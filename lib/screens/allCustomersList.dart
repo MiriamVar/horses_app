@@ -1,31 +1,38 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:horsesapp/customerProfile.dart';
-import 'package:horsesapp/newCustomer.dart';
+import 'package:horsesapp/database.dart';
+import 'package:sqflite/sqflite.dart';
+import '../models/Customer.dart';
+import 'customerProfile.dart';
+import 'newCustomer.dart';
 
-class AllCustomers extends StatefulWidget{
+class AllCustomersList extends StatefulWidget{
 
   @override
-  _AllCustomersState createState() => _AllCustomersState();
+  _AllCustomersListState createState() => _AllCustomersListState();
 }
 
-class _AllCustomersState extends State<AllCustomers>{
+class _AllCustomersListState extends State<AllCustomersList>{
+  DBProvider dbProvider= DBProvider();
+  List<Customer> customersList;
+  int count = 0;
 
   @override
   Widget build(BuildContext context) {
+    if(customersList == null){
+      customersList = List<Customer>();
+      updateListView();
+    }
     return Scaffold(
       backgroundColor: Color.fromRGBO(73,130, 129, 1.0),
-//      backgroundColor: Color.fromRGBO(255, 199, 159, 1.0),
       appBar: AppBar(
         elevation: 0.1,
         backgroundColor: Color.fromRGBO(73,130, 129, 1.0),
-//        backgroundColor: Color.fromRGBO(255, 199, 159, 1.0) ,
         centerTitle: true,
         title: Text(
           "Customers",
           style: TextStyle(
               color: Color.fromRGBO(0, 44, 44, 1.0),
-//            color:  Color.fromRGBO(171, 104, 68, 1.0),
             fontWeight: FontWeight.bold,
             fontSize: 22.0
           ),
@@ -35,7 +42,7 @@ class _AllCustomersState extends State<AllCustomers>{
         child: ListView.builder(
           scrollDirection: Axis.vertical,
             shrinkWrap: true,
-            itemCount: 5,
+            itemCount: count,
             itemBuilder: (context, index){
               return Card(
                 elevation: 8.0,
@@ -68,14 +75,12 @@ class _AllCustomersState extends State<AllCustomers>{
                       child: Icon(
                         Icons.person,
                         color: Color.fromRGBO(0, 44, 44, 1.0),
-//                        color: Color.fromRGBO(171, 104, 68, 1.0)
                       ),
                     ),
                     title: Text(
-                      "Vet ${index+1}",
+                      "${this.customersList[index].name}",
                       style: TextStyle(
                           color: Color.fromRGBO(0, 44, 44, 1.0),
-//                        color: Color.fromRGBO(171, 104, 68, 1.0),
                         fontWeight: FontWeight.bold
                       ),
                     ),
@@ -83,16 +88,10 @@ class _AllCustomersState extends State<AllCustomers>{
                     icon: Icon(
                       Icons.keyboard_arrow_right,
                       color: Color.fromRGBO(0, 44, 44, 1.0),
-//                      color: Color.fromRGBO(171, 104, 68, 1.0),
                       size: 30.0,
                     ),
                     onPressed: (){
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CustomerProfile()
-                          )
-                      );
+                     navigateToProfile(this.customersList[index]);
                     },
                   ),
                   ),
@@ -103,7 +102,6 @@ class _AllCustomersState extends State<AllCustomers>{
       ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Color.fromRGBO(238, 237, 9, 1.0),
-//          backgroundColor: Color.fromRGBO(255, 199, 159, 1.0),
           onPressed: (){
             Navigator.push(
                 context,
@@ -111,28 +109,36 @@ class _AllCustomersState extends State<AllCustomers>{
                     builder: (context) => NewCustomer()
                 )
             );
+            updateListView();
           },
           child: Icon(
               Icons.add,
             color: Color.fromRGBO(0, 44, 44, 1.0),
-//            color: Color.fromRGBO(171, 104, 68, 1.0),
           ),
         ),
-//      bottomNavigationBar: Container(
-//        height: 55.0,
-//        child: BottomAppBar(
-//          color: Color.fromRGBO(224, 150, 112, 1.0),
-//          child: Row(
-//            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//            children: <Widget>[
-//              IconButton(
-//                icon: Icon(Icons.home, color: Colors.white),
-//                onPressed: () {},
-//              )
-//            ],
-//          ),
-//        ),
-//      ),
     );
   }
+
+  void updateListView() {
+    final Future<Database> dbFuture = dbProvider.initDB();
+    dbFuture.then((database){
+      Future<List<Customer>> customersListFuture = dbProvider.getCustomersList();
+      customersListFuture.then((customersList){
+        setState(() {
+          this.customersList = customersList;
+          this.count = customersList.length;
+        });
+      });
+    });
+  }
+
+  void navigateToProfile(Customer customer) async{
+    bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return CustomerProfile(customer: customer);
+    }));
+    if(result == true){
+      updateListView();
+    }
+  }
 }
+

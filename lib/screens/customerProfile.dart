@@ -1,18 +1,34 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:horsesapp/HorseInfo.dart';
-import 'package:horsesapp/main.dart';
+import 'package:horsesapp/database.dart';
+import 'package:horsesapp/models/Horse.dart';
+import 'package:horsesapp/screens/HorseInfo.dart';
+import 'package:horsesapp/screens/main.dart';
+import 'package:sqflite/sqflite.dart';
+
+import '../models/Customer.dart';
 
 class CustomerProfile extends StatefulWidget{
+  final Customer customer;
+
+  CustomerProfile({Key key, @required this.customer}) : super(key: key);
 
   @override
   _CustomerProfileState createState() => _CustomerProfileState();
 }
 
 class _CustomerProfileState extends State<CustomerProfile>{
+  Customer customer;
+  DBProvider dbProvider= DBProvider();
+  List<Horse> myHorses;
+  int count = 0;
 
   @override
   Widget build(BuildContext context) {
+    if(myHorses == null){
+      myHorses= List<Horse>();
+      updateListView(customer.id);
+    }
     return Scaffold(
       backgroundColor: Colors.white,
      body: Stack(
@@ -76,7 +92,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
                        height: 20,
                      ),
                      Text(
-                       'Customers name',
+                       '${customer.name}',
                        style: TextStyle(
                          color: Color.fromRGBO(25, 85, 85, 1.0),
                          fontSize: 20
@@ -116,7 +132,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
                                      height: 3,
                                    ),
                                    Text(
-                                     'vet@gmail.com',
+                                     '${customer.email}',
                                      style: TextStyle(
                                        color: Color.fromRGBO(73, 130, 129, 1.0)
                                      ),
@@ -184,7 +200,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
                                child: ListView.builder(
                                    scrollDirection: Axis.vertical,
                                    shrinkWrap: true,
-                                   itemCount: 2,
+                                   itemCount: count,
                                    itemBuilder: (context, index){
                                      return Card(
                                        elevation: 8.0,
@@ -203,7 +219,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
                                                vertical: 3.0
                                            ),
                                            title: Text(
-                                             "Horse ${index+1}",
+                                             "${myHorses[index].name}",
                                              style: TextStyle(
                                                  color: Color.fromRGBO(0, 44, 44, 1.0),
                                                  fontWeight: FontWeight.bold
@@ -216,23 +232,12 @@ class _CustomerProfileState extends State<CustomerProfile>{
                                                size: 30.0,
                                              ),
                                              onPressed: (){
-                                               if(index == 0){
-                                                 Navigator.push(
+                                               Navigator.push(
                                                      context,
                                                      MaterialPageRoute(
-                                                         builder: (context) => HorseInfo(number: 0,)
+                                                         builder: (context) => HorseInfo(number: index,)
                                                      )
                                                  );
-                                               }
-                                               if(index == 1){
-                                                 Navigator.push(
-                                                     context,
-                                                     MaterialPageRoute(
-                                                         builder: (context) => HorseInfo(number: 1,)
-                                                     )
-                                                 );
-                                               }
-
                                              },
                                            ),
                                          ),
@@ -280,5 +285,18 @@ class _CustomerProfileState extends State<CustomerProfile>{
         child: Text("Add horse"),
       ),
     );
+  }
+
+  void updateListView(int idC) {
+    final Future<Database> dbFuture = dbProvider.initDB();
+    dbFuture.then((database){
+      Future<List<Horse>> horsesListFuture = dbProvider.getMyHorsesList(idC);List();
+      horsesListFuture.then((myHorses){
+        setState(() {
+          this.myHorses = myHorses;
+          this.count = myHorses.length;
+        });
+      });
+    });
   }
 }

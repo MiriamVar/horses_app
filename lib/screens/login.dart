@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:horsesapp/allCustomers.dart';
-import 'package:horsesapp/main.dart';
+import 'package:horsesapp/screens/allCustomersList.dart';
+import 'package:horsesapp/screens/main.dart';
 
 class LoginPage extends StatefulWidget{
   @override
@@ -159,7 +159,7 @@ class _LoginPageState extends State<LoginPage>{
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => AllCustomers()
+            builder: (context) => AllCustomersList()
           )
       );
     } else(

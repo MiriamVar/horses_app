@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:horsesapp/allCustomers.dart';
-import 'package:horsesapp/main.dart';
+import 'package:horsesapp/screens/allCustomersList.dart';
+import 'package:horsesapp/screens/main.dart';
+
+import '../database.dart';
+import '../models/Customer.dart';
 
 class NewCustomer extends StatefulWidget{
 
@@ -10,6 +13,8 @@ class NewCustomer extends StatefulWidget{
 }
 
 class _NewCustomerState extends State<NewCustomer>{
+  String name, email;
+  DBProvider dbProvider= DBProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -90,10 +95,10 @@ class _NewCustomerState extends State<NewCustomer>{
                           Container(
                             padding: EdgeInsets.only(right:5.0),
                             child: TextFormField(
-//                              onChanged: (payload){
-//                                heightPayload =payload;
-//                                print("new value of name $heightPayload");
-//                              },
+                              onChanged: (nameVal){
+                                name = nameVal;
+                                print("new value of name $name");
+                              },
                               controller: TextEditingController(
                                   text: ""
                               ),
@@ -117,10 +122,10 @@ class _NewCustomerState extends State<NewCustomer>{
                           Container(
                             padding: EdgeInsets.only(right:5.0),
                             child: TextFormField(
-//                              onChanged: (payload){
-//                                heightPayload =payload;
-//                                print("new value of name $heightPayload");
-//                              },
+                              onChanged: (emailVal){
+                                email = emailVal;
+                                print("new value of email $email");
+                              },
                               controller: TextEditingController(
                                   text: ""
                               ),
@@ -236,14 +241,20 @@ class _NewCustomerState extends State<NewCustomer>{
               fontWeight: FontWeight.bold
           ),
         ), onPressed: () {
+          Customer newCust = new Customer(name, email);
+          _saveCustomerFun(newCust);
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => AllCustomers()
+                builder: (context) => AllCustomersList()
             )
         );
       },
       ),
     );
   }
+  void _saveCustomerFun(Customer customer) async{
+    await dbProvider.insertCustomer(customer);
+  }
+
 }
