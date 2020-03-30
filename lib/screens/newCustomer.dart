@@ -176,11 +176,11 @@ class _NewCustomerState extends State<NewCustomer>{
                                   ),
                                 ],
                               ),
-                              Row(
-                                children: <Widget>[
-                                  _addHorseBtn(),
-                                ],
-                              )
+//                              Row(
+//                                children: <Widget>[
+//                                  _addHorseBtn(),
+//                                ],
+//                              )
                             ],
                           ),
                           SizedBox(
@@ -203,25 +203,25 @@ class _NewCustomerState extends State<NewCustomer>{
     );
   }
 
-  Widget _addHorseBtn(){
-    return Container(
-      padding: EdgeInsets.only(right: 10.0),
-      child: RaisedButton(
-        padding: EdgeInsets.all(0),
-        color: Color.fromRGBO(25, 85,85, 1.0),
-        textColor: Colors.white,
-        onPressed: (){
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MyHomePage(title: "Horses",)
-              )
-          );
-        },
-        child: Text("Add horse"),
-      ),
-    );
-  }
+//  Widget _addHorseBtn(){
+//    return Container(
+//      padding: EdgeInsets.only(right: 10.0),
+//      child: RaisedButton(
+//        padding: EdgeInsets.all(0),
+//        color: Color.fromRGBO(25, 85,85, 1.0),
+//        textColor: Colors.white,
+//        onPressed: (){
+//          Navigator.push(
+//              context,
+//              MaterialPageRoute(
+//                  builder: (context) => MyHomePage(title: "Horses",)
+//              )
+//          );
+//        },
+//        child: Text("Add horse"),
+//      ),
+//    );
+//  }
 
   Widget _saveCustomer(){
     return Material(

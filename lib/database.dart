@@ -51,7 +51,7 @@ class DBProvider{
             "chipNumber TEXT,"
             "IDNumber TEXT,"
             "name TEXT,"
-            "commomName TEXT,"
+            "commonName TEXT,"
             "sir TEXT,"
             "dam TEXT,"
             "sex TEXT,"
@@ -107,9 +107,9 @@ class DBProvider{
       return await db.rawQuery('SELECT * FROM Horse WHERE customerID = $idC');
     }
 
-    Future<List<Map<String,dynamic>>> getMyHorseMapList(int idH) async{
+    Future<List<Map<String,dynamic>>> getMyHorseMapList(String UID) async{
       Database db = await this.database;
-      return await db.rawQuery('SELECT * FROM Horse WHERE id = $idH');
+      return await db.rawQuery('SELECT * FROM Horse WHERE uid = $UID');
     }
 
     Future<List<Map<String,dynamic>>> getMyHorseValuesMapList(int idH) async{
@@ -182,8 +182,8 @@ class DBProvider{
       return myHorsesList;
     }
 
-    Future<List<Horse>> getMyHorseList(int idH)async{
-      var myHorseMapList = await getMyHorseMapList(idH);
+    Future<List<Horse>> getMyHorseList(String UID)async{
+      var myHorseMapList = await getMyHorseMapList(UID);
       int count = myHorseMapList.length;
 
       List<Horse> myHorseList = List<Horse>();
@@ -192,6 +192,7 @@ class DBProvider{
       }
       return myHorseList;
     }
+
 
 
 

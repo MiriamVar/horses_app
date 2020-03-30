@@ -236,7 +236,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
                                                Navigator.push(
                                                      context,
                                                      MaterialPageRoute(
-                                                         builder: (context) => HorseInfo(number: index, customerID: widget.customer.id)
+                                                         builder: (context) => HorseInfo()
                                                      )
                                                  );
                                              },
@@ -279,7 +279,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => MyHomePage(title: "Horses",)
+                  builder: (context) => MyHomePage(customerID: widget.customer.id,)
               )
           );
         },

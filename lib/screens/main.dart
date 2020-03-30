@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:horsesapp/database.dart';
 import 'package:horsesapp/screens/HorseInfo.dart';
 import 'package:horsesapp/screens/allCustomersList.dart';
 import 'package:horsesapp/screens/customerProfile.dart';
@@ -53,9 +54,9 @@ Map<int, Color> color = {
 MaterialColor colorBrown = MaterialColor(0xff185555, color);
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key key, this.customerID}) : super(key: key);
 
-  final String title;
+  final int customerID;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -67,6 +68,8 @@ class _MyHomePageState extends State<MyHomePage> {
   List<NDEFMessage> _tags = [];
   int index2 = 0;
   bool _hasClosedWriteDialog = false;
+  DBProvider dbProvider = DBProvider();
+
 //  AllHorses allHorses = new AllHorses();
 
   String chipNumberPayload, IDPayload, namePayload, commonNamePayload, sirPayload, damPayload, sexPayload, breedPayload, colourPayload, dobPayload, descriptionPayload;
@@ -163,7 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text("Horse"),
         actions: <Widget>[
           Builder(
             builder: (context){
@@ -189,8 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         ],
       ),
-      body:
-      SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Row(
@@ -515,8 +517,10 @@ class _MyHomePageState extends State<MyHomePage> {
     records.add(NDEFRecord.type("text/plain", cannonGirthPayload.toString()));
     records.add(NDEFRecord.type("text/plain", weightPayload.toString()));
 
-//    Horse newHorse = Horse(chipNumberPayload, IDPayload,namePayload,commonNamePayload,sirPayload,damPayload,sexPayload,breedPayload,colourPayload,dobPayload,descriptionPayload, tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload, cannonGirthPayload);
+    Horse newHorse = Horse(widget.customerID, "UID",chipNumberPayload, IDPayload,namePayload,commonNamePayload,sirPayload,damPayload,sexPayload,breedPayload,colourPayload,dobPayload,descriptionPayload, tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload, cannonGirthPayload);
 //    allHorses.addHorse(newHorse);
+    _saveHorseFun(newHorse);
+
 
     NDEFMessage message = NDEFMessage.withRecords(records);
 
@@ -544,6 +548,11 @@ class _MyHomePageState extends State<MyHomePage> {
     if(!_hasClosedWriteDialog){
       Navigator.pop(context);
     }
+  }
+
+  void _saveHorseFun(Horse horse) async{
+    await dbProvider.insertHorse(horse);
+    print("new horse was saved");
   }
 
 }
