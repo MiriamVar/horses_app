@@ -3,7 +3,6 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:horsesapp/AllHorses.dart';
 import 'package:horsesapp/screens/HorseInfo.dart';
 import 'package:horsesapp/screens/allCustomersList.dart';
 import 'package:horsesapp/screens/customerProfile.dart';
@@ -68,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<NDEFMessage> _tags = [];
   int index2 = 0;
   bool _hasClosedWriteDialog = false;
-  AllHorses allHorses = new AllHorses();
+//  AllHorses allHorses = new AllHorses();
 
   String chipNumberPayload, IDPayload, namePayload, commonNamePayload, sirPayload, damPayload, sexPayload, breedPayload, colourPayload, dobPayload, descriptionPayload;
   int tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload;
@@ -516,8 +515,8 @@ class _MyHomePageState extends State<MyHomePage> {
     records.add(NDEFRecord.type("text/plain", cannonGirthPayload.toString()));
     records.add(NDEFRecord.type("text/plain", weightPayload.toString()));
 
-    Horse newHorse = Horse(chipNumberPayload, IDPayload,namePayload,commonNamePayload,sirPayload,damPayload,sexPayload,breedPayload,colourPayload,dobPayload,descriptionPayload, tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload, cannonGirthPayload);
-    allHorses.addHorse(newHorse);
+//    Horse newHorse = Horse(chipNumberPayload, IDPayload,namePayload,commonNamePayload,sirPayload,damPayload,sexPayload,breedPayload,colourPayload,dobPayload,descriptionPayload, tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload, cannonGirthPayload);
+//    allHorses.addHorse(newHorse);
 
     NDEFMessage message = NDEFMessage.withRecords(records);
 

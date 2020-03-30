@@ -132,13 +132,14 @@ class _AllCustomersListState extends State<AllCustomersList>{
     });
   }
 
-  void navigateToProfile(Customer customer) async{
+  void navigateToProfile(Customer customerko) async{
+    print(customerko.id);
     bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return CustomerProfile(customer: customer);
+      return CustomerProfile(customer: customerko);
     }));
-    if(result == true){
-      updateListView();
-    }
+//    if(result == true){
+//      updateListView();
+//    }
   }
 }
 

@@ -1,8 +1,8 @@
 class Values{
   int _idH;
-  bool _chipNumber, _IDNumber, _name, _commonName, _sir, _dam, _sex, _breed, _colour, _dob, _description;
-  bool _tapeMeasure, _stickMeasure, _breastGirth, _weight, _number, _yob;
-  bool _cannonGirth;
+  int _chipNumber, _IDNumber, _name, _commonName, _sir, _dam, _sex, _breed, _colour, _dob, _description;
+  int _tapeMeasure, _stickMeasure, _breastGirth, _weight, _number, _yob;
+  int _cannonGirth;
 
   Values(this._idH, this._chipNumber, this._IDNumber, this._name, this._commonName,
       this._sir, this._dam, this._sex, this._breed, this._colour, this._dob,
@@ -56,9 +56,9 @@ class Values{
     this._cannonGirth = map['cannonGirth'];
   }
 
-  bool get cannonGirth => _cannonGirth;
+  int get cannonGirth => _cannonGirth;
 
-  set cannonGirth(bool value) {
+  set cannonGirth(int value) {
     _cannonGirth = value;
   }
 
@@ -92,9 +92,9 @@ class Values{
     _stickMeasure = value;
   }
 
-  bool get tapeMeasure => _tapeMeasure;
+  int get tapeMeasure => _tapeMeasure;
 
-  set tapeMeasure(bool value) {
+  set tapeMeasure(int value) {
     _tapeMeasure = value;
   }
 
@@ -158,9 +158,9 @@ class Values{
     _IDNumber = value;
   }
 
-  bool get chipNumber => _chipNumber;
+  int get chipNumber => _chipNumber;
 
-  set chipNumber(bool value) {
+  set chipNumber(int value) {
     _chipNumber = value;
   }
 

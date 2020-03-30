@@ -1,32 +1,33 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:horsesapp/database.dart';
+import 'package:sqflite/sqflite.dart';
 import '../models/Horse.dart';
-import '../AllHorses.dart';
 
 
 class HorseInfo extends StatefulWidget {
-  HorseInfo({Key key, this.number}) : super(key: key);
+  HorseInfo({Key key, this.number, this.customerID}) : super(key: key);
 
-  final int number;
+  final int number, customerID;
 
   @override
   _HorseInfoState createState() => _HorseInfoState();
 }
 
 class _HorseInfoState extends State<HorseInfo> {
-  AllHorses allHorses = new AllHorses();
   List<Horse> horses;
   Horse horse1;
   List<Horse> selectedHorse;
   bool sort;
   String num, yob, tape, stick, breast, cannon, wei;
+  DBProvider dbProvider = DBProvider();
+  int count;
 
 
   @override
   void initState() {
     sort = false;
     selectedHorse = [];
-    horses = allHorses.getHorses();
     super.initState();
   }
 
@@ -42,8 +43,11 @@ class _HorseInfoState extends State<HorseInfo> {
 
   @override
   Widget build(BuildContext context) {
+    if(horses == null){
+      horses= List<Horse>();
+      updateListView(widget.customerID);
+    }
     horse1 = horses[widget.number];
-    print(horse1);
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -79,7 +83,7 @@ class _HorseInfoState extends State<HorseInfo> {
                   ],
                 ),
                 _field("Chip number", horse1.chipNumber),
-                _field("ID number", horse1.ID),
+                _field("ID number", horse1.IDNumber),
                 _field("Number", horse1.number),
                 _field("Name", horse1.name),
                 _field("Common name", horse1.commonName),
@@ -162,8 +166,8 @@ class _HorseInfoState extends State<HorseInfo> {
       }break;
 
       case "ID number": {
-        horse1.ID = value;
-        print(horse1.ID);
+        horse1.IDNumber = value;
+        print(horse1.IDNumber);
       }break;
 
       case "Number": {
@@ -268,4 +272,18 @@ class _HorseInfoState extends State<HorseInfo> {
       ),
     );
   }
+
+  void updateListView(int idC) {
+    final Future<Database> dbFuture = dbProvider.initDB();
+    dbFuture.then((database){
+      Future<List<Horse>> horsesListFuture = dbProvider.getMyHorsesList(idC);
+      horsesListFuture.then((horses){
+        setState(() {
+          this.horses = horses;
+          this.count = horses.length;
+        });
+      });
+    });
+  }
+
 }

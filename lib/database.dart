@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:horsesapp/models/Customer.dart';
 import 'package:horsesapp/models/Horse.dart';
-import 'package:horsesapp/models/Values_able.dart';
+import 'package:horsesapp/models/Values.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
@@ -30,16 +30,20 @@ class DBProvider{
 
     Future<Database> initDB() async{
         Directory docDirectory = await getApplicationDocumentsDirectory();
-        String path = docDirectory.path +"horses.db";;
-        return await openDatabase(path, version: 1, onOpen: (db){}, onCreate: _createDb);
+        String path = docDirectory.path +"horses.db";
+        print(path);
+        return await openDatabase(path, version: 1,  onCreate: _createDb);
     }
 
     void _createDb(Database db, int newVersion) async{
+      print("create customer");
         await db.execute("CREATE TABLE Customer("
             "id INTEGER PRIMARY KEY autoincrement,"
             "name TEXT,"
             "email TEXT"
             ")");
+        print("create  customer done");
+        print('create horse');
         await db.execute("CREATE TABLE Horse("
             "id INTEGER PRIMARY KEY autoincrement,"
             "customerID INTEGER,"
@@ -64,12 +68,14 @@ class DBProvider{
             "cannonGirth REAL,"
             "FOREIGN KEY (customerID) REFERENCES Customer(id)"
             ")");
-        await db.execute("CREATE TABLE Values("
-            "idH INTEGER,"
+        print("create horse done");
+        print("create values");
+        await db.execute("CREATE TABLE Values ("
+            "idH INTEGER PRIMARY KEY,"
             "chipNumber INTEGER,"
             "IDNumber INTEGER,"
             "name INTEGER,"
-            "commomName INTEGER,"
+            "commonName INTEGER,"
             "sir INTEGER,"
             "dam INTEGER,"
             "sex INTEGER,"
@@ -86,6 +92,7 @@ class DBProvider{
             "cannonGirth INTEGER,"
             "FOREIGN KEY (idH) REFERENCES Horse(id)"
             ")");
+        print("create values done");
 
     }
 
@@ -100,46 +107,56 @@ class DBProvider{
       return await db.rawQuery('SELECT * FROM Horse WHERE customerID = $idC');
     }
 
+    Future<List<Map<String,dynamic>>> getMyHorseMapList(int idH) async{
+      Database db = await this.database;
+      return await db.rawQuery('SELECT * FROM Horse WHERE id = $idH');
+    }
+
+    Future<List<Map<String,dynamic>>> getMyHorseValuesMapList(int idH) async{
+      Database db = await this.database;
+      return await db.rawQuery('SELECT * FROM Values WHERE idH = $idH');
+    }
+
     Future<List<Map<String,dynamic>>> getValuesMapList() async{
-        Database db = await this._database;
+        Database db = await this.database;
         return await db.query('Values');
     }
 
     //INSERT INTO ...
     Future<int> insertCustomer(Customer customer) async{
-      Database db = await this._database;
+      Database db = await this.database;
       return await db.insert('Customer', customer.toMap());
     }
 
     Future<int> insertHorse(Horse horse) async{
-      Database db = await this._database;
+      Database db = await this.database;
       return await db.insert('Horse', horse.toMap());
     }
 
     Future<int> insertValues(Values values) async{
-      Database db = await this._database;
+      Database db = await this.database;
       return await db.insert('Customer', values.toMap());
     }
 
     //UPDATE ..
     Future<int> updateCustomer(Customer customer) async{
-      var db = await this._database;
+      var db = await this.database;
       return await db.update('Customer', customer.toMap(), where: 'id = ?', whereArgs: [customer.id]);
     }
 
     Future<int> updateHorse(Horse horse) async{
-      var db = await this._database;
+      var db = await this.database;
       return await db.update('Horse', horse.toMap(), where: 'id = ?', whereArgs: [horse.id]);
     }
 
     Future<int> updateValues(Values values) async{
-      var db = await this._database;
+      var db = await this.database;
       return await db.update('Values', values.toMap(), where: 'idH = ?', whereArgs: [values.idH]);
     }
 
     //DELETE
     Future<int> deteleCustomer(int id) async{
-      var db = await this._database;
+      var db = await this.database;
       return await db.rawDelete('DELETE FROM Customer WHERE id = $id');
     }
 
@@ -163,6 +180,17 @@ class DBProvider{
         myHorsesList.add(Horse.fromMapObject(myHorsesMapList[i]));
       }
       return myHorsesList;
+    }
+
+    Future<List<Horse>> getMyHorseList(int idH)async{
+      var myHorseMapList = await getMyHorseMapList(idH);
+      int count = myHorseMapList.length;
+
+      List<Horse> myHorseList = List<Horse>();
+      for(int i=0; i< count; i++){
+        myHorseList.add(Horse.fromMapObject(myHorseMapList[i]));
+      }
+      return myHorseList;
     }
 
 

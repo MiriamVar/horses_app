@@ -9,16 +9,16 @@ import 'package:sqflite/sqflite.dart';
 import '../models/Customer.dart';
 
 class CustomerProfile extends StatefulWidget{
-  final Customer customer;
 
   CustomerProfile({Key key, @required this.customer}) : super(key: key);
+
+  final Customer customer;
 
   @override
   _CustomerProfileState createState() => _CustomerProfileState();
 }
 
 class _CustomerProfileState extends State<CustomerProfile>{
-  Customer customer;
   DBProvider dbProvider= DBProvider();
   List<Horse> myHorses;
   int count = 0;
@@ -27,7 +27,8 @@ class _CustomerProfileState extends State<CustomerProfile>{
   Widget build(BuildContext context) {
     if(myHorses == null){
       myHorses= List<Horse>();
-      updateListView(customer.id);
+      print(widget.customer.name);
+      updateListView(widget.customer.id);
     }
     return Scaffold(
       backgroundColor: Colors.white,
@@ -92,7 +93,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
                        height: 20,
                      ),
                      Text(
-                       '${customer.name}',
+                       '${widget.customer.name}',
                        style: TextStyle(
                          color: Color.fromRGBO(25, 85, 85, 1.0),
                          fontSize: 20
@@ -132,7 +133,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
                                      height: 3,
                                    ),
                                    Text(
-                                     '${customer.email}',
+                                     '${widget.customer.email}',
                                      style: TextStyle(
                                        color: Color.fromRGBO(73, 130, 129, 1.0)
                                      ),
@@ -235,7 +236,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
                                                Navigator.push(
                                                      context,
                                                      MaterialPageRoute(
-                                                         builder: (context) => HorseInfo(number: index,)
+                                                         builder: (context) => HorseInfo(number: index, customerID: widget.customer.id)
                                                      )
                                                  );
                                              },
