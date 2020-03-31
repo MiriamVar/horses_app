@@ -6,6 +6,7 @@ import 'package:horsesapp/database.dart';
 import 'package:nfc_in_flutter/nfc_in_flutter.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/Horse.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 
 
 class HorseInfo extends StatefulWidget {
@@ -26,12 +27,11 @@ class _HorseInfoState extends State<HorseInfo> {
   bool _supportsNFC = false;
   List<NDEFMessage> _tags = [];
   int index2 = 0;
+  bool connected=false;
 
   String chipNumberPayload, IDPayload, namePayload, commonNamePayload, sirPayload, damPayload, sexPayload, breedPayload, colourPayload, dobPayload, descriptionPayload;
   int tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload;
   double cannonGirthPayload;
-
-  String UID_tag= "";
 
 
 
@@ -69,7 +69,7 @@ class _HorseInfoState extends State<HorseInfo> {
 //              print("Record '${_tags[index2].records[1].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[1].tnf}, type '${_tags[index2].records[1].type}', payload '${_tags[index2].records[1].payload}' and data '${_tags[index2].records[1].data}' and language code '${_tags[index2].records[1].languageCode}''");
 //              print("Record '${_tags[index2].records[2].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[2].tnf}, type '${_tags[index2].records[2].type}', payload '${_tags[index2].records[2].payload}' and data '${_tags[index2].records[2].data}' and language code '${_tags[index2].records[2].languageCode}''");
 
-              UID_tag = _tags[index2].records[0].data;
+              chipNumberPayload = _tags[index2].records[0].data;
 //
 //              chipNumberPayload= _tags[index2].records[0].payload;
 //              print("printim chipNumber");
@@ -133,8 +133,8 @@ class _HorseInfoState extends State<HorseInfo> {
   Widget build(BuildContext context) {
     if(horses == null){
       horses= List<Horse>();
-      if(UID_tag != null){
-        updateListView(UID_tag);
+      if(chipNumberPayload!= null){
+        updateListView(chipNumberPayload);
       }
     }
     horse1 = horses[0];
@@ -182,131 +182,163 @@ class _HorseInfoState extends State<HorseInfo> {
           children: <Widget>[
             Builder(
               builder: (context){
-                if (UID_tag == null) {
-                  return Column(
-                    children: <Widget>[
-                      Column(
+                return OfflineBuilder(
+                  connectivityBuilder: (context, ConnectivityResult connectivity, Widget child){
+                    connected = connectivity!= ConnectivityResult.none;
+                    if (chipNumberPayload == null) {
+                      return Column(
                         children: <Widget>[
-                          Row(
+                          Column(
                             children: <Widget>[
-                              Padding(
-                                  padding: EdgeInsets.only(left: 10.0)
+                              Row(
+                                children: <Widget>[
+                                  Padding(
+                                      padding: EdgeInsets.only(left: 10.0)
+                                  ),
+                                  Text(
+                                    "Basic Data",
+                                    style: TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Text(
-                                "Basic Data",
-                                style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold
-                                ),
-                              ),
+                              _field("Chip number", ""),
+                              _field("ID number", ""),
+                              _field("Number", ""),
+                              _field("Name",""),
+                              _field("Common name", ""),
+                              _field("Sir", ""),
+                              _field("Dam", ""),
+                              _field("Day of birth", ""),
+                              _field("Year of birth", ""),
+                              _field("Sex", ""),
+                              _field("Breed", ""),
+                              _field("Colour", ""),
+                              _field("Description", "")
                             ],
                           ),
-                          _field("Chip number", ""),
-                          _field("ID number", ""),
-                          _field("Number", ""),
-                          _field("Name",""),
-                          _field("Common name", ""),
-                          _field("Sir", ""),
-                          _field("Dam", ""),
-                          _field("Day of birth", ""),
-                          _field("Year of birth", ""),
-                          _field("Sex", ""),
-                          _field("Breed", ""),
-                          _field("Colour", ""),
-                          _field("Description", "")
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Row(
+                          SizedBox(
+                            height: 20.0,
+                          ),
+                          Column(
                             children: <Widget>[
-                              Padding(
-                                  padding: EdgeInsets.only(left: 10.0)
+                              Row(
+                                children: <Widget>[
+                                  Padding(
+                                      padding: EdgeInsets.only(left: 10.0)
+                                  ),
+                                  Text(
+                                    "Measurements",
+                                    style: TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Text(
-                                "Measurements",
-                                style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold
-                                ),
-                              ),
+                              _field("Tape measure", ""),
+                              _field("Stick measure", ""),
+                              _field("Breast girth", ""),
+                              _field("Cannon girth", ""),
+                              _field("Weight", ""),
                             ],
                           ),
-                          _field("Tape measure", ""),
-                          _field("Stick measure", ""),
-                          _field("Breast girth", ""),
-                          _field("Cannon girth", ""),
-                          _field("Weight", ""),
                         ],
-                      ),
-                    ],
-                  );
-                } else{
-                  return Column(
-                    children: <Widget>[
-                      Column(
+                      );
+                    } else{
+                      return Column(
                         children: <Widget>[
-                          Row(
+                          Column(
                             children: <Widget>[
-                              Padding(
-                                  padding: EdgeInsets.only(left: 10.0)
+                              Row(
+                                children: <Widget>[
+                                  Padding(
+                                      padding: EdgeInsets.only(left: 10.0)
+                                  ),
+                                  Text(
+                                    "Basic Data",
+                                    style: TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Text(
-                                "Basic Data",
-                                style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold
-                                ),
-                              ),
+                              _field("Chip number", horse1.chipNumber),
+                              _field("ID number", horse1.IDNumber),
+                              _field("Number", horse1.number),
+                              _field("Name", horse1.name),
+                              _field("Common name", horse1.commonName),
+                              _field("Sir", horse1.sir),
+                              _field("Dam", horse1.dam),
+                              _field("Day of birth", horse1.dob),
+                              _field("Year of birth", horse1.yob),
+                              _field("Sex", horse1.sex),
+                              _field("Breed", horse1.breed),
+                              _field("Colour", horse1.colour),
+                              _field("Description", horse1.description)
                             ],
                           ),
-                          _field("Chip number", horse1.chipNumber),
-                          _field("ID number", horse1.IDNumber),
-                          _field("Number", horse1.number),
-                          _field("Name", horse1.name),
-                          _field("Common name", horse1.commonName),
-                          _field("Sir", horse1.sir),
-                          _field("Dam", horse1.dam),
-                          _field("Day of birth", horse1.dob),
-                          _field("Year of birth", horse1.yob),
-                          _field("Sex", horse1.sex),
-                          _field("Breed", horse1.breed),
-                          _field("Colour", horse1.colour),
-                          _field("Description", horse1.description)
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Row(
+                          SizedBox(
+                            height: 20.0,
+                          ),
+                          Column(
                             children: <Widget>[
-                              Padding(
-                                  padding: EdgeInsets.only(left: 10.0)
+                              Row(
+                                children: <Widget>[
+                                  Padding(
+                                      padding: EdgeInsets.only(left: 10.0)
+                                  ),
+                                  Text(
+                                    "Measurements",
+                                    style: TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Text(
-                                "Measurements",
-                                style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold
-                                ),
-                              ),
+                              _field("Tape measure", horse1.tapeMeasure),
+                              _field("Stick measure", horse1.stickMeasure),
+                              _field("Breast girth", horse1.breastGirth),
+                              _field("Cannon girth", horse1.cannonGirth),
+                              _field("Weight", horse1.weight),
                             ],
                           ),
-                          _field("Tape measure", horse1.tapeMeasure),
-                          _field("Stick measure", horse1.stickMeasure),
-                          _field("Breast girth", horse1.breastGirth),
-                          _field("Cannon girth", horse1.cannonGirth),
-                          _field("Weight", horse1.weight),
                         ],
-                      ),
-                    ],
-                  );
-                }
+                      );
+                    }
+//                    return Stack(
+//                      fit:  StackFit.expand,
+//                        children: <Widget>[
+//                          child,
+//                          Positioned(
+//                            left: 0.0,
+//                            right: 0.0,
+//                            height: 32.0,
+//                            child: AnimatedContainer(
+//                              duration: const Duration(milliseconds: 300),
+//                              color: connected ? Color(0xff00ee44) : Color(0xffee4400),
+//                              child: connected ? Row(
+//                                mainAxisAlignment: MainAxisAlignment.center,
+//                                children: <Widget>[
+//                                  Text("ONLINE")
+//                                ],
+//                              ): Row(
+//                                mainAxisAlignment: MainAxisAlignment.center,
+//                                children: <Widget>[
+//                                  Text("OFFLINE")
+//                                ],
+//                              )
+//                            ),
+//                          ),
+//
+//                        ],
+//                    );
+                  },
+                );
               },
             ),
               _sendBtn(),

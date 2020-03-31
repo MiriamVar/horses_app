@@ -4,6 +4,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:horsesapp/database.dart';
+import 'package:horsesapp/models/Customer.dart';
 import 'package:horsesapp/screens/HorseInfo.dart';
 import 'package:horsesapp/screens/allCustomersList.dart';
 import 'package:horsesapp/screens/customerProfile.dart';
@@ -54,9 +55,9 @@ Map<int, Color> color = {
 MaterialColor colorBrown = MaterialColor(0xff185555, color);
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.customerID}) : super(key: key);
+  MyHomePage({Key key, this.customer}) : super(key: key);
 
-  final int customerID;
+  final Customer customer;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -89,32 +90,35 @@ class _MyHomePageState extends State<MyHomePage> {
               _tags.insert(0,tag);
               print(tag);
               print("Record '${_tags[index2].records[0].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[0].tnf}, type '${_tags[index2].records[0].type}', payload '${_tags[index2].records[0].payload}' and data '${_tags[index2].records[0].data}' and language code '${_tags[index2].records[0].languageCode}''");
-              print("Record '${_tags[index2].records[1].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[1].tnf}, type '${_tags[index2].records[1].type}', payload '${_tags[index2].records[1].payload}' and data '${_tags[index2].records[1].data}' and language code '${_tags[index2].records[1].languageCode}''");
-              print("Record '${_tags[index2].records[2].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[2].tnf}, type '${_tags[index2].records[2].type}', payload '${_tags[index2].records[2].payload}' and data '${_tags[index2].records[2].data}' and language code '${_tags[index2].records[2].languageCode}''");
 
-              chipNumberPayload= _tags[index2].records[0].payload;
-              print("printim chipNumber");
-              print(chipNumberPayload);
-              IDPayload = _tags[index2].records[1].payload;
-              numberPayload = int.parse(_tags[index2].records[2].payload);
-              namePayload = _tags[index2].records[3].payload;
-              commonNamePayload = _tags[index2].records[4].payload;
-              sirPayload = _tags[index2].records[5].payload;
-              damPayload = _tags[index2].records[6].payload;
-              dobPayload = _tags[index2].records[7].payload;
-              print(dobPayload + "dob");
-              print(yobPayload);
-              yobPayload = int.parse(_tags[index2].records[8].payload);
-              sexPayload = _tags[index2].records[9].payload;
-              breedPayload = _tags[index2].records[10].payload;
-              colourPayload = _tags[index2].records[11].payload;
-              descriptionPayload = _tags[index2].records[12].payload;
+              chipNumberPayload = _tags[index2].records[0].data;
 
-              tapeMeasurePayload = int.parse(_tags[index2].records[13].payload);
-              stickMeasurePayload = int.parse(_tags[index2].records[14].payload);
-              breastGirthPayload = int.parse(_tags[index2].records[15].payload);
-              cannonGirthPayload = double.parse(_tags[index2].records[16].payload);
-              weightPayload = int.parse(_tags[index2].records[17].payload);
+//              print("Record '${_tags[index2].records[1].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[1].tnf}, type '${_tags[index2].records[1].type}', payload '${_tags[index2].records[1].payload}' and data '${_tags[index2].records[1].data}' and language code '${_tags[index2].records[1].languageCode}''");
+//              print("Record '${_tags[index2].records[2].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[2].tnf}, type '${_tags[index2].records[2].type}', payload '${_tags[index2].records[2].payload}' and data '${_tags[index2].records[2].data}' and language code '${_tags[index2].records[2].languageCode}''");
+//
+//              chipNumberPayload= _tags[index2].records[0].payload;
+//              print("printim chipNumber");
+//              print(chipNumberPayload);
+//              IDPayload = _tags[index2].records[1].payload;
+//              numberPayload = int.parse(_tags[index2].records[2].payload);
+//              namePayload = _tags[index2].records[3].payload;
+//              commonNamePayload = _tags[index2].records[4].payload;
+//              sirPayload = _tags[index2].records[5].payload;
+//              damPayload = _tags[index2].records[6].payload;
+//              dobPayload = _tags[index2].records[7].payload;
+//              print(dobPayload + "dob");
+//              print(yobPayload);
+//              yobPayload = int.parse(_tags[index2].records[8].payload);
+//              sexPayload = _tags[index2].records[9].payload;
+//              breedPayload = _tags[index2].records[10].payload;
+//              colourPayload = _tags[index2].records[11].payload;
+//              descriptionPayload = _tags[index2].records[12].payload;
+//
+//              tapeMeasurePayload = int.parse(_tags[index2].records[13].payload);
+//              stickMeasurePayload = int.parse(_tags[index2].records[14].payload);
+//              breastGirthPayload = int.parse(_tags[index2].records[15].payload);
+//              cannonGirthPayload = double.parse(_tags[index2].records[16].payload);
+//              weightPayload = int.parse(_tags[index2].records[17].payload);
 
             });
           },
@@ -199,79 +203,25 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Tab(icon: new Image.asset("assets/icon_horse.png"),),
-                Text("Info about a horse"),
+                Text("Add info about a new horse"),
               ],
             ),
             Column(
                   children: <Widget>[
                     Builder(
                         builder: (context) {
-                          if (_tags.isEmpty) {
+                          if (chipNumberPayload == "") {
                             return Column(
                               children: <Widget>[
-                                Column(
+                                Row(
                                   children: <Widget>[
-                                    Row(
-                                      children: <Widget>[
-                                        Padding(
-                                            padding: EdgeInsets.only(
-                                                left: 10.0)
-                                        ),
-                                        Text(
-                                          "Basic Data",
-                                          style: TextStyle(
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.bold
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    _field("Chip number", ""),
-                                    _field("ID number", ""),
-                                    _field("Number", ""),
-                                    _field("Name", ""),
-                                    _field("Common name", ""),
-                                    _field("Sir", ""),
-                                    _field("Dam", ""),
-                                    _field("Day of birth", ""),
-                                    _field("Year of birth", ""),
-                                    _field("Sex", ""),
-                                    _field("Breed", ""),
-                                    _field("Colour", ""),
-                                    _field("Description", "")
+                                    Text("Scan tag on horse first")
                                   ],
-                                ),
-                                SizedBox(
-                                  height: 20.0,
-                                ),
-                                Column(
-                                  children: <Widget>[
-                                    Row(
-                                      children: <Widget>[
-                                        Padding(
-                                            padding: EdgeInsets.only(
-                                                left: 10.0)
-                                        ),
-                                        Text(
-                                          "Measurements",
-                                          style: TextStyle(
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.bold
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    _field("Tape measure", ""),
-                                    _field("Stick measure", ""),
-                                    _field("Breast girth", ""),
-                                    _field("Cannon girth", ""),
-                                    _field("Weight",""),
-                                  ],
-                                ),
+                                )
                               ],
                             );
                           } else {
-                            return  Column(
+                            return Column(
                               children: <Widget>[
                                 Column(
                                   children: <Widget>[
@@ -327,14 +277,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ],
                                     ),
                                     _field("Tape measure", tapeMeasurePayload),
-                                    _field("Stick measure", stickMeasurePayload),
+                                    _field(
+                                        "Stick measure", stickMeasurePayload),
                                     _field("Breast girth", breastGirthPayload),
                                     _field("Cannon girth", commonNamePayload),
-                                    _field("Weight",weightPayload),
+                                    _field("Weight", weightPayload),
                                   ],
                                 ),
                               ],
                             );
+//                          }
                           }
                         }
                     ),
@@ -379,11 +331,6 @@ class _MyHomePageState extends State<MyHomePage> {
     print("keyValue");
     print(keyValue);
     switch(keyValue) {
-      case "Chip number": {
-        chipNumberPayload = value;
-        print(chipNumberPayload);
-      }break;
-
       case "ID number": {
         IDPayload = value;
         print(IDPayload);
@@ -487,7 +434,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: (){
           _submitForm();
         },
-        child: Text("SEND"),
+        child: Text("SAVE DATA"),
       ),
     );
   }
@@ -497,28 +444,30 @@ class _MyHomePageState extends State<MyHomePage> {
     print("submit form");
     List<NDEFRecord> records = new List<NDEFRecord>();
 
+    // prvych 5 veci sa zapise na Tag
     records.add(NDEFRecord.type("text/plain", chipNumberPayload));
     records.add(NDEFRecord.type("text/plain", IDPayload));
     records.add(NDEFRecord.type("text/plain", numberPayload.toString()));
     records.add(NDEFRecord.type("text/plain", namePayload));
     records.add(NDEFRecord.type("text/plain", commonNamePayload));
-    records.add(NDEFRecord.type("text/plain", sirPayload));
-    records.add(NDEFRecord.type("text/plain", damPayload));
-    records.add(NDEFRecord.type("text/plain", dobPayload));
-    records.add(NDEFRecord.type("text/plain", yobPayload.toString()));
-    records.add(NDEFRecord.type("text/plain", sexPayload));
-    records.add(NDEFRecord.type("text/plain", breedPayload));
-    records.add(NDEFRecord.type("text/plain", colourPayload));
-    records.add(NDEFRecord.type("text/plain", descriptionPayload));
+//    records.add(NDEFRecord.type("text/plain", sirPayload));
+//    records.add(NDEFRecord.type("text/plain", damPayload));
+//    records.add(NDEFRecord.type("text/plain", dobPayload));
+//    records.add(NDEFRecord.type("text/plain", yobPayload.toString()));
+//    records.add(NDEFRecord.type("text/plain", sexPayload));
+//    records.add(NDEFRecord.type("text/plain", breedPayload));
+//    records.add(NDEFRecord.type("text/plain", colourPayload));
+//    records.add(NDEFRecord.type("text/plain", descriptionPayload));
 
-    records.add(NDEFRecord.type("text/plain", tapeMeasurePayload.toString()));
-    records.add(NDEFRecord.type("text/plain", stickMeasurePayload.toString()));
-    records.add(NDEFRecord.type("text/plain", breastGirthPayload.toString()));
-    records.add(NDEFRecord.type("text/plain", cannonGirthPayload.toString()));
-    records.add(NDEFRecord.type("text/plain", weightPayload.toString()));
+//    records.add(NDEFRecord.type("text/plain", tapeMeasurePayload.toString()));
+//    records.add(NDEFRecord.type("text/plain", stickMeasurePayload.toString()));
+//    records.add(NDEFRecord.type("text/plain", breastGirthPayload.toString()));
+//    records.add(NDEFRecord.type("text/plain", cannonGirthPayload.toString()));
+//    records.add(NDEFRecord.type("text/plain", weightPayload.toString()));
 
-    Horse newHorse = Horse(widget.customerID, "UID",chipNumberPayload, IDPayload,namePayload,commonNamePayload,sirPayload,damPayload,sexPayload,breedPayload,colourPayload,dobPayload,descriptionPayload, tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload, cannonGirthPayload);
-//    allHorses.addHorse(newHorse);
+
+    //zapis noveho kona do db
+    Horse newHorse = Horse(widget.customer.id,chipNumberPayload, IDPayload,namePayload,commonNamePayload,sirPayload,damPayload,sexPayload,breedPayload,colourPayload,dobPayload,descriptionPayload, tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload, cannonGirthPayload);
     _saveHorseFun(newHorse);
 
 
@@ -546,7 +495,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
     await NFC.writeNDEF(message).first;
     if(!_hasClosedWriteDialog){
-      Navigator.pop(context);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CustomerProfile(customer: widget.customer,)
+          )
+      );
     }
   }
 

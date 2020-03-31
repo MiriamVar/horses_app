@@ -279,7 +279,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => MyHomePage(customerID: widget.customer.id,)
+                  builder: (context) => MyHomePage(customer: widget.customer,)
               )
           );
         },

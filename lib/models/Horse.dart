@@ -1,18 +1,17 @@
 class Horse{
   int _id;
   int _customerID;
-  String _uid;
   String _chipNumber, _IDNumber, _name, _commonName, _sir, _dam, _sex, _breed, _colour, _dob, _description;
   int _tapeMeasure, _stickMeasure, _breastGirth, _weight, _number, _yob;
   double _cannonGirth;
 
-  Horse(this._customerID, this._uid, this._chipNumber, this._IDNumber, this._name,
+  Horse(this._customerID, this._chipNumber, this._IDNumber, this._name,
       this._commonName, this._sir, this._dam, this._sex, this._breed,
       this._colour, this._dob, this._description, this._tapeMeasure,
       this._stickMeasure, this._breastGirth, this._weight, this._number,
       this._yob, this._cannonGirth);
 
-  Horse.withID(this._id, this._customerID, this._uid, this._chipNumber, this._IDNumber,
+  Horse.withID(this._id, this._customerID, this._chipNumber, this._IDNumber,
       this._name, this._commonName, this._sir, this._dam, this._sex,
       this._breed, this._colour, this._dob, this._description,
       this._tapeMeasure, this._stickMeasure, this._breastGirth, this._weight,
@@ -22,7 +21,6 @@ class Horse{
     return {
       'id': _id,
       'customerID': _customerID,
-      'uid': _uid,
       'chipNumber': _chipNumber,
       'IDNumber': _IDNumber,
       'name': _name,
@@ -47,7 +45,6 @@ class Horse{
   Horse.fromMapObject(Map<String, dynamic> map){
     this._id= map['id'];
     this._customerID = map['customerID'];
-    this._uid = map['uid'];
     this._chipNumber = map['chipNumber'];
     this._IDNumber = map['IDNumber'];
     this._name = map['name'];
@@ -174,12 +171,6 @@ class Horse{
 
   set chipNumber(String value) {
     _chipNumber = value;
-  }
-
-  String get uid => _uid;
-
-  set uid(String value) {
-    _uid = value;
   }
 
   int get customerID => _customerID;
