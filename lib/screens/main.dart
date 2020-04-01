@@ -27,8 +27,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: colorBrown,
       ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => LoginPage(),
+        // When navigating to the "/second" route, build the SecondScreen widget.
+      },
 //      home: MyHomePage(title: 'Horses'),
-    home: LoginPage(),
+//    home: LoginPage(),
 //      home: CustomerProfile(),
 //      home: AllCustomers()
 //    home: NewCustomer(),
@@ -70,8 +75,6 @@ class _MyHomePageState extends State<MyHomePage> {
   int index2 = 0;
   bool _hasClosedWriteDialog = false;
   DBProvider dbProvider = DBProvider();
-
-//  AllHorses allHorses = new AllHorses();
 
   String chipNumberPayload, IDPayload, namePayload, commonNamePayload, sirPayload, damPayload, sexPayload, breedPayload, colourPayload, dobPayload, descriptionPayload;
   int tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload;

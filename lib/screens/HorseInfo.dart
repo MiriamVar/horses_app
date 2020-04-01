@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:horsesapp/database.dart';
+import 'package:horsesapp/models/Customer.dart';
+import 'package:horsesapp/screens/customerProfile.dart';
 import 'package:nfc_in_flutter/nfc_in_flutter.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/Horse.dart';
@@ -10,14 +13,17 @@ import 'package:flutter_offline/flutter_offline.dart';
 
 
 class HorseInfo extends StatefulWidget {
+  HorseInfo({Key key, @required this.customer, @required this.horsik}) : super(key: key);
+
+  final Customer customer;
+  final Horse horsik;
 
   @override
   _HorseInfoState createState() => _HorseInfoState();
 }
 
 class _HorseInfoState extends State<HorseInfo> {
-  List<Horse> horses;
-  Horse horse1;
+  Horse horseFromDB;
   List<Horse> selectedHorse;
   bool sort;
   String num, yob, tape, stick, breast, cannon, wei;
@@ -28,6 +34,7 @@ class _HorseInfoState extends State<HorseInfo> {
   List<NDEFMessage> _tags = [];
   int index2 = 0;
   bool connected=false;
+  bool _hasClosedWriteDialog = false;
 
   String chipNumberPayload, IDPayload, namePayload, commonNamePayload, sirPayload, damPayload, sexPayload, breedPayload, colourPayload, dobPayload, descriptionPayload;
   int tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload;
@@ -70,6 +77,18 @@ class _HorseInfoState extends State<HorseInfo> {
 //              print("Record '${_tags[index2].records[2].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[2].tnf}, type '${_tags[index2].records[2].type}', payload '${_tags[index2].records[2].payload}' and data '${_tags[index2].records[2].data}' and language code '${_tags[index2].records[2].languageCode}''");
 
               chipNumberPayload = _tags[index2].records[0].data;
+              IDPayload = _tags[index2].records[1].data;
+              if(IDPayload == null){
+                IDPayload = null;
+                numberPayload = null;
+                namePayload = null;
+                commonNamePayload = null;
+              }else {
+                numberPayload = int.parse(_tags[index2].records[2].data);
+                namePayload =_tags[index2].records[3].data;
+                commonNamePayload =_tags[index2].records[4].data;
+              }
+
 //
 //              chipNumberPayload= _tags[index2].records[0].payload;
 //              print("printim chipNumber");
@@ -131,26 +150,35 @@ class _HorseInfoState extends State<HorseInfo> {
 
   @override
   Widget build(BuildContext context) {
-    if(horses == null){
-      horses= List<Horse>();
-      if(chipNumberPayload!= null){
-        updateListView(chipNumberPayload);
-      }
-    }
-    horse1 = horses[0];
+//    if(horses == null){
+//      horses= List<Horse>();
+//      if(chipNumberPayload!= null){
+//        updateListView(chipNumberPayload);
+//      }
+//    } else{
+//      //su data z db sa doplnia + treba dorobit values
+//      horseFromDB =
+//      print("mam kona");
+//      print(horseFromDB.name);
+//    }
+    horseFromDB = widget.horsik;
+    print("mam kona");
+    print(horseFromDB.name);
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/logo_horse.png',
-              fit: BoxFit.contain,
-              height: 32,
-            ),
-            Container(
-                padding: const EdgeInsets.all(8.0), child: Text('Info about horse'))
-          ],
+        title: SingleChildScrollView(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/logo_horse.png',
+                fit: BoxFit.contain,
+                height: 22,
+              ),
+              Container(
+                  padding: const EdgeInsets.all(5.0), child: Text('Info about horse', style: TextStyle(fontSize: 15.0),))
+            ],
+          ),
         ),
         actions: <Widget>[
           Builder(
@@ -180,136 +208,279 @@ class _HorseInfoState extends State<HorseInfo> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Builder(
-              builder: (context){
-                return OfflineBuilder(
-                  connectivityBuilder: (context, ConnectivityResult connectivity, Widget child){
+                OfflineBuilder(
+                  connectivityBuilder: (BuildContext context, ConnectivityResult connectivity, Widget child){
                     connected = connectivity!= ConnectivityResult.none;
-                    if (chipNumberPayload == null) {
-                      return Column(
-                        children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Padding(
-                                      padding: EdgeInsets.only(left: 10.0)
-                                  ),
-                                  Text(
-                                    "Basic Data",
-                                    style: TextStyle(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold
+                    //ak sme pripojeny na internet
+                    if(connected == true){
+                      if (chipNumberPayload == null) {
+                         return Column(
+                          children: <Widget>[
+                            child,
+                            Column(
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Padding(
+                                        padding: EdgeInsets.only(left: 10.0)
                                     ),
-                                  ),
-                                ],
-                              ),
-                              _field("Chip number", ""),
-                              _field("ID number", ""),
-                              _field("Number", ""),
-                              _field("Name",""),
-                              _field("Common name", ""),
-                              _field("Sir", ""),
-                              _field("Dam", ""),
-                              _field("Day of birth", ""),
-                              _field("Year of birth", ""),
-                              _field("Sex", ""),
-                              _field("Breed", ""),
-                              _field("Colour", ""),
-                              _field("Description", "")
-                            ],
-                          ),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                          Column(
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Padding(
-                                      padding: EdgeInsets.only(left: 10.0)
-                                  ),
-                                  Text(
-                                    "Measurements",
-                                    style: TextStyle(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold
+                                    Text(
+                                      "Basic Data",
+                                      style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              _field("Tape measure", ""),
-                              _field("Stick measure", ""),
-                              _field("Breast girth", ""),
-                              _field("Cannon girth", ""),
-                              _field("Weight", ""),
-                            ],
-                          ),
-                        ],
-                      );
-                    } else{
-                      return Column(
-                        children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Padding(
-                                      padding: EdgeInsets.only(left: 10.0)
-                                  ),
-                                  Text(
-                                    "Basic Data",
-                                    style: TextStyle(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold
+                                  ],
+                                ),
+                                _field("Chip number", ""),
+                                _field("ID number", ""),
+                                _field("Number", ""),
+                                _field("Name",""),
+                                _field("Common name", ""),
+                                _field("Sir", ""),
+                                _field("Dam", ""),
+                                _field("Day of birth", ""),
+                                _field("Year of birth", ""),
+                                _field("Sex", ""),
+                                _field("Breed", ""),
+                                _field("Colour", ""),
+                                _field("Description", "")
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Padding(
+                                        padding: EdgeInsets.only(left: 10.0)
                                     ),
-                                  ),
-                                ],
-                              ),
-                              _field("Chip number", horse1.chipNumber),
-                              _field("ID number", horse1.IDNumber),
-                              _field("Number", horse1.number),
-                              _field("Name", horse1.name),
-                              _field("Common name", horse1.commonName),
-                              _field("Sir", horse1.sir),
-                              _field("Dam", horse1.dam),
-                              _field("Day of birth", horse1.dob),
-                              _field("Year of birth", horse1.yob),
-                              _field("Sex", horse1.sex),
-                              _field("Breed", horse1.breed),
-                              _field("Colour", horse1.colour),
-                              _field("Description", horse1.description)
-                            ],
-                          ),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                          Column(
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Padding(
-                                      padding: EdgeInsets.only(left: 10.0)
-                                  ),
-                                  Text(
-                                    "Measurements",
-                                    style: TextStyle(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold
+                                    Text(
+                                      "Measurements",
+                                      style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              _field("Tape measure", horse1.tapeMeasure),
-                              _field("Stick measure", horse1.stickMeasure),
-                              _field("Breast girth", horse1.breastGirth),
-                              _field("Cannon girth", horse1.cannonGirth),
-                              _field("Weight", horse1.weight),
-                            ],
-                          ),
-                        ],
-                      );
+                                  ],
+                                ),
+                                _field("Tape measure", ""),
+                                _field("Stick measure", ""),
+                                _field("Breast girth", ""),
+                                _field("Cannon girth", ""),
+                                _field("Weight", ""),
+                              ],
+                            ),
+                            _saveToDB(),
+                          ],
+                        );
+                      } else{
+                        return Column(
+                          children: <Widget>[
+                            child,
+                            Column(
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Padding(
+                                        padding: EdgeInsets.only(left: 10.0)
+                                    ),
+                                    Text(
+                                      "Basic Data",
+                                      style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                _field("Chip number", horseFromDB.chipNumber),
+                                _field("ID number", horseFromDB.IDNumber),
+                                _field("Number", horseFromDB.number),
+                                _field("Name", horseFromDB.name),
+                                _field("Common name", horseFromDB.commonName),
+                                _field("Sir", horseFromDB.sir),
+                                _field("Dam", horseFromDB.dam),
+                                _field("Day of birth", horseFromDB.dob),
+                                _field("Year of birth", horseFromDB.yob),
+                                _field("Sex", horseFromDB.sex),
+                                _field("Breed", horseFromDB.breed),
+                                _field("Colour", horseFromDB.colour),
+                                _field("Description", horseFromDB.description)
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Padding(
+                                        padding: EdgeInsets.only(left: 10.0)
+                                    ),
+                                    Text(
+                                      "Measurements",
+                                      style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                _field("Tape measure", horseFromDB.tapeMeasure),
+                                _field("Stick measure", horseFromDB.stickMeasure),
+                                _field("Breast girth", horseFromDB.breastGirth),
+                                _field("Cannon girth", horseFromDB.cannonGirth),
+                                _field("Weight", horseFromDB.weight),
+                              ],
+                            ),
+                            _saveToDB(),
+                          ],
+                        );
+                      }
                     }
+                    //ked nie som connectnuty
+                    else{
+                      if (chipNumberPayload == null) {
+                        return Column(
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text("You are in OFFLINE mode."),
+                                Text("You can save only first 4 values on tag.")
+                              ],
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Padding(
+                                        padding: EdgeInsets.only(left: 10.0)
+                                    ),
+                                    Text(
+                                      "Basic Data",
+                                      style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                _field("Chip number", ""),
+                                _field("ID number", ""),
+                                _field("Number", ""),
+                                _field("Name",""),
+                                _field("Common name", ""),
+                                _field("Sir", ""),
+                                _field("Dam", ""),
+                                _field("Day of birth", ""),
+                                _field("Year of birth", ""),
+                                _field("Sex", ""),
+                                _field("Breed", ""),
+                                _field("Colour", ""),
+                                _field("Description", "")
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Padding(
+                                        padding: EdgeInsets.only(left: 10.0)
+                                    ),
+                                    Text(
+                                      "Measurements",
+                                      style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                _field("Tape measure", ""),
+                                _field("Stick measure", ""),
+                                _field("Breast girth", ""),
+                                _field("Cannon girth", ""),
+                                _field("Weight", ""),
+                              ],
+                            ),
+                            _saveToTAG(),
+                          ],
+                        );
+                      } else{
+                        return Column(
+                          children: <Widget>[
+                            Column(
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Padding(
+                                        padding: EdgeInsets.only(left: 10.0)
+                                    ),
+                                    Text(
+                                      "Basic Data",
+                                      style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                _field("Chip number", chipNumberPayload),
+                                _field("ID number",IDPayload),
+                                _field("Number", numberPayload),
+                                _field("Name", namePayload),
+                                _field("Common name", commonNamePayload),
+                                _field("Sir", sirPayload),
+                                _field("Dam", damPayload),
+                                _field("Day of birth", dobPayload),
+                                _field("Year of birth", yobPayload),
+                                _field("Sex", sexPayload),
+                                _field("Breed", breedPayload),
+                                _field("Colour", colourPayload),
+                                _field("Description", descriptionPayload)
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Padding(
+                                        padding: EdgeInsets.only(left: 10.0)
+                                    ),
+                                    Text(
+                                      "Measurements",
+                                      style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                _field("Tape measure", tapeMeasurePayload),
+                                _field("Stick measure", stickMeasurePayload),
+                                _field("Breast girth", breastGirthPayload),
+                                _field("Cannon girth", cannonGirthPayload),
+                                _field("Weight", weightPayload),
+                              ],
+                            ),
+                            _saveToTAG(),
+                          ],
+                        );
+                      }
+                    }
+
 //                    return Stack(
 //                      fit:  StackFit.expand,
 //                        children: <Widget>[
@@ -338,10 +509,16 @@ class _HorseInfoState extends State<HorseInfo> {
 //                        ],
 //                    );
                   },
-                );
-              },
-            ),
-              _sendBtn(),
+                  builder: (context){
+                    return Column(
+                      children: <Widget>[
+                        Text(
+                          "Skusam"
+                        )
+                      ],
+                    );
+                  },
+                )
           ],
         ),
       ),
@@ -378,130 +555,240 @@ class _HorseInfoState extends State<HorseInfo> {
     print("keyValue");
     print(keyValue);
     switch(keyValue) {
-      case "Chip number": {
-        horse1.chipNumber = value;
-        print(horse1.chipNumber);
-      }break;
-
       case "ID number": {
-        horse1.IDNumber = value;
-        print(horse1.IDNumber);
+        horseFromDB.IDNumber = value;
+        print(horseFromDB.IDNumber);
+        IDPayload = value;
       }break;
 
       case "Number": {
         num = value;
-        horse1.number = int.parse(num);
-        print(horse1.number);
+        horseFromDB.number = int.parse(num);
+        print(horseFromDB.number);
+        numberPayload = int.parse(num);
       }break;
 
       case "Name": {
-        horse1.name= value;
-        print(horse1.name);
+        horseFromDB.name= value;
+        print(horseFromDB.name);
+        namePayload = value;
       }break;
 
       case "Common name": {
-        horse1.commonName = value;
-        print(horse1.commonName);
+        horseFromDB.commonName = value;
+        print(horseFromDB.commonName);
+        commonNamePayload = value;
       }break;
 
       case "Sir": {
-        horse1.sir = value;
-        print(horse1.sir);
+        horseFromDB.sir = value;
+        print(horseFromDB.sir);
       }break;
 
       case "Dam": {
-        horse1.dam= value;
-        print(horse1.dam);
+        horseFromDB.dam= value;
+        print(horseFromDB.dam);
       }break;
 
       case "Day of birth": {
-        horse1.dob= value;
-        print(horse1.dob);
+        horseFromDB.dob= value;
+        print(horseFromDB.dob);
       }break;
 
       case "Year of birth": {
         yob = value;
-        horse1.yob= int.parse(yob);
-        print(horse1.yob);
+        horseFromDB.yob= int.parse(yob);
+        print(horseFromDB.yob);
       }break;
 
       case "Sex": {
-        horse1.sex = value;
-        print(horse1.sex);
+        horseFromDB.sex = value;
+        print(horseFromDB.sex);
       }break;
 
       case "Breed": {
-        horse1.breed= value;
-        print(horse1.breed);
+        horseFromDB.breed= value;
+        print(horseFromDB.breed);
       }break;
 
       case "Colour": {
-        horse1.colour = value;
-        print(horse1.colour);
+        horseFromDB.colour = value;
+        print(horseFromDB.colour);
       }break;
 
       case "Description": {
-        horse1.description = value;
-        print(horse1.description);
+        horseFromDB.description = value;
+        print(horseFromDB.description);
       }break;
 
       case "Tape measure": {
         tape = value;
-        horse1.tapeMeasure = int.parse(tape);
-        print(horse1.tapeMeasure);
+        horseFromDB.tapeMeasure = int.parse(tape);
+        print(horseFromDB.tapeMeasure);
       }break;
 
       case "Stick measure": {
         stick = value;
-        horse1.stickMeasure= int.parse(stick);
-        print(horse1.stickMeasure);
+        horseFromDB.stickMeasure= int.parse(stick);
+        print(horseFromDB.stickMeasure);
       }break;
 
       case "Breast girth": {
         breast =value;
-        horse1.breastGirth = int.parse(breast);
-        print(horse1.breastGirth);
+        horseFromDB.breastGirth = int.parse(breast);
+        print(horseFromDB.breastGirth);
       }break;
 
       case "Cannon girth": {
         cannon = value;
-        horse1.cannonGirth = double.parse(cannon);
-        print(horse1.cannonGirth);
+        horseFromDB.cannonGirth = double.parse(cannon);
+        print(horseFromDB.cannonGirth);
       }break;
 
       case "Weight": {
         wei = value;
-        horse1.weight = int.parse(wei);
-        print(horse1.weight);
+        horseFromDB.weight = int.parse(wei);
+        print(horseFromDB.weight);
       }break;
     }
   }
 
-  Widget _sendBtn(){
+  Widget _saveToTAG(){
     return Container(
       padding: EdgeInsets.only(top: 20.0),
       child: RaisedButton(
         color: Color.fromRGBO(0,44,44, 1.0),
         textColor: Colors.white,
         onPressed: (){
-         //todo
+         _saveOnTAGFun();
         },
-        child: Text("SEND"),
+        child: Text("SAVE ON TAG"),
       ),
     );
   }
 
-  void updateListView(String uid) {
-    final Future<Database> dbFuture = dbProvider.initDB();
-    dbFuture.then((database){
-      Future<List<Horse>> horseListFuture = dbProvider.getMyHorseList(uid);
-      horseListFuture.then((horses){
-        setState(() {
-          this.horses = horses;
-          this.count = horses.length;
-        });
-      });
-    });
+  Widget _saveToDB(){
+    return Container(
+      padding: EdgeInsets.only(top: 20.0),
+      child: RaisedButton(
+        color: Color.fromRGBO(0,44,44, 1.0),
+        textColor: Colors.white,
+        onPressed: (){
+          _saveOnDBFun();
+        },
+        child: Text("SAVE TO DATABASE"),
+      ),
+    );
+  }
+
+//  void updateListView(String uid) {
+//    final Future<Database> dbFuture = dbProvider.initDB();
+//    dbFuture.then((database){
+//      Future<List<Horse>> horseListFuture = dbProvider.getMyHorseList(uid);
+//      horseListFuture.then((horses){
+//        setState(() {
+//          this.horses = horses;
+//          this.count = horses.length;
+//        });
+//      });
+//    });
+//  }
+
+  void _saveOnTAGFun() async{
+    print("saving na tag");
+    List<NDEFRecord> records = new List<NDEFRecord>();
+
+    // prvych 5 veci sa zapise na Tag
+    records.add(NDEFRecord.type("text/plain", chipNumberPayload));
+    records.add(NDEFRecord.type("text/plain", IDPayload));
+    records.add(NDEFRecord.type("text/plain", numberPayload.toString()));
+    records.add(NDEFRecord.type("text/plain", namePayload));
+    records.add(NDEFRecord.type("text/plain", commonNamePayload));
+
+    NDEFMessage message = NDEFMessage.withRecords(records);
+
+    //iOS zevraj ma svoj
+    if (Platform.isAndroid) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Scan the tag you want to write to"),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text("Cancel"),
+              onPressed: () {
+                _hasClosedWriteDialog = true;
+                _streamSubscription?.cancel();
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
+    await NFC.writeNDEF(message).first;
+    if(!_hasClosedWriteDialog){
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CustomerProfile(customer: widget.customer,)
+          )
+      );
+    }
+  }
+
+  void _saveOnDBFun() async{
+    print("saving do db a na tag");
+    List<NDEFRecord> records = new List<NDEFRecord>();
+
+    // prvych 5 veci sa zapise na Tag
+    records.add(NDEFRecord.type("text/plain", chipNumberPayload));
+    records.add(NDEFRecord.type("text/plain", horseFromDB.IDNumber));
+    records.add(NDEFRecord.type("text/plain", horseFromDB.number.toString()));
+    records.add(NDEFRecord.type("text/plain", horseFromDB.name));
+    records.add(NDEFRecord.type("text/plain", horseFromDB.commonName));
+
+    //update kona do db
+    Horse newHorse = horseFromDB;
+    _updateHorseFun(newHorse);
+
+    NDEFMessage message = NDEFMessage.withRecords(records);
+
+    //iOS zevraj ma svoj
+    if (Platform.isAndroid) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Scan the tag you want to write to"),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text("Cancel"),
+              onPressed: () {
+                _hasClosedWriteDialog = true;
+                _streamSubscription?.cancel();
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
+    await NFC.writeNDEF(message).first;
+    if(!_hasClosedWriteDialog){
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CustomerProfile(customer: widget.customer,)
+          )
+      );
+    }
+  }
+
+  void _updateHorseFun(Horse horse) async{
+    await dbProvider.updateHorse(horse);
+    print("horse was updated");
   }
 
 }

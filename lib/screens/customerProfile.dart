@@ -236,7 +236,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
                                                Navigator.push(
                                                      context,
                                                      MaterialPageRoute(
-                                                         builder: (context) => HorseInfo()
+                                                         builder: (context) => HorseInfo(customer: widget.customer, horsik: myHorses[index])
                                                      )
                                                  );
                                              },
