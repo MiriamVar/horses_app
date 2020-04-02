@@ -82,6 +82,28 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String num, yob, tape, stick, breast, wei, cannon;
 
+  bool ID_ch = false;
+  bool name_ch = false;
+  bool commonMane_ch = false;
+  bool sir_ch= false;
+  bool dam_ch= false;
+  bool sex_ch= false;
+  bool breed_ch= false;
+  bool colour_ch = false;
+  bool dob_ch = false;
+  bool description_ch = false;
+  bool tapeMeasure_ch =false;
+  bool stichMeasure_ch= false;
+  bool breastGirth_ch =false;
+  bool weight_ch = false;
+  bool number_ch= false;
+  bool yob_ch= false;
+  bool cannonGirth_ch = false;
+  bool chipNumber_ch= true;
+
+
+  List<NDEFRecord> records = new List<NDEFRecord>();
+
 
 
   void _startScannig(BuildContext context){
@@ -94,34 +116,8 @@ class _MyHomePageState extends State<MyHomePage> {
               print(tag);
               print("Record '${_tags[index2].records[0].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[0].tnf}, type '${_tags[index2].records[0].type}', payload '${_tags[index2].records[0].payload}' and data '${_tags[index2].records[0].data}' and language code '${_tags[index2].records[0].languageCode}''");
 
+              //nacitavam iba ID chipu
               chipNumberPayload = _tags[index2].records[0].data;
-
-//              print("Record '${_tags[index2].records[1].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[1].tnf}, type '${_tags[index2].records[1].type}', payload '${_tags[index2].records[1].payload}' and data '${_tags[index2].records[1].data}' and language code '${_tags[index2].records[1].languageCode}''");
-//              print("Record '${_tags[index2].records[2].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[2].tnf}, type '${_tags[index2].records[2].type}', payload '${_tags[index2].records[2].payload}' and data '${_tags[index2].records[2].data}' and language code '${_tags[index2].records[2].languageCode}''");
-//
-//              chipNumberPayload= _tags[index2].records[0].payload;
-//              print("printim chipNumber");
-//              print(chipNumberPayload);
-//              IDPayload = _tags[index2].records[1].payload;
-//              numberPayload = int.parse(_tags[index2].records[2].payload);
-//              namePayload = _tags[index2].records[3].payload;
-//              commonNamePayload = _tags[index2].records[4].payload;
-//              sirPayload = _tags[index2].records[5].payload;
-//              damPayload = _tags[index2].records[6].payload;
-//              dobPayload = _tags[index2].records[7].payload;
-//              print(dobPayload + "dob");
-//              print(yobPayload);
-//              yobPayload = int.parse(_tags[index2].records[8].payload);
-//              sexPayload = _tags[index2].records[9].payload;
-//              breedPayload = _tags[index2].records[10].payload;
-//              colourPayload = _tags[index2].records[11].payload;
-//              descriptionPayload = _tags[index2].records[12].payload;
-//
-//              tapeMeasurePayload = int.parse(_tags[index2].records[13].payload);
-//              stickMeasurePayload = int.parse(_tags[index2].records[14].payload);
-//              breastGirthPayload = int.parse(_tags[index2].records[15].payload);
-//              cannonGirthPayload = double.parse(_tags[index2].records[16].payload);
-//              weightPayload = int.parse(_tags[index2].records[17].payload);
 
             });
           },
@@ -243,20 +239,19 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                       ],
                                     ),
-                                    _field("Chip number", chipNumberPayload),
-                                    _field("ID number", IDPayload),
-                                    _field("Number", numberPayload),
-                                    _field("Name", namePayload),
-                                    _field("Common name", commonNamePayload),
-                                    _field("Sir", sirPayload),
-                                    _field("Dam", damPayload),
-                                    _field("Day of birth", dobPayload),
-                                    _field("Year of birth", yobPayload),
-                                    _field("Sex", sexPayload),
-                                    _field("Breed", breedPayload),
-                                    _field("Colour", colourPayload),
-                                    _field("Description", descriptionPayload)
-
+                                    _field("Chip number", chipNumberPayload,chipNumber_ch),
+                                    _field("ID number", IDPayload, ID_ch),
+                                    _field("Number", numberPayload, number_ch),
+                                    _field("Name", namePayload, name_ch),
+                                    _field("Common name", commonNamePayload, commonMane_ch),
+                                    _field("Sir", sirPayload, sir_ch),
+                                    _field("Dam", damPayload, dam_ch),
+                                    _field("Day of birth", dobPayload, dob_ch),
+                                    _field("Year of birth", yobPayload, yob_ch),
+                                    _field("Sex", sexPayload, sex_ch),
+                                    _field("Breed", breedPayload, breed_ch),
+                                    _field("Colour", colourPayload, colour_ch),
+                                    _field("Description", descriptionPayload, description_ch)
                                   ],
                                 ),
                                 SizedBox(
@@ -279,17 +274,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                       ],
                                     ),
-                                    _field("Tape measure", tapeMeasurePayload),
-                                    _field(
-                                        "Stick measure", stickMeasurePayload),
-                                    _field("Breast girth", breastGirthPayload),
-                                    _field("Cannon girth", commonNamePayload),
-                                    _field("Weight", weightPayload),
+                                    _field("Tape measure", tapeMeasurePayload, tapeMeasure_ch),
+                                    _field("Stick measure", stickMeasurePayload, stichMeasure_ch),
+                                    _field("Breast girth", breastGirthPayload, breed_ch),
+                                    _field("Cannon girth", cannonGirthPayload,cannonGirth_ch ),
+                                    _field("Weight", weightPayload, weight_ch),
                                   ],
                                 ),
                               ],
                             );
-//                          }
                           }
                         }
                     ),
@@ -303,13 +296,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
 
-  Widget _field(String key, var payload2){
-    bool val = false;
-    //TODO - onChange function
+  Widget _field(String key, var payload2, bool checked){
      return Row(
       children: <Widget>[
         Checkbox(
-          value: val,
+          value: checked,
+          onChanged: (checked){
+            setState(() {
+              setChecked(key, checked);
+            });
+          },
         ),
         Text(key),
         Spacer(),
@@ -428,6 +424,243 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void setChecked(String key, bool value){
+    String keyValue = key;
+    print("keyValue");
+    print(keyValue);
+
+    switch(keyValue) {
+      case "Chip number": {
+        chipNumber_ch = true;
+        print("is chceck ID?");
+        print(chipNumber_ch);
+      }break;
+      case "ID number": {
+        ID_ch = value;
+        print("is chceck ID?");
+        print(ID_ch);
+      }break;
+      case "ID number": {
+        ID_ch = value;
+        print("is chceck ID?");
+        print(ID_ch);
+      }break;
+
+      case "Number": {
+        number_ch = value;
+        print(number_ch);
+      }break;
+
+      case "Name": {
+        name_ch= value;
+        print(name_ch);
+      }break;
+
+      case "Common name": {
+        commonMane_ch = value;
+        print(commonMane_ch);
+      }break;
+
+      case "Sir": {
+        sir_ch = value;
+        print(sir_ch);
+      }break;
+
+      case "Dam": {
+        dam_ch = value;
+        print(dam_ch);
+      }break;
+
+      case "Day of birth": {
+        dob_ch = value;
+        print(dob_ch);
+      }break;
+
+      case "Year of birth": {
+        yob_ch = value;
+        print(yob_ch);
+      }break;
+
+      case "Sex": {
+        sex_ch = value;
+        print(sex_ch);
+      }break;
+
+      case "Breed": {
+        breed_ch = value;
+        print(breed_ch);
+      }break;
+
+      case "Colour": {
+        colour_ch = value;
+        print(colour_ch);
+      }break;
+
+      case "Description": {
+        description_ch = value;
+        print(description_ch);
+      }break;
+
+      case "Tape measure": {
+        tapeMeasure_ch = value;
+        print(tapeMeasure_ch);
+      }break;
+
+      case "Stick measure": {
+        stichMeasure_ch = value;
+        print(stichMeasure_ch);
+      }break;
+
+      case "Breast girth": {
+        breastGirth_ch =value;
+        print(breastGirth_ch);
+      }break;
+
+      case "Cannon girth": {
+        cannonGirth_ch = value;
+        print(cannonGirth_ch);
+      }break;
+
+      case "Weight": {
+        weight_ch = value;
+        print(weight_ch);
+      }break;
+    }
+  }
+
+  void isChecked(String key, bool value){
+    String keyValue = key;
+    print("keyValue");
+    print(keyValue);
+
+    switch(keyValue) {
+      case "Chip number": {
+        if(value){
+          records.add(NDEFRecord.type("text/plain", "chipNumber:"+chipNumberPayload));
+        }
+        print(ID_ch);
+      }break;
+      case "ID number": {
+        if(value){
+          records.add(NDEFRecord.type("text/plain", "id:"+IDPayload));
+        }
+        print(ID_ch);
+      }break;
+
+      case "Number": {
+        if(value){
+          records.add(NDEFRecord.type("text/plain", "number:"+numberPayload.toString()));
+        }
+        print(number_ch);
+      }break;
+
+      case "Name": {
+        if(value){
+          records.add(NDEFRecord.type("text/plain", "name:"+namePayload));
+        }
+        print(name_ch);
+      }break;
+
+      case "Common name": {
+        if(value){
+          records.add(NDEFRecord.type("text/plain", "commonName:"+commonNamePayload));
+        }
+        print(commonMane_ch);
+      }break;
+
+      case "Sir": {
+        if(value){
+          records.add(NDEFRecord.type("text/plain", "sir:"+sirPayload));
+        }
+        print(sir_ch);
+      }break;
+
+      case "Dam": {
+        if(value){
+          records.add(NDEFRecord.type("text/plain", "dam:"+damPayload));
+        }
+        print(dam_ch);
+      }break;
+
+      case "Day of birth": {
+        if(value){
+          records.add(NDEFRecord.type("text/plain", "dob:"+dobPayload));
+        }
+        print(dob_ch);
+      }break;
+
+      case "Year of birth": {
+        if(value){
+          records.add(NDEFRecord.type("text/plain", "yob:"+yobPayload.toString()));
+        }
+        print(yob_ch);
+      }break;
+
+      case "Sex": {
+        if(value){
+          records.add(NDEFRecord.type("text/plain", "sex:"+sexPayload));
+        }
+        print(sex_ch);
+      }break;
+
+      case "Breed": {
+        if(value){
+          records.add(NDEFRecord.type("text/plain", "breed:"+breedPayload));
+        }
+        print(breed_ch);
+      }break;
+
+      case "Colour": {
+        if(value){
+          records.add(NDEFRecord.type("text/plain", "colour:"+colourPayload));
+        }
+        print(colour_ch);
+      }break;
+
+      case "Description": {
+        if(value){
+          records.add(NDEFRecord.type("text/plain", "description:"+descriptionPayload));
+        }
+        print(description_ch);
+      }break;
+
+      case "Tape measure": {
+        if(value){
+          records.add(NDEFRecord.type("text/plain", "tapeMeasure:"+tapeMeasurePayload.toString()));
+        }
+        print(tapeMeasure_ch);
+      }break;
+
+      case "Stick measure": {
+        if(value){
+          records.add(NDEFRecord.type("text/plain", "stickMeasure:"+stickMeasurePayload.toString()));
+        }
+        print(stichMeasure_ch);
+      }break;
+
+      case "Breast girth": {
+        if(value){
+          records.add(NDEFRecord.type("text/plain", "breastGirth:"+breastGirthPayload.toString()));
+        }
+        print(breastGirth_ch);
+      }break;
+
+      case "Cannon girth": {
+        if(value){
+          records.add(NDEFRecord.type("text/plain", "cannonGirth:"+cannonGirthPayload.toString()));
+        }
+        print(cannonGirth_ch);
+      }break;
+
+      case "Weight": {
+        if(value){
+          records.add(NDEFRecord.type("text/plain", "weight:"+weightPayload.toString()));
+        }
+        print(weight_ch);
+      }break;
+    }
+  }
+
   Widget _sendBtn(){
     return Container(
       padding: EdgeInsets.only(top: 20.0),
@@ -445,14 +678,40 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _submitForm() async{
     print("submit form");
-    List<NDEFRecord> records = new List<NDEFRecord>();
 
-    // prvych 5 veci sa zapise na Tag
-    records.add(NDEFRecord.type("text/plain", chipNumberPayload));
-    records.add(NDEFRecord.type("text/plain", IDPayload));
-    records.add(NDEFRecord.type("text/plain", numberPayload.toString()));
-    records.add(NDEFRecord.type("text/plain", namePayload));
-    records.add(NDEFRecord.type("text/plain", commonNamePayload));
+    var checkedValues = new Map();
+    checkedValues['Chip number']= chipNumber_ch;
+    checkedValues['ID number']= ID_ch;
+    checkedValues['Number']= number_ch;
+    checkedValues['Name']= name_ch;
+    checkedValues['Common name']= commonMane_ch;
+    checkedValues['Sir']= sir_ch;
+    checkedValues['Dam']= dam_ch;
+    checkedValues['Day of birth']= dob_ch;
+    checkedValues['Year of birth']= yob_ch;
+    checkedValues['Sex']= sex_ch;
+    checkedValues['Breed']= breed_ch;
+    checkedValues['Colour']= colour_ch;
+    checkedValues['Description']= description_ch;
+    checkedValues['Tape measure']= tapeMeasure_ch;
+    checkedValues['Stick measure']= stichMeasure_ch;
+    checkedValues['Breast girth']= breastGirth_ch;
+    checkedValues['Cannon girth']= cannonGirth_ch;
+    checkedValues['Weight']= weight_ch;
+    
+    checkedValues.forEach((k, v) =>{
+      isChecked(k,v)
+    });
+
+    print("pocet zaskrtnutych policok");
+    print(records.length);
+
+//    // prvych 5 veci sa zapise na Tag
+//    records.add(NDEFRecord.type("text/plain", chipNumberPayload));
+//    records.add(NDEFRecord.type("text/plain", IDPayload));
+//    records.add(NDEFRecord.type("text/plain", numberPayload.toString()));
+//    records.add(NDEFRecord.type("text/plain", namePayload));
+//    records.add(NDEFRecord.type("text/plain", commonNamePayload));
 //    records.add(NDEFRecord.type("text/plain", sirPayload));
 //    records.add(NDEFRecord.type("text/plain", damPayload));
 //    records.add(NDEFRecord.type("text/plain", dobPayload));
@@ -470,7 +729,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
     //zapis noveho kona do db
-    Horse newHorse = Horse(widget.customer.id,chipNumberPayload, IDPayload,namePayload,commonNamePayload,sirPayload,damPayload,sexPayload,breedPayload,colourPayload,dobPayload,descriptionPayload, tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload, cannonGirthPayload);
+    Horse newHorse = Horse(widget.customer.id, chipNumberPayload, IDPayload,namePayload,commonNamePayload,sirPayload,damPayload,sexPayload,breedPayload,colourPayload,dobPayload,descriptionPayload, tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload, cannonGirthPayload);
     _saveHorseFun(newHorse);
 
 
@@ -511,6 +770,7 @@ class _MyHomePageState extends State<MyHomePage> {
     await dbProvider.insertHorse(horse);
     print("new horse was saved");
   }
+
 
 }
 
