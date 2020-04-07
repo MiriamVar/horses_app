@@ -536,20 +536,20 @@ class _MyHomePageState extends State<MyHomePage> {
     switch(keyValue) {
       case "Chip number": {
         if(value){
-          records.add(NDEFRecord.type("text/plain", "chipNumber:"+chipNumberPayload));
+          records.add(NDEFRecord.type("text/plain", "Chip number:"+chipNumberPayload));
         }
         print(ID_ch);
       }break;
       case "ID number": {
         if(value){
-          records.add(NDEFRecord.type("text/plain", "id:"+IDPayload));
+          records.add(NDEFRecord.type("text/plain", "ID number:"+IDPayload));
         }
         print(ID_ch);
       }break;
 
       case "Number": {
         if(value){
-          records.add(NDEFRecord.type("text/plain", "number:"+numberPayload.toString()));
+          records.add(NDEFRecord.type("text/plain", "Number:"+numberPayload.toString()));
         }
         print(number_ch);
       }break;
@@ -563,98 +563,98 @@ class _MyHomePageState extends State<MyHomePage> {
 
       case "Common name": {
         if(value){
-          records.add(NDEFRecord.type("text/plain", "commonName:"+commonNamePayload));
+          records.add(NDEFRecord.type("text/plain", "Common name:"+commonNamePayload));
         }
         print(commonMane_ch);
       }break;
 
       case "Sir": {
         if(value){
-          records.add(NDEFRecord.type("text/plain", "sir:"+sirPayload));
+          records.add(NDEFRecord.type("text/plain", "Sir:"+sirPayload));
         }
         print(sir_ch);
       }break;
 
       case "Dam": {
         if(value){
-          records.add(NDEFRecord.type("text/plain", "dam:"+damPayload));
+          records.add(NDEFRecord.type("text/plain", "Dam:"+damPayload));
         }
         print(dam_ch);
       }break;
 
       case "Day of birth": {
         if(value){
-          records.add(NDEFRecord.type("text/plain", "dob:"+dobPayload));
+          records.add(NDEFRecord.type("text/plain", "Day of birth:"+dobPayload));
         }
         print(dob_ch);
       }break;
 
       case "Year of birth": {
         if(value){
-          records.add(NDEFRecord.type("text/plain", "yob:"+yobPayload.toString()));
+          records.add(NDEFRecord.type("text/plain", "Year of birth:"+yobPayload.toString()));
         }
         print(yob_ch);
       }break;
 
       case "Sex": {
         if(value){
-          records.add(NDEFRecord.type("text/plain", "sex:"+sexPayload));
+          records.add(NDEFRecord.type("text/plain", "Sex:"+sexPayload));
         }
         print(sex_ch);
       }break;
 
       case "Breed": {
         if(value){
-          records.add(NDEFRecord.type("text/plain", "breed:"+breedPayload));
+          records.add(NDEFRecord.type("text/plain", "Breed:"+breedPayload));
         }
         print(breed_ch);
       }break;
 
       case "Colour": {
         if(value){
-          records.add(NDEFRecord.type("text/plain", "colour:"+colourPayload));
+          records.add(NDEFRecord.type("text/plain", "Colour:"+colourPayload));
         }
         print(colour_ch);
       }break;
 
       case "Description": {
         if(value){
-          records.add(NDEFRecord.type("text/plain", "description:"+descriptionPayload));
+          records.add(NDEFRecord.type("text/plain", "Description:"+descriptionPayload));
         }
         print(description_ch);
       }break;
 
       case "Tape measure": {
         if(value){
-          records.add(NDEFRecord.type("text/plain", "tapeMeasure:"+tapeMeasurePayload.toString()));
+          records.add(NDEFRecord.type("text/plain", "Tape measure:"+tapeMeasurePayload.toString()));
         }
         print(tapeMeasure_ch);
       }break;
 
       case "Stick measure": {
         if(value){
-          records.add(NDEFRecord.type("text/plain", "stickMeasure:"+stickMeasurePayload.toString()));
+          records.add(NDEFRecord.type("text/plain", "Stick measure:"+stickMeasurePayload.toString()));
         }
         print(stichMeasure_ch);
       }break;
 
       case "Breast girth": {
         if(value){
-          records.add(NDEFRecord.type("text/plain", "breastGirth:"+breastGirthPayload.toString()));
+          records.add(NDEFRecord.type("text/plain", "Breast girth:"+breastGirthPayload.toString()));
         }
         print(breastGirth_ch);
       }break;
 
       case "Cannon girth": {
         if(value){
-          records.add(NDEFRecord.type("text/plain", "cannonGirth:"+cannonGirthPayload.toString()));
+          records.add(NDEFRecord.type("text/plain", "Cannon girth:"+cannonGirthPayload.toString()));
         }
         print(cannonGirth_ch);
       }break;
 
       case "Weight": {
         if(value){
-          records.add(NDEFRecord.type("text/plain", "weight:"+weightPayload.toString()));
+          records.add(NDEFRecord.type("text/plain", "Weight:"+weightPayload.toString()));
         }
         print(weight_ch);
       }break;
@@ -729,8 +729,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
     //zapis noveho kona do db
-    Horse newHorse = Horse(widget.customer.id, chipNumberPayload, IDPayload,namePayload,commonNamePayload,sirPayload,damPayload,sexPayload,breedPayload,colourPayload,dobPayload,descriptionPayload, tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload, cannonGirthPayload);
-    _saveHorseFun(newHorse);
+//    Horse newHorse = Horse(widget.customer.id, chipNumberPayload, IDPayload,namePayload,commonNamePayload,sirPayload,damPayload,sexPayload,breedPayload,colourPayload,dobPayload,descriptionPayload, tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload, cannonGirthPayload);
+//    _saveHorseFun(newHorse);
 
 
     NDEFMessage message = NDEFMessage.withRecords(records);

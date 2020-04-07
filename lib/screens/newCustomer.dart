@@ -13,7 +13,7 @@ class NewCustomer extends StatefulWidget{
 }
 
 class _NewCustomerState extends State<NewCustomer>{
-  String name, email;
+  String name, email, password;
   DBProvider dbProvider= DBProvider();
 
   @override
@@ -241,8 +241,8 @@ class _NewCustomerState extends State<NewCustomer>{
               fontWeight: FontWeight.bold
           ),
         ), onPressed: () {
-          Customer newCust = new Customer(name, email);
-          _saveCustomerFun(newCust);
+//          Customer newCust = new Customer(id, name, email, password);
+//          _saveCustomerFun(newCust);
         Navigator.push(
             context,
             MaterialPageRoute(

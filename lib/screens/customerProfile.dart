@@ -28,7 +28,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
     if(myHorses == null){
       myHorses= List<Horse>();
       print(widget.customer.name);
-      updateListView(widget.customer.id);
+//      updateListView(widget.customer.id);
     }
     return Scaffold(
       backgroundColor: Colors.white,

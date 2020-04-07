@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:horsesapp/database.dart';
+import 'package:horsesapp/models/Customer.dart';
 import 'package:horsesapp/screens/allCustomersList.dart';
-import 'package:horsesapp/screens/main.dart';
+import 'package:horsesapp/screens/customerProfile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget{
   @override
@@ -10,13 +13,60 @@ class LoginPage extends StatefulWidget{
 }
 
 class _LoginPageState extends State<LoginPage>{
-  final _formKey = GlobalKey<FormState>();
-  String username, password = "";
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  DBProvider db = DBProvider();
+  bool _isLoading = false;
+  Future<List<Customer>> customers;
+  List<Customer> customersList;
 
+//  firstTime() async{
+//    SharedPreferences prefs = await SharedPreferences.getInstance();
+//    bool firstTime = prefs.getBool('first_time');
+//
+//    if (firstTime != null && !firstTime) {// Not first time
+//      print("db by mala byt plna");
+//    } else {// First time
+//      prefs.setBool('first_time', false);
+//      _fillDB();
+//    }
+//  }
+
+
+
+//  void _fillDB(){
+//    Customer vet1 = new Customer("Jano", "jano@vet.com", "jano123");
+//    Customer customer1 = new Customer("Kubo", "kubo@gmail.com.com", "kubo123");
+//    Customer customer2 = new Customer("Miro", "miro@gmail.com", "miro123");
+//
+//    db.insertCustomer(vet1);
+//    db.insertCustomer(customer1);
+//    db.insertCustomer(customer2);
+//  }
+
+  Future<Customer> _loginUser(String name, String password) async {
+    Customer user = await db.loginCustomer(name, password);
+    if(user == null){
+      print("z db mi nic nevratilo");
+      return null;
+    }
+    else{
+      return user;
+    }
+  }
+
+
+//  @override
+//  void initState() {
+//    super.initState();
+//    firstTime();
+//  }
 
   @override
   Widget build(BuildContext context) {
      return Scaffold(
+       key: _formKey,
        resizeToAvoidBottomPadding: false,
        body: Container(
          height: MediaQuery.of(context).size.height,
@@ -26,7 +76,6 @@ class _LoginPageState extends State<LoginPage>{
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
               colors: [Color(0xff498281),Color(0xff185555)]
-//              colors: [Color(0xffffc79f),Color(0xffe09670)]
             )
           ),
            child: Padding(
@@ -50,9 +99,10 @@ class _LoginPageState extends State<LoginPage>{
   }
 
   Widget _loginForm(){
-    return Form(
-      key: _formKey,
-      child: SingleChildScrollView(
+    return Center(
+      child: _isLoading
+      ? CircularProgressIndicator()
+      : SingleChildScrollView(
         child: Column(
           children: <Widget>[
             SizedBox(
@@ -78,9 +128,7 @@ class _LoginPageState extends State<LoginPage>{
   
   Widget _nameField(){
     return TextFormField(
-      onChanged: (name){
-        username= name;
-      },
+     controller: _nameController,
       style: TextStyle(
         color: Colors.white
       ),
@@ -95,7 +143,7 @@ class _LoginPageState extends State<LoginPage>{
             borderRadius: BorderRadius.circular(32.0)
         ),
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0,15.0),
-        hintText: 'username',
+        hintText: 'name',
         hintStyle: TextStyle(
           color: Colors.white
         ),
@@ -105,9 +153,7 @@ class _LoginPageState extends State<LoginPage>{
 
   Widget _passwordField(){
     return TextFormField(
-      onChanged: (pass){
-        password = pass;
-      },
+      controller: _passwordController,
       style: TextStyle(
           color: Colors.white
       ),
@@ -147,24 +193,36 @@ class _LoginPageState extends State<LoginPage>{
             color: Colors.white,
             fontWeight: FontWeight.bold
           ),
-        ), onPressed: () {
-          _submitForm();
-      },
+        ), onPressed: () async {
+          setState(() {
+            _isLoading = true;
+          });
+          Customer user = await _loginUser(_nameController.text, _passwordController.text);
+          setState(() {
+            _isLoading = false;
+          });
+          if(user != null){
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) => AllCustomersList()));
+            // ignore: unrelated_type_equality_checks
+//            if(user.name.compareTo("Jano") == true){
+//              Navigator.of(context).push(MaterialPageRoute(
+//                  builder: (BuildContext context) => AllCustomersList()
+//              ));
+//            }else {
+//              Navigator.of(context).push(MaterialPageRoute(
+//                  builder: (BuildContext context) => CustomerProfile(customer: user,)
+//              )
+//              );
+//            }
+          }else{
+            Scaffold.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Wrong email or password"),
+              )
+            );
+          }},
       ),
-    );
-  }
-
-  void _submitForm(){
-    if(username == "Admin123" && password == "Admin123"){
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AllCustomersList()
-          )
-      );
-    } else(
-    // ignore: unnecessary_statements
-    print("zle meno a heslo")
     );
   }
 }

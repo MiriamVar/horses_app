@@ -40,6 +40,8 @@ class _HorseInfoState extends State<HorseInfo> {
   int tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload;
   double cannonGirthPayload;
 
+  List<String> whatIsOnTag = [];
+
 
 
   @override
@@ -76,18 +78,43 @@ class _HorseInfoState extends State<HorseInfo> {
 //              print("Record '${_tags[index2].records[1].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[1].tnf}, type '${_tags[index2].records[1].type}', payload '${_tags[index2].records[1].payload}' and data '${_tags[index2].records[1].data}' and language code '${_tags[index2].records[1].languageCode}''");
 //              print("Record '${_tags[index2].records[2].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[2].tnf}, type '${_tags[index2].records[2].type}', payload '${_tags[index2].records[2].payload}' and data '${_tags[index2].records[2].data}' and language code '${_tags[index2].records[2].languageCode}''");
 
+              int lenght = _tags[index2].records.length;
               chipNumberPayload = _tags[index2].records[0].data;
-              IDPayload = _tags[index2].records[1].data;
-              if(IDPayload == null){
-                IDPayload = null;
-                numberPayload = null;
-                namePayload = null;
-                commonNamePayload = null;
-              }else {
-                numberPayload = int.parse(_tags[index2].records[2].data);
-                namePayload =_tags[index2].records[3].data;
-                commonNamePayload =_tags[index2].records[4].data;
+
+              for(int i = 1; i <lenght; i++){
+                String dataFromTag = _tags[index2].records[i].data;
+                whatIsOnTag.add(dataFromTag);
+                dataFromTag = "";
               }
+
+              print("kolko je dat na tagu");
+              print(whatIsOnTag.length);
+
+              for(int i=0; i<whatIsOnTag.length; i++){
+
+                String valueWithKey = whatIsOnTag[i];
+                String key = valueWithKey.substring(0,valueWithKey.indexOf(RegExp(r':')));
+                String valeu = valueWithKey.substring(valueWithKey.indexOf(RegExp(r':')));
+
+                setValueFromTag(key, valeu);
+
+                valueWithKey = "";
+                key = "";
+                valeu = "";
+              }
+
+
+//              IDPayload = _tags[index2].records[1].data;
+//              if(IDPayload == null){
+//                IDPayload = null;
+//                numberPayload = null;
+//                namePayload = null;
+//                commonNamePayload = null;
+//              }else {
+//                numberPayload = int.parse(_tags[index2].records[2].data);
+//                namePayload =_tags[index2].records[3].data;
+//                commonNamePayload =_tags[index2].records[4].data;
+//              }
 
 //
 //              chipNumberPayload= _tags[index2].records[0].payload;
@@ -554,103 +581,220 @@ class _HorseInfoState extends State<HorseInfo> {
     String keyValue = key;
     print("keyValue");
     print(keyValue);
-    switch(keyValue) {
-      case "ID number": {
-        horseFromDB.IDNumber = value;
-        print(horseFromDB.IDNumber);
-        IDPayload = value;
-      }break;
 
-      case "Number": {
-        num = value;
-        horseFromDB.number = int.parse(num);
-        print(horseFromDB.number);
-        numberPayload = int.parse(num);
-      }break;
+    if(connected){
+      switch(keyValue) {
+        case "ID number": {
+          horseFromDB.IDNumber = value;
+          print(horseFromDB.IDNumber);
+          IDPayload = value;
+        }break;
 
-      case "Name": {
-        horseFromDB.name= value;
-        print(horseFromDB.name);
-        namePayload = value;
-      }break;
+        case "Number": {
+          num = value;
+          horseFromDB.number = int.parse(num);
+          print(horseFromDB.number);
+          numberPayload = int.parse(num);
+        }break;
 
-      case "Common name": {
-        horseFromDB.commonName = value;
-        print(horseFromDB.commonName);
-        commonNamePayload = value;
-      }break;
+        case "Name": {
+          horseFromDB.name= value;
+          print(horseFromDB.name);
+          namePayload = value;
+        }break;
 
-      case "Sir": {
-        horseFromDB.sir = value;
-        print(horseFromDB.sir);
-      }break;
+        case "Common name": {
+          horseFromDB.commonName = value;
+          print(horseFromDB.commonName);
+          commonNamePayload = value;
+        }break;
 
-      case "Dam": {
-        horseFromDB.dam= value;
-        print(horseFromDB.dam);
-      }break;
+        case "Sir": {
+          horseFromDB.sir = value;
+          print(horseFromDB.sir);
+          sirPayload = value;
+        }break;
 
-      case "Day of birth": {
-        horseFromDB.dob= value;
-        print(horseFromDB.dob);
-      }break;
+        case "Dam": {
+          horseFromDB.dam= value;
+          print(horseFromDB.dam);
+          damPayload = value;
+        }break;
 
-      case "Year of birth": {
-        yob = value;
-        horseFromDB.yob= int.parse(yob);
-        print(horseFromDB.yob);
-      }break;
+        case "Day of birth": {
+          horseFromDB.dob= value;
+          print(horseFromDB.dob);
+          dobPayload = value;
+        }break;
 
-      case "Sex": {
-        horseFromDB.sex = value;
-        print(horseFromDB.sex);
-      }break;
+        case "Year of birth": {
+          yob = value;
+          horseFromDB.yob= int.parse(yob);
+          print(horseFromDB.yob);
+          yobPayload = int.parse(yob);
+        }break;
 
-      case "Breed": {
-        horseFromDB.breed= value;
-        print(horseFromDB.breed);
-      }break;
+        case "Sex": {
+          horseFromDB.sex = value;
+          print(horseFromDB.sex);
+          sexPayload = value;
+        }break;
 
-      case "Colour": {
-        horseFromDB.colour = value;
-        print(horseFromDB.colour);
-      }break;
+        case "Breed": {
+          horseFromDB.breed= value;
+          print(horseFromDB.breed);
+          breedPayload = value;
+        }break;
 
-      case "Description": {
-        horseFromDB.description = value;
-        print(horseFromDB.description);
-      }break;
+        case "Colour": {
+          horseFromDB.colour = value;
+          print(horseFromDB.colour);
+          colourPayload = value;
+        }break;
 
-      case "Tape measure": {
-        tape = value;
-        horseFromDB.tapeMeasure = int.parse(tape);
-        print(horseFromDB.tapeMeasure);
-      }break;
+        case "Description": {
+          horseFromDB.description = value;
+          print(horseFromDB.description);
+          descriptionPayload = value;
+        }break;
 
-      case "Stick measure": {
-        stick = value;
-        horseFromDB.stickMeasure= int.parse(stick);
-        print(horseFromDB.stickMeasure);
-      }break;
+        case "Tape measure": {
+          tape = value;
+          horseFromDB.tapeMeasure = int.parse(tape);
+          print(horseFromDB.tapeMeasure);
+          tapeMeasurePayload =value;
+        }break;
 
-      case "Breast girth": {
-        breast =value;
-        horseFromDB.breastGirth = int.parse(breast);
-        print(horseFromDB.breastGirth);
-      }break;
+        case "Stick measure": {
+          stick = value;
+          horseFromDB.stickMeasure= int.parse(stick);
+          print(horseFromDB.stickMeasure);
+          stickMeasurePayload = value;
+        }break;
 
-      case "Cannon girth": {
-        cannon = value;
-        horseFromDB.cannonGirth = double.parse(cannon);
-        print(horseFromDB.cannonGirth);
-      }break;
+        case "Breast girth": {
+          breast =value;
+          horseFromDB.breastGirth = int.parse(breast);
+          print(horseFromDB.breastGirth);
+        }break;
 
-      case "Weight": {
-        wei = value;
-        horseFromDB.weight = int.parse(wei);
-        print(horseFromDB.weight);
-      }break;
+        case "Cannon girth": {
+          cannon = value;
+          horseFromDB.cannonGirth = double.parse(cannon);
+          print(horseFromDB.cannonGirth);
+          cannonGirthPayload = value;
+        }break;
+
+        case "Weight": {
+          wei = value;
+          horseFromDB.weight = int.parse(wei);
+          print(horseFromDB.weight);
+          weightPayload = value;
+        }break;
+      }
     }
+
+  }
+
+  void setValueFromTag(String key, var value){
+    String keyValue = key;
+    print("keyValue");
+    print(keyValue);
+
+      switch(keyValue) {
+        case "ID number": {
+          IDPayload = value;
+          print(IDPayload);
+        }break;
+
+        case "Number": {
+          num = value;
+          numberPayload = int.parse(num);
+          print(numberPayload);
+        }break;
+
+        case "Name": {
+          namePayload = value;
+          print(namePayload);
+        }break;
+
+        case "Common name": {
+          commonNamePayload = value;
+          print(commonNamePayload);
+        }break;
+
+        case "Sir": {
+          sirPayload = value;
+          print(sirPayload);
+        }break;
+
+        case "Dam": {
+          damPayload = value;
+          print(damPayload);
+        }break;
+
+        case "Day of birth": {
+          dobPayload = value;
+          print(dobPayload);
+        }break;
+
+        case "Year of birth": {
+          yob = value;
+          yobPayload= int.parse(yob);
+          print(yobPayload);
+        }break;
+
+        case "Sex": {
+          sexPayload= value;
+          print(sexPayload);
+        }break;
+
+        case "Breed": {
+          breedPayload= value;
+          print(breedPayload);
+        }break;
+
+        case "Colour": {
+          colourPayload = value;
+          print(colourPayload);
+        }break;
+
+        case "Description": {
+          descriptionPayload= value;
+          print(descriptionPayload);
+        }break;
+
+        case "Tape measure": {
+          tape = value;
+          tapeMeasurePayload = int.parse(tape);
+          print(tapeMeasurePayload);
+        }break;
+
+        case "Stick measure": {
+          stick = value;
+          stickMeasurePayload= int.parse(stick);
+          print(stickMeasurePayload);
+        }break;
+
+        case "Breast girth": {
+          breast =value;
+          breastGirthPayload = int.parse(breast);
+          print(breastGirthPayload);
+        }break;
+
+        case "Cannon girth": {
+          cannon = value;
+          cannonGirthPayload = double.parse(cannon);
+          print(cannonGirthPayload);
+        }break;
+
+        case "Weight": {
+          wei = value;
+          weightPayload = int.parse(wei);
+          print(weightPayload);
+        }break;
+    }
+
   }
 
   Widget _saveToTAG(){
