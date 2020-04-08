@@ -56,13 +56,13 @@ Map<int, Color> color = {
   900:Color.fromRGBO(25,85,85, 1),
 };
 
-//MaterialColor colorBrown = MaterialColor(0xFFE09670, color);
 MaterialColor colorBrown = MaterialColor(0xff185555, color);
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.customer}) : super(key: key);
+  MyHomePage({Key key, this.customer, this.tagID}) : super(key: key);
 
   final Customer customer;
+  final String tagID;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -70,8 +70,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   StreamSubscription<NDEFMessage> _streamSubscription;
-  bool _supportsNFC = false;
-  List<NDEFMessage> _tags = [];
+//  bool _supportsNFC = false;
+//  List<NDEFMessage> _tags = [];
   int index2 = 0;
   bool _hasClosedWriteDialog = false;
   DBProvider dbProvider = DBProvider();
@@ -106,94 +106,95 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
 
-  void _startScannig(BuildContext context){
-    try{
-      // ignore: cancel_subscriptions
-      StreamSubscription<NDEFMessage> subscription = NFC.readNDEF().listen(
-          (tag){
-            setState(() {
-              _tags.insert(0,tag);
-              print(tag);
-              print("Record '${_tags[index2].records[0].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[0].tnf}, type '${_tags[index2].records[0].type}', payload '${_tags[index2].records[0].payload}' and data '${_tags[index2].records[0].data}' and language code '${_tags[index2].records[0].languageCode}''");
+//  void _startScannig(BuildContext context){
+//    try{
+//      // ignore: cancel_subscriptions
+//      StreamSubscription<NDEFMessage> subscription = NFC.readNDEF().listen(
+//          (tag){
+//            setState(() {
+//              _tags.insert(0,tag);
+//              print(tag);
+//              print("Record '${_tags[index2].records[0].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[0].tnf}, type '${_tags[index2].records[0].type}', payload '${_tags[index2].records[0].payload}' and data '${_tags[index2].records[0].data}' and language code '${_tags[index2].records[0].languageCode}''");
+//
+//              //nacitavam iba ID chipu
+//              chipNumberPayload = _tags[index2].records[0].data;
+//
+//            });
+//          },
+//        onDone: (){
+//            setState(() {
+//              _streamSubscription = null;
+//            });
+//        },
+//        onError: (exp){
+//            setState(() {
+//              _streamSubscription = null;
+//            });
+//        });
+//      setState(() {
+//        _streamSubscription = subscription;
+//      });
+//    }
+//    catch (error){
+//      print("error: $error");
+//    }
+//  }
 
-              //nacitavam iba ID chipu
-              chipNumberPayload = _tags[index2].records[0].data;
-
-            });
-          },
-        onDone: (){
-            setState(() {
-              _streamSubscription = null;
-            });
-        },
-        onError: (exp){
-            setState(() {
-              _streamSubscription = null;
-            });
-        });
-      setState(() {
-        _streamSubscription = subscription;
-      });
-    }
-    catch (error){
-      print("error: $error");
-    }
-  }
 
 
-
-  void _stopScanning() {
-    _streamSubscription?.cancel();
-    setState(() {
-      _streamSubscription = null;
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _stopScanning();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    NFC.isNDEFSupported.then((supported) {
-      setState(() {
-        _supportsNFC = true;
-      });
-    });
-  }
+//  void _stopScanning() {
+//    _streamSubscription?.cancel();
+//    setState(() {
+//      _streamSubscription = null;
+//    });
+//  }
+//
+//  @override
+//  void dispose() {
+//    super.dispose();
+//    _stopScanning();
+//  }
+//
+//  @override
+//  void initState() {
+//    super.initState();
+//    NFC.isNDEFSupported.then((supported) {
+//      setState(() {
+//        _supportsNFC = true;
+//      });
+//    });
+//  }
 
   @override
   Widget build(BuildContext context) {
+    chipNumberPayload = widget.tagID;
     return Scaffold(
       appBar: AppBar(
         title: Text("Horse"),
-        actions: <Widget>[
-          Builder(
-            builder: (context){
-              if(!_supportsNFC){
-                return FlatButton(
-                  child: Text("NFC unsupported"),
-                  onPressed: null,
-                );
-              }
-              return
-                FlatButton(
-                  child:
-                  Text(_streamSubscription == null ? "Start reading": "Stop reading"),
-                  onPressed: (){
-                    if(_streamSubscription == null){
-                      _startScannig(context);
-                    } else{
-                      _stopScanning();
-                    }
-                  },
-                );
-            },
-          )
-        ],
+//        actions: <Widget>[
+//          Builder(
+//            builder: (context){
+//              if(!_supportsNFC){
+//                return FlatButton(
+//                  child: Text("NFC unsupported"),
+//                  onPressed: null,
+//                );
+//              }
+//              return
+//                FlatButton(
+//                  child:
+//                  Text(_streamSubscription == null ? "Start reading": "Stop reading"),
+//                  onPressed: (){
+//                    if(_streamSubscription == null){
+//                      _startScannig(context);
+//                    } else{
+//                      _stopScanning();
+//                    }
+//                  },
+//                );
+//            },
+//          )
+//        ],
       ),
       body: SingleChildScrollView(
         child: Column(

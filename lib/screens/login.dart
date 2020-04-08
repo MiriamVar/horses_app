@@ -4,7 +4,6 @@ import 'package:horsesapp/database.dart';
 import 'package:horsesapp/models/Customer.dart';
 import 'package:horsesapp/screens/allCustomersList.dart';
 import 'package:horsesapp/screens/customerProfile.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget{
   @override
@@ -21,30 +20,6 @@ class _LoginPageState extends State<LoginPage>{
   Future<List<Customer>> customers;
   List<Customer> customersList;
 
-//  firstTime() async{
-//    SharedPreferences prefs = await SharedPreferences.getInstance();
-//    bool firstTime = prefs.getBool('first_time');
-//
-//    if (firstTime != null && !firstTime) {// Not first time
-//      print("db by mala byt plna");
-//    } else {// First time
-//      prefs.setBool('first_time', false);
-//      _fillDB();
-//    }
-//  }
-
-
-
-//  void _fillDB(){
-//    Customer vet1 = new Customer("Jano", "jano@vet.com", "jano123");
-//    Customer customer1 = new Customer("Kubo", "kubo@gmail.com.com", "kubo123");
-//    Customer customer2 = new Customer("Miro", "miro@gmail.com", "miro123");
-//
-//    db.insertCustomer(vet1);
-//    db.insertCustomer(customer1);
-//    db.insertCustomer(customer2);
-//  }
-
   Future<Customer> _loginUser(String name, String password) async {
     Customer user = await db.loginCustomer(name, password);
     if(user == null){
@@ -56,12 +31,6 @@ class _LoginPageState extends State<LoginPage>{
     }
   }
 
-
-//  @override
-//  void initState() {
-//    super.initState();
-//    firstTime();
-//  }
 
   @override
   Widget build(BuildContext context) {
@@ -202,19 +171,17 @@ class _LoginPageState extends State<LoginPage>{
             _isLoading = false;
           });
           if(user != null){
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) => AllCustomersList()));
             // ignore: unrelated_type_equality_checks
-//            if(user.name.compareTo("Jano") == true){
-//              Navigator.of(context).push(MaterialPageRoute(
-//                  builder: (BuildContext context) => AllCustomersList()
-//              ));
-//            }else {
-//              Navigator.of(context).push(MaterialPageRoute(
-//                  builder: (BuildContext context) => CustomerProfile(customer: user,)
-//              )
-//              );
-//            }
+            if(user.name.compareTo("Jano") == true){
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => AllCustomersList()
+              ));
+            }else {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => CustomerProfile(customer: user,)
+              )
+              );
+            }
           }else{
             Scaffold.of(context).showSnackBar(
               SnackBar(

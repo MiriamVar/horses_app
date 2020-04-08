@@ -24,7 +24,7 @@ class Customer{
       this._email = map['email'];
       this._password = map['password'];
     } else{
-      this._id = int.parse(map['id']);
+      this._id = map['id'];
       this._name = map['name'];
       this._email = map['email'];
       this._password = map['password'];

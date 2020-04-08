@@ -5,6 +5,7 @@ import 'package:sqflite/sqflite.dart';
 import '../models/Customer.dart';
 import 'customerProfile.dart';
 import 'newCustomer.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class AllCustomersList extends StatefulWidget{
 
@@ -16,6 +17,7 @@ class _AllCustomersListState extends State<AllCustomersList>{
   DBProvider dbProvider= DBProvider();
   List<Customer> customersList;
   int count = 0;
+  int index2 = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -38,67 +40,85 @@ class _AllCustomersListState extends State<AllCustomersList>{
           ),
         ),
       ),
-      body: Container(
-        child: ListView.builder(
-          scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: count,
-            itemBuilder: (context, index){
-              return Card(
-                elevation: 8.0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32.0),
-                ),
-                margin: EdgeInsets.symmetric(horizontal: 10.0,vertical: 6.0),
-                child: Container(
-                  decoration: BoxDecoration(
+      body: Slidable(
+        actionPane: SlidableDrawerActionPane(),
+        actionExtentRatio: 0.25,
+        child: Container(
+          child: ListView.builder(
+            scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: count,
+              itemBuilder: (context, index){
+              index2 = index;
+                return Card(
+                  elevation: 8.0,
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(32.0),
-                    color: Colors.white
                   ),
-                  child: ListTile(
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                      vertical: 10.0
+                  margin: EdgeInsets.symmetric(horizontal: 10.0,vertical: 6.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(32.0),
+                      color: Colors.white
                     ),
-                    leading: Container(
-                      padding: EdgeInsets.only(
-                        right: 12.0
+                    child: ListTile(
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 20.0,
+                        vertical: 10.0
                       ),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          right: BorderSide(
-                            width: 1.0,
-                            color: Colors.white24
+                      leading: Container(
+                        padding: EdgeInsets.only(
+                          right: 12.0
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            right: BorderSide(
+                              width: 1.0,
+                              color: Colors.white24
+                            )
                           )
-                        )
-                      ),
-                      child: Icon(
-                        Icons.person,
-                        color: Color.fromRGBO(0, 44, 44, 1.0),
-                      ),
-                    ),
-                    title: Text(
-                      "${this.customersList[index].name}",
-                      style: TextStyle(
+                        ),
+                        child: Icon(
+                          Icons.person,
                           color: Color.fromRGBO(0, 44, 44, 1.0),
-                        fontWeight: FontWeight.bold
+                        ),
                       ),
+                      title: Text(
+                        "${this.customersList[index].name}",
+                        style: TextStyle(
+                            color: Color.fromRGBO(0, 44, 44, 1.0),
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.keyboard_arrow_right,
+                        color: Color.fromRGBO(0, 44, 44, 1.0),
+                        size: 30.0,
+                      ),
+                      onPressed: (){
+                       navigateToProfile(this.customersList[index]);
+                      },
                     ),
-                  trailing: IconButton(
-                    icon: Icon(
-                      Icons.keyboard_arrow_right,
-                      color: Color.fromRGBO(0, 44, 44, 1.0),
-                      size: 30.0,
                     ),
-                    onPressed: (){
-                     navigateToProfile(this.customersList[index]);
-                    },
                   ),
-                  ),
-                ),
-              );
-            }
+                );
+              }
+          ),
         ),
+        secondaryActions: <Widget>[
+          IconSlideAction(
+            caption: 'Delete',
+            color: Colors.red,
+            icon: Icons.delete,
+            onTap: () {
+              _deleteCustomer(this.customersList[index2].id);
+              SnackBar(
+                content: Text("Customer was deleted"),
+              );
+            },
+          ),
+        ],
       ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Color.fromRGBO(238, 237, 9, 1.0),
@@ -140,6 +160,10 @@ class _AllCustomersListState extends State<AllCustomersList>{
 //    if(result == true){
 //      updateListView();
 //    }
+  }
+
+  void _deleteCustomer(int idC) async{
+    await dbProvider.deleteCustomer(idC);
   }
 }
 

@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:horsesapp/database.dart';
 import 'package:horsesapp/models/Horse.dart';
 import 'package:horsesapp/screens/HorseInfo.dart';
 import 'package:horsesapp/screens/main.dart';
+import 'package:nfc_in_flutter/nfc_in_flutter.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../models/Customer.dart';
@@ -22,13 +26,19 @@ class _CustomerProfileState extends State<CustomerProfile>{
   DBProvider dbProvider= DBProvider();
   List<Horse> myHorses;
   int count = 0;
+  StreamSubscription<NDEFMessage> _streamSubscription;
+  bool _supportsNFC = false;
+  List<NDEFMessage> _tags = [];
+  int index2 = 0;
+  String chipNumberPayload = "";
+  int index3  = 0;
 
   @override
   Widget build(BuildContext context) {
     if(myHorses == null){
       myHorses= List<Horse>();
       print(widget.customer.name);
-//      updateListView(widget.customer.id);
+      updateListView(widget.customer.id);
     }
     return Scaffold(
       backgroundColor: Colors.white,
@@ -194,63 +204,81 @@ class _CustomerProfileState extends State<CustomerProfile>{
                              )
                            ],
                          ),
-                         Column(
-                           children: <Widget>[
-                             Container(
-                               width: 350,
-                               child: ListView.builder(
-                                   scrollDirection: Axis.vertical,
-                                   shrinkWrap: true,
-                                   itemCount: count,
-                                   itemBuilder: (context, index){
-                                     return Card(
-                                       elevation: 8.0,
-                                       shape: RoundedRectangleBorder(
-                                         borderRadius: BorderRadius.circular(32.0),
-                                       ),
-                                       margin: EdgeInsets.symmetric(horizontal: 10.0,vertical: 6.0),
-                                       child: Container(
-                                         decoration: BoxDecoration(
-                                             borderRadius: BorderRadius.circular(32.0),
-                                           color: Color.fromRGBO(73, 130, 129, .2),
+                         Slidable(
+                           actionPane: SlidableDrawerActionPane(),
+                           actionExtentRatio: 0.25,
+                           child: Column(
+                             children: <Widget>[
+                               Container(
+                                 width: 350,
+                                 child: ListView.builder(
+                                     scrollDirection: Axis.vertical,
+                                     shrinkWrap: true,
+                                     itemCount: count,
+                                     itemBuilder: (context, index){
+                                       index3= index;
+                                       return Card(
+                                         elevation: 8.0,
+                                         shape: RoundedRectangleBorder(
+                                           borderRadius: BorderRadius.circular(32.0),
                                          ),
-                                         child: ListTile(
-                                           contentPadding: EdgeInsets.symmetric(
-                                               horizontal: 20.0,
-                                               vertical: 3.0
+                                         margin: EdgeInsets.symmetric(horizontal: 10.0,vertical: 6.0),
+                                         child: Container(
+                                           decoration: BoxDecoration(
+                                               borderRadius: BorderRadius.circular(32.0),
+                                             color: Color.fromRGBO(73, 130, 129, .2),
                                            ),
-                                           title: Text(
-                                             "${myHorses[index].name}",
-                                             style: TextStyle(
+                                           child: ListTile(
+                                             contentPadding: EdgeInsets.symmetric(
+                                                 horizontal: 20.0,
+                                                 vertical: 3.0
+                                             ),
+                                             title: Text(
+                                               "${myHorses[index].name}",
+                                               style: TextStyle(
+                                                   color: Color.fromRGBO(0, 44, 44, 1.0),
+                                                   fontWeight: FontWeight.bold
+                                               ),
+                                             ),
+                                             trailing: IconButton(
+                                               icon: Icon(
+                                                 Icons.keyboard_arrow_right,
                                                  color: Color.fromRGBO(0, 44, 44, 1.0),
-                                                 fontWeight: FontWeight.bold
+                                                 size: 30.0,
+                                               ),
+                                               onPressed: (){
+                                                 Navigator.push(
+                                                       context,
+                                                       MaterialPageRoute(
+                                                           builder: (context) => HorseInfo(customer: widget.customer, horsik: myHorses[index])
+                                                       )
+                                                   );
+                                               },
                                              ),
-                                           ),
-                                           trailing: IconButton(
-                                             icon: Icon(
-                                               Icons.keyboard_arrow_right,
-                                               color: Color.fromRGBO(0, 44, 44, 1.0),
-                                               size: 30.0,
-                                             ),
-                                             onPressed: (){
-                                               Navigator.push(
-                                                     context,
-                                                     MaterialPageRoute(
-                                                         builder: (context) => HorseInfo(customer: widget.customer, horsik: myHorses[index])
-                                                     )
-                                                 );
-                                             },
                                            ),
                                          ),
-                                       ),
-                                     );
-                                   }
+                                       );
+                                     }
+                                 ),
                                ),
+                             ],
+                           ),
+                           secondaryActions: <Widget>[
+                             IconSlideAction(
+                               caption: 'Delete',
+                               color: Colors.red,
+                               icon: Icons.delete,
+                               onTap: () {
+                                 _deleteHorse(myHorses[index3].id);
+                                 SnackBar(
+                                   content: Text("Customer was deleted"),
+                                 );
+                               },
                              ),
-                             SizedBox(
-                               width: 14,
-                             )
                            ],
+                         ),
+                         SizedBox(
+                           width: 14,
                          )
                        ],
                      )
@@ -276,11 +304,28 @@ class _CustomerProfileState extends State<CustomerProfile>{
         color: Color.fromRGBO(25, 85,85, 1.0),
         textColor: Colors.white,
         onPressed: (){
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MyHomePage(customer: widget.customer,)
-              )
+          showDialog(
+              context: context,
+            builder: (BuildContext context){
+                return AlertDialog(
+                  content: Text("For adding new horse scan a tag first."),
+                  actions: <Widget>[
+                    new FlatButton(
+                      child: new Text("Ok"),
+                      onPressed: () {
+                        //todo .. make a scanning and routes for another page
+                        _startScannig(context);
+                      },
+                    ),
+                    new FlatButton(
+                      child: new Text("Close"),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+            }
           );
         },
         child: Text("Add horse"),
@@ -299,5 +344,53 @@ class _CustomerProfileState extends State<CustomerProfile>{
         });
       });
     });
+  }
+
+  void _startScannig(BuildContext context){
+    try{
+      // ignore: cancel_subscriptions
+      StreamSubscription<NDEFMessage> subscription = NFC.readNDEF().listen(
+              (tag){
+            setState(() {
+              _tags.insert(0,tag);
+              print(tag);
+              print("Record '${_tags[index2].records[0].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[0].tnf}, type '${_tags[index2].records[0].type}', payload '${_tags[index2].records[0].payload}' and data '${_tags[index2].records[0].data}' and language code '${_tags[index2].records[0].languageCode}''");
+
+              //nacitavam iba ID chipu
+              chipNumberPayload = _tags[index2].records[0].data;
+
+              if(chipNumberPayload == null){
+
+              }
+
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MyHomePage(customer: widget.customer, tagID:  chipNumberPayload,)
+                  )
+              );
+            });
+          },
+          onDone: (){
+            setState(() {
+              _streamSubscription = null;
+            });
+          },
+          onError: (exp){
+            setState(() {
+              _streamSubscription = null;
+            });
+          });
+      setState(() {
+        _streamSubscription = subscription;
+      });
+    }
+    catch (error){
+      print("error: $error");
+    }
+  }
+
+  void _deleteHorse(int idH) async{
+    await dbProvider.deleteHorse(idH);
   }
 }

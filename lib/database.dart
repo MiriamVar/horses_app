@@ -110,17 +110,16 @@ class DBProvider{
     }
 
 
+    //overenie customera
     Future<Customer> loginCustomer(String name, String password) async {
       Database dbs = await this.database;
       List<Map<String, dynamic>> result = await dbs.rawQuery('SELECT * FROM Customer WHERE name = ? AND password = ?', [name,password]);
       print("printim result");
-//      List<Customer> cust= result.map((f) => Customer.fromMapObject(f)).toList;
       result.forEach((row) => print(row));
       if (result.length == 0) return null;
 
-      return Customer.fromMapObject(result);
+      return Customer.fromMapObject(result.first);
     }
-
 
 
     //UPDATE ..
@@ -135,10 +134,18 @@ class DBProvider{
     }
 
     //DELETE
-    Future<int> deteleCustomer(int id) async{
+    Future<int> deleteCustomer(int id) async{
       var db = await this.database;
       return await db.rawDelete('DELETE FROM Customer WHERE id = $id');
     }
+
+
+    Future<int> deleteHorse(int idH) async{
+      var db = await this.database;
+      return await db.rawDelete('DELETE FROM Horse WHERE id = $idH');
+    }
+
+
 
     Future<List<Customer>> getCustomersList()async{
       var customersMapList = await getCustomersMapList();

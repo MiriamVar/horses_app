@@ -241,8 +241,8 @@ class _NewCustomerState extends State<NewCustomer>{
               fontWeight: FontWeight.bold
           ),
         ), onPressed: () {
-//          Customer newCust = new Customer(id, name, email, password);
-//          _saveCustomerFun(newCust);
+          Customer newCust = new Customer(name, email, password);
+          _saveCustomerFun(newCust);
         Navigator.push(
             context,
             MaterialPageRoute(
