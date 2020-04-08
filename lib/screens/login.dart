@@ -171,6 +171,7 @@ class _LoginPageState extends State<LoginPage>{
             _isLoading = false;
           });
           if(user != null){
+            //toto nejde
             // ignore: unrelated_type_equality_checks
             if(user.name.compareTo("Jano") == true){
               Navigator.of(context).push(MaterialPageRoute(

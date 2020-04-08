@@ -246,60 +246,53 @@ class _HorseInfoState extends State<HorseInfo> {
                             child,
                             Column(
                               children: <Widget>[
-                                Row(
+                              ExpansionTile(
+                                title: Text("IDs"),
+                                children: <Widget>[
+                                  _field("Chip number", ""),
+                                  _field("ID number", ""),
+                                ],
+                              ),
+                                ExpansionTile(
+                                  title: Text("Basic data"),
                                   children: <Widget>[
-                                    Padding(
-                                        padding: EdgeInsets.only(left: 10.0)
-                                    ),
-                                    Text(
-                                      "Basic Data",
-                                      style: TextStyle(
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold
-                                      ),
-                                    ),
+                                    _field("Number", ""),
+                                    _field("Name",""),
+                                    _field("Common name", ""),
+                                    _field("Day of birth", ""),
+                                    _field("Year of birth", ""),
                                   ],
                                 ),
-                                _field("Chip number", ""),
-                                _field("ID number", ""),
-                                _field("Number", ""),
-                                _field("Name",""),
-                                _field("Common name", ""),
-                                _field("Sir", ""),
-                                _field("Dam", ""),
-                                _field("Day of birth", ""),
-                                _field("Year of birth", ""),
-                                _field("Sex", ""),
-                                _field("Breed", ""),
-                                _field("Colour", ""),
-                                _field("Description", "")
+                                ExpansionTile(
+                                  title: Text("Pedigree"),
+                                  children: <Widget>[
+                                    _field("Sir", ""),
+                                    _field("Dam", ""),
+                                  ],
+                                ),
+                                ExpansionTile(
+                                  title: Text("Description"),
+                                  children: <Widget>[
+                                    _field("Sex", ""),
+                                    _field("Breed", ""),
+                                    _field("Colour", ""),
+                                    _field("Description", "")
+                                  ],
+                                ),
+                                ExpansionTile(
+                                  title: Text("Measurements"),
+                                  children: <Widget>[
+                                    _field("Tape measure", ""),
+                                    _field("Stick measure", ""),
+                                    _field("Breast girth", ""),
+                                    _field("Cannon girth", ""),
+                                    _field("Weight", ""),
+                                  ],
+                                )
                               ],
                             ),
                             SizedBox(
                               height: 20.0,
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Padding(
-                                        padding: EdgeInsets.only(left: 10.0)
-                                    ),
-                                    Text(
-                                      "Measurements",
-                                      style: TextStyle(
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                _field("Tape measure", ""),
-                                _field("Stick measure", ""),
-                                _field("Breast girth", ""),
-                                _field("Cannon girth", ""),
-                                _field("Weight", ""),
-                              ],
                             ),
                             _saveToDB(),
                           ],
@@ -310,60 +303,53 @@ class _HorseInfoState extends State<HorseInfo> {
                             child,
                             Column(
                               children: <Widget>[
-                                Row(
+                                ExpansionTile(
+                                  title: Text("IDs"),
                                   children: <Widget>[
-                                    Padding(
-                                        padding: EdgeInsets.only(left: 10.0)
-                                    ),
-                                    Text(
-                                      "Basic Data",
-                                      style: TextStyle(
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold
-                                      ),
-                                    ),
+                                    _field("Chip number", horseFromDB.chipNumber),
+                                    _field("ID number", horseFromDB.IDNumber),
                                   ],
                                 ),
-                                _field("Chip number", horseFromDB.chipNumber),
-                                _field("ID number", horseFromDB.IDNumber),
-                                _field("Number", horseFromDB.number),
-                                _field("Name", horseFromDB.name),
-                                _field("Common name", horseFromDB.commonName),
-                                _field("Sir", horseFromDB.sir),
-                                _field("Dam", horseFromDB.dam),
-                                _field("Day of birth", horseFromDB.dob),
-                                _field("Year of birth", horseFromDB.yob),
-                                _field("Sex", horseFromDB.sex),
-                                _field("Breed", horseFromDB.breed),
-                                _field("Colour", horseFromDB.colour),
-                                _field("Description", horseFromDB.description)
+                                ExpansionTile(
+                                  title: Text("Basic data"),
+                                  children: <Widget>[
+                                    _field("Number", horseFromDB.number),
+                                    _field("Name", horseFromDB.name),
+                                    _field("Common name", horseFromDB.commonName),
+                                    _field("Day of birth", horseFromDB.dob),
+                                    _field("Year of birth", horseFromDB.yob),
+                                  ],
+                                ),
+                                ExpansionTile(
+                                  title: Text("Pedigree"),
+                                  children: <Widget>[
+                                    _field("Sir", horseFromDB.sir),
+                                    _field("Dam", horseFromDB.dam),
+                                  ],
+                                ),
+                                ExpansionTile(
+                                  title: Text("Description"),
+                                  children: <Widget>[
+                                    _field("Sex", horseFromDB.sex),
+                                    _field("Breed", horseFromDB.breed),
+                                    _field("Colour", horseFromDB.colour),
+                                    _field("Description", horseFromDB.description)
+                                  ],
+                                ),
+                                ExpansionTile(
+                                  title: Text("Measurements"),
+                                  children: <Widget>[
+                                    _field("Tape measure", horseFromDB.tapeMeasure),
+                                    _field("Stick measure", horseFromDB.stickMeasure),
+                                    _field("Breast girth", horseFromDB.breastGirth),
+                                    _field("Cannon girth", horseFromDB.cannonGirth),
+                                    _field("Weight", horseFromDB.weight),
+                                  ],
+                                )
                               ],
                             ),
                             SizedBox(
                               height: 20.0,
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Padding(
-                                        padding: EdgeInsets.only(left: 10.0)
-                                    ),
-                                    Text(
-                                      "Measurements",
-                                      style: TextStyle(
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                _field("Tape measure", horseFromDB.tapeMeasure),
-                                _field("Stick measure", horseFromDB.stickMeasure),
-                                _field("Breast girth", horseFromDB.breastGirth),
-                                _field("Cannon girth", horseFromDB.cannonGirth),
-                                _field("Weight", horseFromDB.weight),
-                              ],
                             ),
                             _saveToDB(),
                           ],

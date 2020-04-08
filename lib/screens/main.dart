@@ -171,30 +171,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Horse"),
-//        actions: <Widget>[
-//          Builder(
-//            builder: (context){
-//              if(!_supportsNFC){
-//                return FlatButton(
-//                  child: Text("NFC unsupported"),
-//                  onPressed: null,
-//                );
-//              }
-//              return
-//                FlatButton(
-//                  child:
-//                  Text(_streamSubscription == null ? "Start reading": "Stop reading"),
-//                  onPressed: (){
-//                    if(_streamSubscription == null){
-//                      _startScannig(context);
-//                    } else{
-//                      _stopScanning();
-//                    }
-//                  },
-//                );
-//            },
-//          )
-//        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -210,81 +186,60 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: <Widget>[
                     Builder(
                         builder: (context) {
-                          if (chipNumberPayload == "") {
-                            return Column(
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Text("Scan tag on horse first")
-                                  ],
-                                )
-                              ],
-                            );
-                          } else {
                             return Column(
                               children: <Widget>[
                                 Column(
                                   children: <Widget>[
-                                    Row(
+                                    ExpansionTile(
+                                      title: Text("IDs"),
                                       children: <Widget>[
-                                        Padding(
-                                            padding: EdgeInsets.only(
-                                                left: 10.0)
-                                        ),
-                                        Text(
-                                          "Basic Data",
-                                          style: TextStyle(
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.bold
-                                          ),
-                                        ),
+                                        _field("Chip number", chipNumberPayload,chipNumber_ch),
+                                        _field("ID number", IDPayload, ID_ch),
                                       ],
                                     ),
-                                    _field("Chip number", chipNumberPayload,chipNumber_ch),
-                                    _field("ID number", IDPayload, ID_ch),
-                                    _field("Number", numberPayload, number_ch),
-                                    _field("Name", namePayload, name_ch),
-                                    _field("Common name", commonNamePayload, commonMane_ch),
-                                    _field("Sir", sirPayload, sir_ch),
-                                    _field("Dam", damPayload, dam_ch),
-                                    _field("Day of birth", dobPayload, dob_ch),
-                                    _field("Year of birth", yobPayload, yob_ch),
-                                    _field("Sex", sexPayload, sex_ch),
-                                    _field("Breed", breedPayload, breed_ch),
-                                    _field("Colour", colourPayload, colour_ch),
-                                    _field("Description", descriptionPayload, description_ch)
+                                    ExpansionTile(
+                                      title: Text("Basic data"),
+                                      children: <Widget>[
+                                        _field("Number", numberPayload, number_ch),
+                                        _field("Name", namePayload, name_ch),
+                                        _field("Common name", commonNamePayload, commonMane_ch),
+                                        _field("Day of birth", dobPayload, dob_ch),
+                                        _field("Year of birth", yobPayload, yob_ch),
+                                      ],
+                                    ),
+                                    ExpansionTile(
+                                      title: Text("Pedigree"),
+                                      children: <Widget>[
+                                        _field("Sir", sirPayload, sir_ch),
+                                        _field("Dam", damPayload, dam_ch),
+                                      ],
+                                    ),
+                                    ExpansionTile(
+                                      title: Text("Description"),
+                                      children: <Widget>[
+                                        _field("Sex", sexPayload, sex_ch),
+                                        _field("Breed", breedPayload, breed_ch),
+                                        _field("Colour", colourPayload, colour_ch),
+                                        _field("Description", descriptionPayload, description_ch)
+                                      ],
+                                    ),
+                                    ExpansionTile(
+                                      title: Text("Measurements"),
+                                      children: <Widget>[
+                                        _field("Tape measure", tapeMeasurePayload, tapeMeasure_ch),
+                                        _field("Stick measure", stickMeasurePayload, stichMeasure_ch),
+                                        _field("Breast girth", breastGirthPayload, breed_ch),
+                                        _field("Cannon girth", cannonGirthPayload,cannonGirth_ch ),
+                                        _field("Weight", weightPayload, weight_ch),
+                                      ],
+                                    )
                                   ],
                                 ),
                                 SizedBox(
                                   height: 20.0,
                                 ),
-                                Column(
-                                  children: <Widget>[
-                                    Row(
-                                      children: <Widget>[
-                                        Padding(
-                                            padding: EdgeInsets.only(
-                                                left: 10.0)
-                                        ),
-                                        Text(
-                                          "Measurements",
-                                          style: TextStyle(
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.bold
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    _field("Tape measure", tapeMeasurePayload, tapeMeasure_ch),
-                                    _field("Stick measure", stickMeasurePayload, stichMeasure_ch),
-                                    _field("Breast girth", breastGirthPayload, breed_ch),
-                                    _field("Cannon girth", cannonGirthPayload,cannonGirth_ch ),
-                                    _field("Weight", weightPayload, weight_ch),
-                                  ],
-                                ),
                               ],
                             );
-                          }
                         }
                     ),
                     _sendBtn(),
