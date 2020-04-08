@@ -249,8 +249,27 @@ class _HorseInfoState extends State<HorseInfo> {
                               ExpansionTile(
                                 title: Text("IDs"),
                                 children: <Widget>[
-                                  _field("Chip number", ""),
-                                  _field("ID number", ""),
+                                  Row(
+                                    children: <Widget>[
+                                      Text("Chip number"),
+                                      Spacer(),
+                                      Text("")
+                                    ],
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Text("ID number"),
+                                      Spacer(),
+                                      Text("")
+                                    ],
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Text("RFID number"),
+                                      Spacer(),
+                                      Text("")
+                                    ],
+                                  )
                                 ],
                               ),
                                 ExpansionTile(
@@ -261,6 +280,9 @@ class _HorseInfoState extends State<HorseInfo> {
                                     _field("Common name", ""),
                                     _field("Day of birth", ""),
                                     _field("Year of birth", ""),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
                                   ],
                                 ),
                                 ExpansionTile(
@@ -268,6 +290,9 @@ class _HorseInfoState extends State<HorseInfo> {
                                   children: <Widget>[
                                     _field("Sir", ""),
                                     _field("Dam", ""),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
                                   ],
                                 ),
                                 ExpansionTile(
@@ -276,7 +301,10 @@ class _HorseInfoState extends State<HorseInfo> {
                                     _field("Sex", ""),
                                     _field("Breed", ""),
                                     _field("Colour", ""),
-                                    _field("Description", "")
+                                    _field("Description", ""),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
                                   ],
                                 ),
                                 ExpansionTile(
@@ -287,14 +315,20 @@ class _HorseInfoState extends State<HorseInfo> {
                                     _field("Breast girth", ""),
                                     _field("Cannon girth", ""),
                                     _field("Weight", ""),
+                                    SizedBox(
+                                      height: 20.0,
+                                    ),
                                   ],
                                 )
                               ],
                             ),
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            _saveToDB(),
+                            Row(
+                              children: <Widget>[
+                                _saveToDB(),
+                                Spacer(),
+                                _saveToTAG(),
+                              ],
+                            )
                           ],
                         );
                       } else{
@@ -306,8 +340,27 @@ class _HorseInfoState extends State<HorseInfo> {
                                 ExpansionTile(
                                   title: Text("IDs"),
                                   children: <Widget>[
-                                    _field("Chip number", horseFromDB.chipNumber),
-                                    _field("ID number", horseFromDB.IDNumber),
+                                    Row(
+                                      children: <Widget>[
+                                        Text("Chip number"),
+                                        Spacer(),
+                                        Text(horseFromDB.chipNumber)
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Text("ID number"),
+                                        Spacer(),
+                                        Text(horseFromDB.IDNumber)
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Text("RFID number"),
+                                        Spacer(),
+                                        Text("874502345")
+                                      ],
+                                    )
                                   ],
                                 ),
                                 ExpansionTile(
@@ -318,6 +371,9 @@ class _HorseInfoState extends State<HorseInfo> {
                                     _field("Common name", horseFromDB.commonName),
                                     _field("Day of birth", horseFromDB.dob),
                                     _field("Year of birth", horseFromDB.yob),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
                                   ],
                                 ),
                                 ExpansionTile(
@@ -325,6 +381,9 @@ class _HorseInfoState extends State<HorseInfo> {
                                   children: <Widget>[
                                     _field("Sir", horseFromDB.sir),
                                     _field("Dam", horseFromDB.dam),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
                                   ],
                                 ),
                                 ExpansionTile(
@@ -333,7 +392,10 @@ class _HorseInfoState extends State<HorseInfo> {
                                     _field("Sex", horseFromDB.sex),
                                     _field("Breed", horseFromDB.breed),
                                     _field("Colour", horseFromDB.colour),
-                                    _field("Description", horseFromDB.description)
+                                    _field("Description", horseFromDB.description),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
                                   ],
                                 ),
                                 ExpansionTile(
@@ -344,12 +406,12 @@ class _HorseInfoState extends State<HorseInfo> {
                                     _field("Breast girth", horseFromDB.breastGirth),
                                     _field("Cannon girth", horseFromDB.cannonGirth),
                                     _field("Weight", horseFromDB.weight),
+                                    SizedBox(
+                                      height: 20.0,
+                                    ),
                                   ],
                                 )
                               ],
-                            ),
-                            SizedBox(
-                              height: 20.0,
                             ),
                             _saveToDB(),
                           ],
@@ -365,64 +427,79 @@ class _HorseInfoState extends State<HorseInfo> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text("You are in OFFLINE mode."),
-                                Text("You can save only first 4 values on tag.")
                               ],
                             ),
                             Column(
                               children: <Widget>[
                                 Row(
                                   children: <Widget>[
-                                    Padding(
-                                        padding: EdgeInsets.only(left: 10.0)
-                                    ),
-                                    Text(
-                                      "Basic Data",
-                                      style: TextStyle(
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold
-                                      ),
-                                    ),
+                                    Text("Chip number"),
+                                    Spacer(),
+                                    Text(chipNumberPayload)
                                   ],
                                 ),
-                                _field("Chip number", ""),
-                                _field("ID number", ""),
+                                Row(
+                                  children: <Widget>[
+                                    Text("ID number"),
+                                    Spacer(),
+                                    Text(IDPayload)
+                                  ],
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Text("RFID number"),
+                                    Spacer(),
+                                    Text("47590240145")
+                                  ],
+                                )
+                              ],
+                            ),
+                            ExpansionTile(
+                              title: Text("Basic data"),
+                              children: <Widget>[
                                 _field("Number", ""),
                                 _field("Name",""),
                                 _field("Common name", ""),
-                                _field("Sir", ""),
-                                _field("Dam", ""),
                                 _field("Day of birth", ""),
                                 _field("Year of birth", ""),
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                              ],
+                            ),
+                            ExpansionTile(
+                              title: Text("Pedigree"),
+                              children: <Widget>[
+                                _field("Sir", ""),
+                                _field("Dam", ""),
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                              ],
+                            ),
+                            ExpansionTile(
+                              title: Text("Description"),
+                              children: <Widget>[
                                 _field("Sex", ""),
                                 _field("Breed", ""),
                                 _field("Colour", ""),
-                                _field("Description", "")
+                                _field("Description", ""),
+                                SizedBox(
+                                  height: 10.0,
+                                ),
                               ],
                             ),
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            Column(
+                            ExpansionTile(
+                              title: Text("Measurements"),
                               children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Padding(
-                                        padding: EdgeInsets.only(left: 10.0)
-                                    ),
-                                    Text(
-                                      "Measurements",
-                                      style: TextStyle(
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold
-                                      ),
-                                    ),
-                                  ],
-                                ),
                                 _field("Tape measure", ""),
                                 _field("Stick measure", ""),
                                 _field("Breast girth", ""),
                                 _field("Cannon girth", ""),
                                 _field("Weight", ""),
+                                SizedBox(
+                                  height: 20.0,
+                                ),
                               ],
                             ),
                             _saveToTAG(),
@@ -435,57 +512,73 @@ class _HorseInfoState extends State<HorseInfo> {
                               children: <Widget>[
                                 Row(
                                   children: <Widget>[
-                                    Padding(
-                                        padding: EdgeInsets.only(left: 10.0)
-                                    ),
-                                    Text(
-                                      "Basic Data",
-                                      style: TextStyle(
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold
-                                      ),
-                                    ),
+                                    Text("Chip number"),
+                                    Spacer(),
+                                    Text("")
                                   ],
                                 ),
-                                _field("Chip number", chipNumberPayload),
-                                _field("ID number",IDPayload),
-                                _field("Number", numberPayload),
-                                _field("Name", namePayload),
-                                _field("Common name", commonNamePayload),
-                                _field("Sir", sirPayload),
-                                _field("Dam", damPayload),
-                                _field("Day of birth", dobPayload),
-                                _field("Year of birth", yobPayload),
-                                _field("Sex", sexPayload),
-                                _field("Breed", breedPayload),
-                                _field("Colour", colourPayload),
-                                _field("Description", descriptionPayload)
-                              ],
-                            ),
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            Column(
-                              children: <Widget>[
                                 Row(
                                   children: <Widget>[
-                                    Padding(
-                                        padding: EdgeInsets.only(left: 10.0)
-                                    ),
-                                    Text(
-                                      "Measurements",
-                                      style: TextStyle(
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold
-                                      ),
+                                    Text("ID number"),
+                                    Spacer(),
+                                    Text("")
+                                  ],
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Text("RFID number"),
+                                    Spacer(),
+                                    Text("64398520")
+                                  ],
+                                ),
+                                ExpansionTile(
+                                  title: Text("Basic data"),
+                                  children: <Widget>[
+                                    _field("Number", numberPayload),
+                                    _field("Name", namePayload),
+                                    _field("Common name", commonNamePayload),
+                                    _field("Day of birth", dobPayload),
+                                    _field("Year of birth", yobPayload),
+                                    SizedBox(
+                                      height: 10.0,
                                     ),
                                   ],
                                 ),
-                                _field("Tape measure", tapeMeasurePayload),
-                                _field("Stick measure", stickMeasurePayload),
-                                _field("Breast girth", breastGirthPayload),
-                                _field("Cannon girth", cannonGirthPayload),
-                                _field("Weight", weightPayload),
+                                ExpansionTile(
+                                  title: Text("Pedigree"),
+                                  children: <Widget>[
+                                    _field("Sir", sirPayload),
+                                    _field("Dam", damPayload),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
+                                  ],
+                                ),
+                                ExpansionTile(
+                                  title: Text("Description"),
+                                  children: <Widget>[
+                                    _field("Sex", sexPayload),
+                                    _field("Breed", breedPayload),
+                                    _field("Colour", colourPayload),
+                                    _field("Description", descriptionPayload),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
+                                  ],
+                                ),
+                                ExpansionTile(
+                                  title: Text("Measurements"),
+                                  children: <Widget>[
+                                    _field("Tape measure", tapeMeasurePayload),
+                                    _field("Stick measure", stickMeasurePayload),
+                                    _field("Breast girth", breastGirthPayload),
+                                    _field("Cannon girth", cannonGirthPayload),
+                                    _field("Weight", weightPayload),
+                                    SizedBox(
+                                      height: 20.0,
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                             _saveToTAG(),
@@ -493,34 +586,6 @@ class _HorseInfoState extends State<HorseInfo> {
                         );
                       }
                     }
-
-//                    return Stack(
-//                      fit:  StackFit.expand,
-//                        children: <Widget>[
-//                          child,
-//                          Positioned(
-//                            left: 0.0,
-//                            right: 0.0,
-//                            height: 32.0,
-//                            child: AnimatedContainer(
-//                              duration: const Duration(milliseconds: 300),
-//                              color: connected ? Color(0xff00ee44) : Color(0xffee4400),
-//                              child: connected ? Row(
-//                                mainAxisAlignment: MainAxisAlignment.center,
-//                                children: <Widget>[
-//                                  Text("ONLINE")
-//                                ],
-//                              ): Row(
-//                                mainAxisAlignment: MainAxisAlignment.center,
-//                                children: <Widget>[
-//                                  Text("OFFLINE")
-//                                ],
-//                              )
-//                            ),
-//                          ),
-//
-//                        ],
-//                    );
                   },
                   builder: (context){
                     return Column(
@@ -790,7 +855,7 @@ class _HorseInfoState extends State<HorseInfo> {
         color: Color.fromRGBO(0,44,44, 1.0),
         textColor: Colors.white,
         onPressed: (){
-         _saveOnTAGFun();
+         _saveOnDBandTAGFun();
         },
         child: Text("SAVE ON TAG"),
       ),
@@ -804,7 +869,7 @@ class _HorseInfoState extends State<HorseInfo> {
         color: Color.fromRGBO(0,44,44, 1.0),
         textColor: Colors.white,
         onPressed: (){
-          _saveOnDBFun();
+         //todo .. save just to db
         },
         child: Text("SAVE TO DATABASE"),
       ),
@@ -868,7 +933,7 @@ class _HorseInfoState extends State<HorseInfo> {
     }
   }
 
-  void _saveOnDBFun() async{
+  void _saveOnDBandTAGFun() async{
     print("saving do db a na tag");
     List<NDEFRecord> records = new List<NDEFRecord>();
 

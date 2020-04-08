@@ -193,8 +193,27 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ExpansionTile(
                                       title: Text("IDs"),
                                       children: <Widget>[
-                                        _field("Chip number", chipNumberPayload,chipNumber_ch),
-                                        _field("ID number", IDPayload, ID_ch),
+                                        Row(
+                                          children: <Widget>[
+                                            Text("Chip number"),
+                                            Spacer(),
+                                            Text(chipNumberPayload)
+                                          ],
+                                        ),
+                                        Row(
+                                          children: <Widget>[
+                                            Text("ID number"),
+                                            Spacer(),
+                                            Text(IDPayload)
+                                          ],
+                                        ),
+                                        Row(
+                                          children: <Widget>[
+                                            Text("RFID number"),
+                                            Spacer(),
+                                            Text("874502345")
+                                          ],
+                                        )
                                       ],
                                     ),
                                     ExpansionTile(
@@ -205,6 +224,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                         _field("Common name", commonNamePayload, commonMane_ch),
                                         _field("Day of birth", dobPayload, dob_ch),
                                         _field("Year of birth", yobPayload, yob_ch),
+                                        SizedBox(
+                                          height: 10.0,
+                                        ),
                                       ],
                                     ),
                                     ExpansionTile(
@@ -212,6 +234,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                       children: <Widget>[
                                         _field("Sir", sirPayload, sir_ch),
                                         _field("Dam", damPayload, dam_ch),
+                                        SizedBox(
+                                          height: 10.0,
+                                        ),
                                       ],
                                     ),
                                     ExpansionTile(
@@ -220,7 +245,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                         _field("Sex", sexPayload, sex_ch),
                                         _field("Breed", breedPayload, breed_ch),
                                         _field("Colour", colourPayload, colour_ch),
-                                        _field("Description", descriptionPayload, description_ch)
+                                        _field("Description", descriptionPayload, description_ch),
+                                        SizedBox(
+                                          height: 10.0,
+                                        ),
                                       ],
                                     ),
                                     ExpansionTile(
@@ -231,12 +259,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                         _field("Breast girth", breastGirthPayload, breed_ch),
                                         _field("Cannon girth", cannonGirthPayload,cannonGirth_ch ),
                                         _field("Weight", weightPayload, weight_ch),
+                                        SizedBox(
+                                          height: 20.0,
+                                        ),
                                       ],
                                     )
                                   ],
-                                ),
-                                SizedBox(
-                                  height: 20.0,
                                 ),
                               ],
                             );
