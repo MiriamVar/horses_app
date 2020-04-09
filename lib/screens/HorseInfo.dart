@@ -869,7 +869,7 @@ class _HorseInfoState extends State<HorseInfo> {
         color: Color.fromRGBO(0,44,44, 1.0),
         textColor: Colors.white,
         onPressed: (){
-         //todo .. save just to db
+         _saveOnDBFun();
         },
         child: Text("SAVE TO DATABASE"),
       ),
@@ -889,48 +889,11 @@ class _HorseInfoState extends State<HorseInfo> {
 //    });
 //  }
 
-  void _saveOnTAGFun() async{
-    print("saving na tag");
-    List<NDEFRecord> records = new List<NDEFRecord>();
-
-    // prvych 5 veci sa zapise na Tag
-    records.add(NDEFRecord.type("text/plain", chipNumberPayload));
-    records.add(NDEFRecord.type("text/plain", IDPayload));
-    records.add(NDEFRecord.type("text/plain", numberPayload.toString()));
-    records.add(NDEFRecord.type("text/plain", namePayload));
-    records.add(NDEFRecord.type("text/plain", commonNamePayload));
-
-    NDEFMessage message = NDEFMessage.withRecords(records);
-
-    //iOS zevraj ma svoj
-    if (Platform.isAndroid) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text("Scan the tag you want to write to"),
-          actions: <Widget>[
-            FlatButton(
-              child: const Text("Cancel"),
-              onPressed: () {
-                _hasClosedWriteDialog = true;
-                _streamSubscription?.cancel();
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      );
-    }
-
-    await NFC.writeNDEF(message).first;
-    if(!_hasClosedWriteDialog){
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CustomerProfile(customer: widget.customer,)
-          )
-      );
-    }
+  void _saveOnDBFun(){
+    //update kona do db
+    Horse newHorse = horseFromDB;
+    _updateHorseFun(newHorse);
+    Navigator.of(context).pop();
   }
 
   void _saveOnDBandTAGFun() async{

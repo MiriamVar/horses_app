@@ -101,69 +101,8 @@ class _MyHomePageState extends State<MyHomePage> {
   bool cannonGirth_ch = false;
   bool chipNumber_ch= true;
 
-
+  // iba 5 recordov
   List<NDEFRecord> records = new List<NDEFRecord>();
-
-
-
-//  void _startScannig(BuildContext context){
-//    try{
-//      // ignore: cancel_subscriptions
-//      StreamSubscription<NDEFMessage> subscription = NFC.readNDEF().listen(
-//          (tag){
-//            setState(() {
-//              _tags.insert(0,tag);
-//              print(tag);
-//              print("Record '${_tags[index2].records[0].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[0].tnf}, type '${_tags[index2].records[0].type}', payload '${_tags[index2].records[0].payload}' and data '${_tags[index2].records[0].data}' and language code '${_tags[index2].records[0].languageCode}''");
-//
-//              //nacitavam iba ID chipu
-//              chipNumberPayload = _tags[index2].records[0].data;
-//
-//            });
-//          },
-//        onDone: (){
-//            setState(() {
-//              _streamSubscription = null;
-//            });
-//        },
-//        onError: (exp){
-//            setState(() {
-//              _streamSubscription = null;
-//            });
-//        });
-//      setState(() {
-//        _streamSubscription = subscription;
-//      });
-//    }
-//    catch (error){
-//      print("error: $error");
-//    }
-//  }
-
-
-
-//  void _stopScanning() {
-//    _streamSubscription?.cancel();
-//    setState(() {
-//      _streamSubscription = null;
-//    });
-//  }
-//
-//  @override
-//  void dispose() {
-//    super.dispose();
-//    _stopScanning();
-//  }
-//
-//  @override
-//  void initState() {
-//    super.initState();
-//    NFC.isNDEFSupported.then((supported) {
-//      setState(() {
-//        _supportsNFC = true;
-//      });
-//    });
-//  }
 
   @override
   Widget build(BuildContext context) {

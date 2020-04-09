@@ -167,6 +167,14 @@ class _CustomerProfileState extends State<CustomerProfile>{
                              color: Color.fromRGBO(25, 85, 85, .3),
                            ),
                          ),
+                          _findYourHorse(),
+                         SizedBox(
+                           width: 300,
+                           child: Divider(
+                             height: 1,
+                             color: Color.fromRGBO(25, 85, 85, .3),
+                           ),
+                         ),
                          SizedBox(
                            height: 10,
                          ),
@@ -271,7 +279,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
                                onTap: () {
                                  _deleteHorse(myHorses[index3].id);
                                  SnackBar(
-                                   content: Text("Customer was deleted"),
+                                   content: Text("Horse was deleted"),
                                  );
                                },
                              ),
@@ -296,6 +304,24 @@ class _CustomerProfileState extends State<CustomerProfile>{
     );
   }
 
+  Widget _findYourHorse(){
+    return Container(
+      padding: EdgeInsets.only(right:  10.0),
+      child: RaisedButton(
+          padding: EdgeInsets.all(0),
+          color: Color.fromRGBO(25, 85,85, 1.0),
+          textColor: Colors.white,
+          child: Text("Scan your horse"),
+          onPressed: (){
+            // todo ... function to horse Info page with exactly horse
+            // todo ... scan function
+            // todo ... by tagID find out the horse
+            // todo ... open Horse info with horse (info from db)
+          }
+      ),
+    );
+  }
+
   Widget _addHorseBtn(){
     return Container(
       padding: EdgeInsets.only(right: 10.0),
@@ -313,7 +339,6 @@ class _CustomerProfileState extends State<CustomerProfile>{
                     new FlatButton(
                       child: new Text("Ok"),
                       onPressed: () {
-                        //todo .. make a scanning and routes for another page
                         _startScannig(context);
                       },
                     ),
@@ -357,18 +382,21 @@ class _CustomerProfileState extends State<CustomerProfile>{
               print("Record '${_tags[index2].records[0].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[0].tnf}, type '${_tags[index2].records[0].type}', payload '${_tags[index2].records[0].payload}' and data '${_tags[index2].records[0].data}' and language code '${_tags[index2].records[0].languageCode}''");
 
               //nacitavam iba ID chipu
-              chipNumberPayload = _tags[index2].records[0].data;
+              String idTag = _tags[index2].records[0].data;
+              chipNumberPayload = idTag.substring(idTag.indexOf(RegExp(r':')));
+              print("printim upravene chipNumber");
+              print(chipNumberPayload);
 
               if(chipNumberPayload == null){
-
+                  //todo .... if on tag is not ID of tag
+              }else{
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MyHomePage(customer: widget.customer, tagID:  chipNumberPayload,)
+                    )
+                );
               }
-
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MyHomePage(customer: widget.customer, tagID:  chipNumberPayload,)
-                  )
-              );
             });
           },
           onDone: (){
