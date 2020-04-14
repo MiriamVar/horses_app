@@ -34,9 +34,13 @@ class DBProvider{
         return await openDatabase(path, version: 2,  onCreate: _createDb);
     }
 
-    Customer vet = new Customer("Jano", "jano@vet.com","jano123");
+    Customer vet = new Customer("Vet", "vet1@vet.com","vet123");
     Customer customer1 = new Customer("Kubo", "kubo@gmail.com","kubo123");
     Customer customer2 = new Customer("Miro", "miro@gmail.com","miro123");
+
+    Horse horse1 = new Horse(2,"UID1","703001262600197","Nonius XX (N XIII-1) Jonatán","Nonius XX","703001082600407","703001082600711","žrebec","nonius","Hnedák","05-03-1997","viď grafický popis",170,161,190,0,3606,1997,21.6);
+    Horse horse2 = new Horse(2,"UID2","703001082600407","Nonius XIII (N XLIV-78)","Nonius XIII ","703002073322615","25000113007583X","žrebec","nonius","Tm. hnedák","1979-08-30","ľ.z.sp.,p.z.sp.b;",180,169,198,0,3291,1979,23.0);
+    Horse horse3 = new Horse(2,"UID3","703001082600711","Nonius I-20","Nonius I","703002763125814","703001763100800","kobyla","nonius","Hnedák","	1981-12-18","b.ch.na c;l.z.v sp.a kor.nepr.b.,kop.pruh.b;",174,165,199,0,334,1981,20.6);
 
     void _createDb(Database db, int newVersion) async{
       print("create customer");
@@ -72,12 +76,23 @@ class DBProvider{
             "FOREIGN KEY (customerID) REFERENCES Customer(id)"
             ")");
         print("create horse done");
+
       await db.insert('Customer', vet.toMap());
       print("create  customer1 done");
       await db.insert('Customer', customer1.toMap());
       print("create  customer2 done");
       await db.insert('Customer', customer2.toMap());
       print("create  customer3 done");
+
+      print("create horse1");
+      await db.insert('Horse', horse1.toMap());
+      print("creating horse1 done");
+      print("create horse2");
+      await db.insert('Horse', horse2.toMap());
+      print("creating horse2 done");
+      print("create horse3");
+      await db.insert('Horse', horse3.toMap());
+      print("creating horse3 done");
     }
 
     //SELECT * FROM ....

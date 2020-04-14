@@ -240,98 +240,110 @@ class _HorseInfoState extends State<HorseInfo> {
                     connected = connectivity!= ConnectivityResult.none;
                     //ak sme pripojeny na internet
                     if(connected == true){
-                      if (chipNumberPayload == null) {
-                         return Column(
-                          children: <Widget>[
-                            child,
-                            Column(
-                              children: <Widget>[
-                              ExpansionTile(
-                                title: Text("IDs"),
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      Text("Chip number"),
-                                      Spacer(),
-                                      Text("")
-                                    ],
-                                  ),
-                                  Row(
-                                    children: <Widget>[
-                                      Text("ID number"),
-                                      Spacer(),
-                                      Text("")
-                                    ],
-                                  ),
-                                  Row(
-                                    children: <Widget>[
-                                      Text("RFID number"),
-                                      Spacer(),
-                                      Text("")
-                                    ],
-                                  )
-                                ],
-                              ),
-                                ExpansionTile(
-                                  title: Text("Basic data"),
-                                  children: <Widget>[
-                                    _field("Number", ""),
-                                    _field("Name",""),
-                                    _field("Common name", ""),
-                                    _field("Day of birth", ""),
-                                    _field("Year of birth", ""),
-                                    SizedBox(
-                                      height: 10.0,
-                                    ),
-                                  ],
-                                ),
-                                ExpansionTile(
-                                  title: Text("Pedigree"),
-                                  children: <Widget>[
-                                    _field("Sir", ""),
-                                    _field("Dam", ""),
-                                    SizedBox(
-                                      height: 10.0,
-                                    ),
-                                  ],
-                                ),
-                                ExpansionTile(
-                                  title: Text("Description"),
-                                  children: <Widget>[
-                                    _field("Sex", ""),
-                                    _field("Breed", ""),
-                                    _field("Colour", ""),
-                                    _field("Description", ""),
-                                    SizedBox(
-                                      height: 10.0,
-                                    ),
-                                  ],
-                                ),
-                                ExpansionTile(
-                                  title: Text("Measurements"),
-                                  children: <Widget>[
-                                    _field("Tape measure", ""),
-                                    _field("Stick measure", ""),
-                                    _field("Breast girth", ""),
-                                    _field("Cannon girth", ""),
-                                    _field("Weight", ""),
-                                    SizedBox(
-                                      height: 20.0,
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                            Row(
-                              children: <Widget>[
-                                _saveToDB(),
-                                Spacer(),
-                                _saveToTAGandDB(),
-                              ],
-                            )
-                          ],
-                        );
-                      } else{
+//                      if (chipNumberPayload == null) {
+//                         return Column(
+//                          children: <Widget>[
+//                            child,
+//                            Column(
+//                              children: <Widget>[
+//                              ExpansionTile(
+//                                title: Text("IDs"),
+//                                children: <Widget>[
+//                                  Row(
+//                                    mainAxisSize: MainAxisSize.max,
+//                                    mainAxisAlignment: MainAxisAlignment.center,
+//                                    children: <Widget>[
+//                                      Column(
+//                                        mainAxisAlignment: MainAxisAlignment.end,
+//                                        crossAxisAlignment: CrossAxisAlignment.end,
+//                                        mainAxisSize: MainAxisSize.max,
+//                                        children: <Widget>[
+//                                          Text("Chip number:"),
+//                                          Text("RFID number:"),
+//                                          Text("ID number:"),
+//                                        ],
+//                                      ),
+//                                      Padding(
+//                                          padding: EdgeInsets.only(right: 10.0)
+//                                      ),
+//                                      Column(
+//                                        mainAxisAlignment: MainAxisAlignment.start,
+//                                        crossAxisAlignment: CrossAxisAlignment.start,
+//                                        mainAxisSize: MainAxisSize.max,
+//                                        children: <Widget>[
+//                                          Text(""),
+//                                          Text(""),
+//                                          Text("")
+//                                        ],
+//                                      )
+//                                    ],
+//                                  ),
+//                                ],
+//                              ),
+//                                ExpansionTile(
+//                                  title: Text("Basic data"),
+//                                  children: <Widget>[
+//                                    _field("Number", ""),
+//                                    _field("Name",""),
+//                                    _field("Common name", ""),
+//                                    _field("Day of birth", ""),
+//                                    _field("Year of birth", ""),
+//                                    SizedBox(
+//                                      height: 10.0,
+//                                    ),
+//                                  ],
+//                                ),
+//                                ExpansionTile(
+//                                  title: Text("Pedigree"),
+//                                  children: <Widget>[
+//                                    _field("Sir", ""),
+//                                    _field("Dam", ""),
+//                                    SizedBox(
+//                                      height: 10.0,
+//                                    ),
+//                                  ],
+//                                ),
+//                                ExpansionTile(
+//                                  title: Text("Description"),
+//                                  children: <Widget>[
+//                                    _field("Sex", ""),
+//                                    _field("Breed", ""),
+//                                    _field("Colour", ""),
+//                                    _field("Description", ""),
+//                                    SizedBox(
+//                                      height: 10.0,
+//                                    ),
+//                                  ],
+//                                ),
+//                                ExpansionTile(
+//                                  title: Text("Measurements"),
+//                                  children: <Widget>[
+//                                    _field("Tape measure", ""),
+//                                    _field("Stick measure", ""),
+//                                    _field("Breast girth", ""),
+//                                    _field("Cannon girth", ""),
+//                                    _field("Weight", ""),
+//                                    SizedBox(
+//                                      height: 20.0,
+//                                    ),
+//                                  ],
+//                                )
+//                              ],
+//                            ),
+//                            Row(
+//                              crossAxisAlignment: CrossAxisAlignment.center,
+//                              mainAxisAlignment: MainAxisAlignment.center,
+//                              children: <Widget>[
+//                                _saveToDB(),
+//                                Padding(
+//                                  padding: EdgeInsets.only(right: 10.0),
+//                                ),
+//                                _saveToTAGandDB(),
+//                              ],
+//                            )
+//                          ],
+//                        );
+//                      } else{
                         return Column(
                           children: <Widget>[
                             child,
@@ -341,26 +353,34 @@ class _HorseInfoState extends State<HorseInfo> {
                                   title: Text("IDs"),
                                   children: <Widget>[
                                     Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: <Widget>[
-                                        Text("Chip number"),
-                                        Spacer(),
-                                        Text(horseFromDB.chipNumber)
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: <Widget>[
+                                            Text("Chip number:"),
+                                            Text("RFID number:"),
+                                            Text("ID number:"),
+                                          ],
+                                        ),
+                                        Padding(
+                                            padding: EdgeInsets.only(right: 10.0)
+                                        ),
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: <Widget>[
+                                            Text(horseFromDB.chipNumber),
+                                            Text("3264982334"),
+                                            Text(horseFromDB.IDNumber)
+                                          ],
+                                        )
                                       ],
                                     ),
-                                    Row(
-                                      children: <Widget>[
-                                        Text("ID number"),
-                                        Spacer(),
-                                        Text(horseFromDB.IDNumber)
-                                      ],
-                                    ),
-                                    Row(
-                                      children: <Widget>[
-                                        Text("RFID number"),
-                                        Spacer(),
-                                        Text("874502345")
-                                      ],
-                                    )
                                   ],
                                 ),
                                 ExpansionTile(
@@ -414,49 +434,68 @@ class _HorseInfoState extends State<HorseInfo> {
                               ],
                             ),
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 _saveToDB(),
+                                Padding(
+                                  padding: EdgeInsets.only(right: 10.0),
+                                ),
                                 _saveToTAGandDB()
                               ],
                             )
                           ],
                         );
-                      }
+//                      }
                     }
                     //ked nie som connectnuty
                     else{
                       if (chipNumberPayload == null) {
                         return Column(
                           children: <Widget>[
+                            SizedBox(
+                              height: 10.0,
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text("You are in OFFLINE mode."),
                               ],
                             ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
                             Column(
                               children: <Widget>[
                                 Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
-                                    Text("Chip number"),
-                                    Spacer(),
-                                    Text(chipNumberPayload)
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        Text("Chip number:"),
+                                        Text("RFID number:"),
+                                        Text("ID number:"),
+                                      ],
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(right: 10.0)
+                                    ),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        Text(""),
+                                        Text(""),
+                                        Text("")
+                                      ],
+                                    )
                                   ],
                                 ),
-                                Row(
-                                  children: <Widget>[
-                                    Text("ID number"),
-                                    Spacer(),
-                                    Text(IDPayload)
-                                  ],
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Text("RFID number"),
-                                    Spacer(),
-                                    Text("47590240145")
-                                  ],
-                                )
                               ],
                             ),
                             ExpansionTile(
@@ -516,24 +555,32 @@ class _HorseInfoState extends State<HorseInfo> {
                             Column(
                               children: <Widget>[
                                 Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
-                                    Text("Chip number"),
-                                    Spacer(),
-                                    Text("")
-                                  ],
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Text("ID number"),
-                                    Spacer(),
-                                    Text("")
-                                  ],
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Text("RFID number"),
-                                    Spacer(),
-                                    Text("64398520")
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        Text("Chip number:"),
+                                        Text("RFID number:"),
+                                        Text("ID number:"),
+                                      ],
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(right: 10.0)
+                                    ),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        Text(chipNumberPayload),
+                                        Text("32649823345"),
+                                        Text("87450234")
+                                      ],
+                                    )
                                   ],
                                 ),
                                 ExpansionTile(
@@ -593,12 +640,8 @@ class _HorseInfoState extends State<HorseInfo> {
                     }
                   },
                   builder: (context){
-                    return Column(
-                      children: <Widget>[
-                        Text(
-                          "Skusam"
-                        )
-                      ],
+                    return Container(
+                      height: 0.5,
                     );
                   },
                 )

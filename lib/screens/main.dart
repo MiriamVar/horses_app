@@ -146,8 +146,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                               mainAxisSize: MainAxisSize.max,
                                               children: <Widget>[
                                                 Text("Chip number:"),
-                                                Text("ID number:"),
                                                 Text("RFID number:"),
+                                                Text("ID number:"),
                                               ],
                                             ),
                                             Padding(
@@ -159,8 +159,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                               mainAxisSize: MainAxisSize.max,
                                                 children: <Widget>[
                                                   Text(chipNumberPayload),
-                                                  Text("32649823"),
-                                                  Text("874502345")
+                                                  Text("32649823345"),
+                                                  Text("87450234")
                                                 ],
                                             )
                                           ],
@@ -168,37 +168,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                         SizedBox(
                                           height: 10.0,
                                         ),
-//                                        Row(
-//                                          mainAxisAlignment: MainAxisAlignment.center,
-//                                          crossAxisAlignment: CrossAxisAlignment.center,
-//                                          mainAxisSize: MainAxisSize.max,
-//                                          children: <Widget>[
-//                                            Text("Chip number:"),
-//                                            Text(chipNumberPayload)
-//                                          ],
-//                                        ),
-//                                        Row(
-//                                          mainAxisAlignment: MainAxisAlignment.center,
-//                                          crossAxisAlignment: CrossAxisAlignment.center,
-//                                          mainAxisSize: MainAxisSize.max,
-//                                          children: <Widget>[
-//                                            Text("ID number:"),
-//                                            //IDpayload
-//                                            Text("32649823")
-//                                          ],
-//                                        ),
-//                                        Row(
-//                                          mainAxisAlignment: MainAxisAlignment.center,
-//                                          crossAxisAlignment: CrossAxisAlignment.center,
-//                                          mainAxisSize: MainAxisSize.max,
-//                                          children: <Widget>[
-//                                            Text("RFID number:"),
-//                                            Padding(
-//                                              padding: EdgeInsets.only(left: 10.0),
-//                                            ),
-//                                            Text("874502345")
-//                                          ],
-//                                        )
                                       ],
                                     ),
                                     ExpansionTile(

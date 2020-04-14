@@ -171,7 +171,7 @@ class _LoginPageState extends State<LoginPage>{
             _isLoading = false;
           });
           if(user != null){
-            if(user.name == "Jano"){
+            if(user.name == "Vet"){
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => AllCustomersList()
               ));
