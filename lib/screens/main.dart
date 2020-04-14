@@ -77,9 +77,10 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _hasClosedWriteDialog = false;
   DBProvider dbProvider = DBProvider();
 
-  String chipNumberPayload, IDPayload, namePayload, commonNamePayload, sirPayload, damPayload, sexPayload, breedPayload, colourPayload, dobPayload, descriptionPayload;
+  String chipNumberPayload, namePayload, commonNamePayload, sirPayload, damPayload, sexPayload, breedPayload, colourPayload, dobPayload, descriptionPayload;
   int tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload;
   double cannonGirthPayload;
+  String IDPayload = "87450234";
 
   String num, yob, tape, stick, breast, wei, cannon;
 
@@ -102,11 +103,11 @@ class _MyHomePageState extends State<MyHomePage> {
   bool cannonGirth_ch = false;
   bool chipNumber_ch= true;
 
-  Map<String, String> ids;
-  Map<String, String> basic;
-  Map<String, String> pedigree;
-  Map<String, String> description;
-  Map<String, String> measurements;
+  Map<String, String> ids = new Map();
+  Map<String, String> basic = new Map();
+  Map<String, String> pedigree= new Map();
+  Map<String, String> description = new Map();
+  Map<String, String> measurements = new Map();
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 children: <Widget>[
                                                   Text(chipNumberPayload),
                                                   Text("32649823345"),
-                                                  Text("87450234")
+                                                  Text(IDPayload)
                                                 ],
                                             )
                                           ],
@@ -210,7 +211,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       children: <Widget>[
                                         _field("Tape measure", tapeMeasurePayload, tapeMeasure_ch),
                                         _field("Stick measure", stickMeasurePayload, stichMeasure_ch),
-                                        _field("Breast girth", breastGirthPayload, breed_ch),
+                                        _field("Breast girth", breastGirthPayload, breastGirth_ch),
                                         _field("Cannon girth", cannonGirthPayload,cannonGirth_ch ),
                                         _field("Weight", weightPayload, weight_ch),
                                         SizedBox(
@@ -477,10 +478,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
     switch(keyValue) {
       case "Chip number": {
+        print("switch");
+        print(chipNumberPayload);
+        print(keyValue);
         ids[keyValue] = chipNumberPayload;
       }break;
 
       case "ID number": {
+        print("id number");
+        print(IDPayload);
         ids[keyValue] = IDPayload;
       }break;
 
