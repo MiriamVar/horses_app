@@ -167,7 +167,13 @@ class _CustomerProfileState extends State<CustomerProfile>{
                              color: Color.fromRGBO(25, 85, 85, .3),
                            ),
                          ),
+                         SizedBox(
+                           height: 10,
+                         ),
                           _findYourHorse(),
+                         SizedBox(
+                           height: 10,
+                         ),
                          SizedBox(
                            width: 300,
                            child: Divider(
@@ -308,7 +314,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
     return Container(
       padding: EdgeInsets.only(right:  10.0),
       child: RaisedButton(
-          padding: EdgeInsets.all(0),
+          padding: EdgeInsets.only(right: 10.0, left: 10.0),
           color: Color.fromRGBO(25, 85,85, 1.0),
           textColor: Colors.white,
           child: Text("Scan your horse"),
@@ -383,7 +389,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
 
               //nacitavam iba ID chipu
               String idTag = _tags[index2].records[0].data;
-              chipNumberPayload = idTag.substring(idTag.indexOf(RegExp(r':')));
+              chipNumberPayload = idTag.substring(idTag.indexOf(RegExp(r'(?<=:)')));
               print("printim upravene chipNumber");
               print(chipNumberPayload);
 

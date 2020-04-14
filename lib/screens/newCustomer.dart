@@ -134,6 +134,33 @@ class _NewCustomerState extends State<NewCustomer>{
                           ),
                         ],
                       ),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5.0),
+                            child: Text(
+                              'Customers password:',
+                              style: TextStyle(
+                                  color: Color.fromRGBO(25, 85, 85, 1.0),
+                                  fontSize: 15
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(right:5.0),
+                            child: TextFormField(
+                              onChanged: (passVal){
+                                password = passVal;
+                                print("new value of password $password");
+                              },
+                              controller: TextEditingController(
+                                  text: ""
+                              ),
+                            ),
+                            width: 160,
+                          ),
+                        ],
+                      ),
                       Column(
                         children: <Widget>[
                           SizedBox(
@@ -149,40 +176,40 @@ class _NewCustomerState extends State<NewCustomer>{
                           SizedBox(
                             height: 10,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Material(
-                                    borderRadius: BorderRadius.all(Radius.circular(100)),
-                                    child: InkWell(
-                                      borderRadius: BorderRadius.all(Radius.circular(100)),
-                                      onTap: (){},
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(12),
-                                        child:  Tab(
-                                          icon: new Image.asset("assets/icon_horse.png"),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Text(
-                                    "Horses",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 22
-                                    ),
-                                  ),
-                                ],
-                              ),
+//                          Row(
+//                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                            children: <Widget>[
 //                              Row(
 //                                children: <Widget>[
-//                                  _addHorseBtn(),
+//                                  Material(
+//                                    borderRadius: BorderRadius.all(Radius.circular(100)),
+//                                    child: InkWell(
+//                                      borderRadius: BorderRadius.all(Radius.circular(100)),
+//                                      onTap: (){},
+//                                      child: Padding(
+//                                        padding: const EdgeInsets.all(12),
+//                                        child:  Tab(
+//                                          icon: new Image.asset("assets/icon_horse.png"),
+//                                        ),
+//                                      ),
+//                                    ),
+//                                  ),
+//                                  Text(
+//                                    "Horses",
+//                                    style: TextStyle(
+//                                        color: Colors.black,
+//                                        fontSize: 22
+//                                    ),
+//                                  ),
 //                                ],
-//                              )
-                            ],
-                          ),
+//                              ),
+////                              Row(
+////                                children: <Widget>[
+////                                  _addHorseBtn(),
+////                                ],
+////                              )
+//                            ],
+//                          ),
                           SizedBox(
                             height: 15,
                           ),

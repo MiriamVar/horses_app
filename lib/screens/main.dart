@@ -137,26 +137,68 @@ class _MyHomePageState extends State<MyHomePage> {
                                       title: Text("IDs"),
                                       children: <Widget>[
                                         Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: <Widget>[
-                                            Text("Chip number"),
-                                            Spacer(),
-                                            Text(chipNumberPayload)
+                                            Column(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: <Widget>[
+                                                Text("Chip number:"),
+                                                Text("ID number:"),
+                                                Text("RFID number:"),
+                                              ],
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(right: 10.0)
+                                            ),
+                                            Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisSize: MainAxisSize.max,
+                                                children: <Widget>[
+                                                  Text(chipNumberPayload),
+                                                  Text("32649823"),
+                                                  Text("874502345")
+                                                ],
+                                            )
                                           ],
                                         ),
-                                        Row(
-                                          children: <Widget>[
-                                            Text("ID number"),
-                                            Spacer(),
-                                            Text(IDPayload)
-                                          ],
+                                        SizedBox(
+                                          height: 10.0,
                                         ),
-                                        Row(
-                                          children: <Widget>[
-                                            Text("RFID number"),
-                                            Spacer(),
-                                            Text("874502345")
-                                          ],
-                                        )
+//                                        Row(
+//                                          mainAxisAlignment: MainAxisAlignment.center,
+//                                          crossAxisAlignment: CrossAxisAlignment.center,
+//                                          mainAxisSize: MainAxisSize.max,
+//                                          children: <Widget>[
+//                                            Text("Chip number:"),
+//                                            Text(chipNumberPayload)
+//                                          ],
+//                                        ),
+//                                        Row(
+//                                          mainAxisAlignment: MainAxisAlignment.center,
+//                                          crossAxisAlignment: CrossAxisAlignment.center,
+//                                          mainAxisSize: MainAxisSize.max,
+//                                          children: <Widget>[
+//                                            Text("ID number:"),
+//                                            //IDpayload
+//                                            Text("32649823")
+//                                          ],
+//                                        ),
+//                                        Row(
+//                                          mainAxisAlignment: MainAxisAlignment.center,
+//                                          crossAxisAlignment: CrossAxisAlignment.center,
+//                                          mainAxisSize: MainAxisSize.max,
+//                                          children: <Widget>[
+//                                            Text("RFID number:"),
+//                                            Padding(
+//                                              padding: EdgeInsets.only(left: 10.0),
+//                                            ),
+//                                            Text("874502345")
+//                                          ],
+//                                        )
                                       ],
                                     ),
                                     ExpansionTile(
@@ -548,7 +590,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: (){
           _submitForm();
         },
-        child: Text("SAVE DATA"),
+        child: Text("SAVE ON TAG AND TO DATABASE"),
       ),
     );
   }

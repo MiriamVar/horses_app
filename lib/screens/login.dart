@@ -171,9 +171,7 @@ class _LoginPageState extends State<LoginPage>{
             _isLoading = false;
           });
           if(user != null){
-            //toto nejde
-            // ignore: unrelated_type_equality_checks
-            if(user.name.compareTo("Jano") == true){
+            if(user.name == "Jano"){
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => AllCustomersList()
               ));
@@ -184,6 +182,7 @@ class _LoginPageState extends State<LoginPage>{
               );
             }
           }else{
+            //toto nejde
             Scaffold.of(context).showSnackBar(
               SnackBar(
                 content: Text("Wrong email or password"),

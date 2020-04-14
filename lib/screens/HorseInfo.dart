@@ -326,7 +326,7 @@ class _HorseInfoState extends State<HorseInfo> {
                               children: <Widget>[
                                 _saveToDB(),
                                 Spacer(),
-                                _saveToTAG(),
+                                _saveToTAGandDB(),
                               ],
                             )
                           ],
@@ -413,7 +413,12 @@ class _HorseInfoState extends State<HorseInfo> {
                                 )
                               ],
                             ),
-                            _saveToDB(),
+                            Row(
+                              children: <Widget>[
+                                _saveToDB(),
+                                _saveToTAGandDB()
+                              ],
+                            )
                           ],
                         );
                       }
@@ -502,7 +507,7 @@ class _HorseInfoState extends State<HorseInfo> {
                                 ),
                               ],
                             ),
-                            _saveToTAG(),
+//                            _saveToTAG(),
                           ],
                         );
                       } else{
@@ -581,7 +586,7 @@ class _HorseInfoState extends State<HorseInfo> {
                                 ),
                               ],
                             ),
-                            _saveToTAG(),
+//                            _saveToTAG(),
                           ],
                         );
                       }
@@ -848,7 +853,9 @@ class _HorseInfoState extends State<HorseInfo> {
 
   }
 
-  Widget _saveToTAG(){
+  //plus widget na save on tag iba...
+
+  Widget _saveToTAGandDB(){
     return Container(
       padding: EdgeInsets.only(top: 20.0),
       child: RaisedButton(
