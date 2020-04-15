@@ -40,22 +40,22 @@ class _AllCustomersListState extends State<AllCustomersList>{
           ),
         ),
       ),
-      body: Slidable(
-        actionPane: SlidableDrawerActionPane(),
-        actionExtentRatio: 0.25,
-        child: Container(
-          child: ListView.builder(
-            scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: count,
-              itemBuilder: (context, index){
-              index2 = index;
-                return Card(
-                  elevation: 8.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(32.0),
-                  ),
-                  margin: EdgeInsets.symmetric(horizontal: 10.0,vertical: 6.0),
+      body: Container(
+        child: ListView.builder(
+          scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: count,
+            itemBuilder: (context, index){
+            index2 = index;
+              return Card(
+                elevation: 8.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32.0),
+                ),
+                margin: EdgeInsets.symmetric(horizontal: 10.0,vertical: 6.0),
+                child: Slidable(
+                  actionPane: SlidableDrawerActionPane(),
+                  actionExtentRatio: 0.25,
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(32.0),
@@ -102,23 +102,22 @@ class _AllCustomersListState extends State<AllCustomersList>{
                     ),
                     ),
                   ),
-                );
-              }
-          ),
-        ),
-        secondaryActions: <Widget>[
-          IconSlideAction(
-            caption: 'Delete',
-            color: Colors.red,
-            icon: Icons.delete,
-            onTap: () {
-              _deleteCustomer(this.customersList[index2].id);
-              SnackBar(
-                content: Text("Customer was deleted"),
+                  secondaryActions: <Widget>[
+                    IconSlideAction(
+                      caption: 'Delete',
+                      color: Colors.red,
+                      icon: Icons.delete,
+                      onTap: () {
+                        _deleteCustomer(this.customersList[index2].id);
+                        print("mazem customera");
+                        updateListView();
+                      },
+                    ),
+                  ],
+                ),
               );
-            },
-          ),
-        ],
+            }
+        ),
       ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Color.fromRGBO(238, 237, 9, 1.0),

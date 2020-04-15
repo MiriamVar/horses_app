@@ -220,25 +220,25 @@ class _CustomerProfileState extends State<CustomerProfile>{
                                )
                              ],
                            ),
-                           Slidable(
-                             actionPane: SlidableDrawerActionPane(),
-                             actionExtentRatio: 0.25,
-                             child: Column(
-                               children: <Widget>[
-                                 Container(
-                                   width: 350,
-                                   child: ListView.builder(
-                                       scrollDirection: Axis.vertical,
-                                       shrinkWrap: true,
-                                       itemCount: count,
-                                       itemBuilder: (context, index){
-                                         index3= index;
-                                         return Card(
-                                           elevation: 8.0,
-                                           shape: RoundedRectangleBorder(
-                                             borderRadius: BorderRadius.circular(32.0),
-                                           ),
-                                           margin: EdgeInsets.symmetric(horizontal: 10.0,vertical: 6.0),
+                           Column(
+                             children: <Widget>[
+                               Container(
+                                 width: 350,
+                                 child: ListView.builder(
+                                     scrollDirection: Axis.vertical,
+                                     shrinkWrap: true,
+                                     itemCount: count,
+                                     itemBuilder: (context, index){
+                                       index3= index;
+                                       return Card(
+                                         elevation: 8.0,
+                                         shape: RoundedRectangleBorder(
+                                           borderRadius: BorderRadius.circular(32.0),
+                                         ),
+                                         margin: EdgeInsets.symmetric(horizontal: 10.0,vertical: 6.0),
+                                         child: Slidable(
+                                           actionPane: SlidableDrawerActionPane(),
+                                           actionExtentRatio: 0.25,
                                            child: Container(
                                              decoration: BoxDecoration(
                                                  borderRadius: BorderRadius.circular(32.0),
@@ -273,23 +273,22 @@ class _CustomerProfileState extends State<CustomerProfile>{
                                                ),
                                              ),
                                            ),
-                                         );
-                                       }
-                                   ),
+                                           secondaryActions: <Widget>[
+                                             IconSlideAction(
+                                               caption: 'Delete',
+                                               color: Colors.red,
+                                               icon: Icons.delete,
+                                               onTap: () {
+                                                 _deleteHorse(myHorses[index3].id);
+                                                 print("horse was deleted");
+                                                 updateListView(widget.customer.id);
+                                               },
+                                             ),
+                                           ],
+                                         ),
+                                       );
+                                     }
                                  ),
-                               ],
-                             ),
-                             secondaryActions: <Widget>[
-                               IconSlideAction(
-                                 caption: 'Delete',
-                                 color: Colors.red,
-                                 icon: Icons.delete,
-                                 onTap: () {
-                                   _deleteHorse(myHorses[index3].id);
-                                   SnackBar(
-                                     content: Text("Horse was deleted"),
-                                   );
-                                 },
                                ),
                              ],
                            ),

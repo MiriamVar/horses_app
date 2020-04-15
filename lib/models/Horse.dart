@@ -4,24 +4,26 @@ class Horse{
   String _chipNumber, _IDNumber, _name, _commonName, _sir, _dam, _sex, _breed, _colour, _dob, _description;
   int _tapeMeasure, _stickMeasure, _breastGirth, _weight, _number, _yob;
   double _cannonGirth;
+  String _RFIDNumber, _owner;
 
   Horse(this._customerID, this._chipNumber, this._IDNumber, this._name,
       this._commonName, this._sir, this._dam, this._sex, this._breed,
       this._colour, this._dob, this._description, this._tapeMeasure,
       this._stickMeasure, this._breastGirth, this._weight, this._number,
-      this._yob, this._cannonGirth);
+      this._yob, this._cannonGirth, this._RFIDNumber, this._owner);
 
   Horse.withID(this._id, this._customerID, this._chipNumber, this._IDNumber,
       this._name, this._commonName, this._sir, this._dam, this._sex,
       this._breed, this._colour, this._dob, this._description,
       this._tapeMeasure, this._stickMeasure, this._breastGirth, this._weight,
-      this._number, this._yob, this._cannonGirth);
+      this._number, this._yob, this._cannonGirth, this._RFIDNumber, this._owner);
 
   Map<String, dynamic> toMap() {
     return {
       'id': _id,
       'customerID': _customerID,
       'chipNumber': _chipNumber,
+      'RFIDNumber': _RFIDNumber,
       'IDNumber': _IDNumber,
       'name': _name,
       'commonName': _commonName,
@@ -39,6 +41,7 @@ class Horse{
       'number': _number,
       'yob': _yob,
       'cannonGirth': _cannonGirth,
+      'owner': _owner
     };
   }
 
@@ -46,6 +49,7 @@ class Horse{
     this._id= map['id'];
     this._customerID = map['customerID'];
     this._chipNumber = map['chipNumber'];
+    this._RFIDNumber = map['RFIDNUmber'];
     this._IDNumber = map['IDNumber'];
     this._name = map['name'];
     this._commonName = map['commonName'];
@@ -63,6 +67,7 @@ class Horse{
     this._number = map['number'];
     this._yob = map['yob'];
     this._cannonGirth = map['cannonGirth'];
+    this._owner =map['owner'];
   }
 
   double get cannonGirth => _cannonGirth;
@@ -183,6 +188,18 @@ class Horse{
 
   set id(int value) {
     _id = value;
+  }
+
+  get owner => _owner;
+
+  set owner(value) {
+    _owner = value;
+  }
+
+  String get RFIDNumber => _RFIDNumber;
+
+  set RFIDNumber(String value) {
+    _RFIDNumber = value;
   }
 
 

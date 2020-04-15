@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -36,12 +37,36 @@ class _HorseInfoState extends State<HorseInfo> {
   bool connected=false;
   bool _hasClosedWriteDialog = false;
 
-  String chipNumberPayload, IDPayload, namePayload, commonNamePayload, sirPayload, damPayload, sexPayload, breedPayload, colourPayload, dobPayload, descriptionPayload;
+  String chipNumberPayload, RFIDPayload, IDPayload, namePayload, commonNamePayload, sirPayload, damPayload, sexPayload, breedPayload, colourPayload, dobPayload, descriptionPayload;
   int tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload;
   double cannonGirthPayload;
+  String ownerPayload;
 
-  List<String> whatIsOnTag = [];
+  bool ID_ch = false;
+  bool name_ch = false;
+  bool commonMane_ch = false;
+  bool sir_ch= false;
+  bool dam_ch= false;
+  bool sex_ch= false;
+  bool breed_ch= false;
+  bool colour_ch = false;
+  bool dob_ch = false;
+  bool description_ch = false;
+  bool tapeMeasure_ch =false;
+  bool stichMeasure_ch= false;
+  bool breastGirth_ch =false;
+  bool weight_ch = false;
+  bool number_ch= false;
+  bool yob_ch= false;
+  bool cannonGirth_ch = false;
+  bool owner_ch = false;
 
+  Map<String, String> ids = new Map();
+  Map<String, String> basic = new Map();
+  Map<String, String> pedigree= new Map();
+  Map<String, String> description = new Map();
+  Map<String, String> measurements = new Map();
+  Map<String, String> owner = new Map();
 
 
   @override
@@ -75,72 +100,73 @@ class _HorseInfoState extends State<HorseInfo> {
               _tags.insert(0,tag);
               print(tag);
               print("Record '${_tags[index2].records[0].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[0].tnf}, type '${_tags[index2].records[0].type}', payload '${_tags[index2].records[0].payload}' and data '${_tags[index2].records[0].data}' and language code '${_tags[index2].records[0].languageCode}''");
-//              print("Record '${_tags[index2].records[1].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[1].tnf}, type '${_tags[index2].records[1].type}', payload '${_tags[index2].records[1].payload}' and data '${_tags[index2].records[1].data}' and language code '${_tags[index2].records[1].languageCode}''");
-//              print("Record '${_tags[index2].records[2].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[2].tnf}, type '${_tags[index2].records[2].type}', payload '${_tags[index2].records[2].payload}' and data '${_tags[index2].records[2].data}' and language code '${_tags[index2].records[2].languageCode}''");
+              print("Record '${_tags[index2].records[1].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[1].tnf}, type '${_tags[index2].records[1].type}', payload '${_tags[index2].records[1].payload}' and data '${_tags[index2].records[1].data}' and language code '${_tags[index2].records[1].languageCode}''");
+              print("Record '${_tags[index2].records[2].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[2].tnf}, type '${_tags[index2].records[2].type}', payload '${_tags[index2].records[2].payload}' and data '${_tags[index2].records[2].data}' and language code '${_tags[index2].records[2].languageCode}''");
+              print("Record '${_tags[index2].records[3].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[3].tnf}, type '${_tags[index2].records[3].type}', payload '${_tags[index2].records[3].payload}' and data '${_tags[index2].records[3].data}' and language code '${_tags[index2].records[3].languageCode}''");
+              print("Record '${_tags[index2].records[4].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[4].tnf}, type '${_tags[index2].records[4].type}', payload '${_tags[index2].records[4].payload}' and data '${_tags[index2].records[4].data}' and language code '${_tags[index2].records[4].languageCode}''");
+              print("Record '${_tags[index2].records[5].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[5].tnf}, type '${_tags[index2].records[5].type}', payload '${_tags[index2].records[5].payload}' and data '${_tags[index2].records[5].data}' and language code '${_tags[index2].records[5].languageCode}''");
 
-              int lenght = _tags[index2].records.length;
-              chipNumberPayload = _tags[index2].records[0].data;
+              var record1 = jsonDecode(_tags[index2].records[0].payload);
+              var record2 = jsonDecode(_tags[index2].records[1].payload);
+              var record3 = jsonDecode(_tags[index2].records[2].payload);
+              var record4 = jsonDecode(_tags[index2].records[3].payload);
+              var record5 = jsonDecode(_tags[index2].records[4].payload);
+              var record6 = jsonDecode(_tags[index2].records[5].payload);
 
-              for(int i = 1; i <lenght; i++){
-                String dataFromTag = _tags[index2].records[i].data;
-                whatIsOnTag.add(dataFromTag);
-                dataFromTag = "";
+              chipNumberPayload = record1["Chip number"];
+              IDPayload = record1["ID number"];
+              RFIDPayload = record1["RFID number"];
+
+              if(record2["Number"] == null){
+                numberPayload = 0;
+              }else{
+                numberPayload = int.parse(record2["Number"]);
               }
 
-              print("kolko je dat na tagu");
-              print(whatIsOnTag.length);
+              namePayload = record2["Name"];
+              commonNamePayload = record2["Common name"];
+              dobPayload = record2["Day of birth"];
+              yob = record2["Year of birth"];
 
-              for(int i=0; i<whatIsOnTag.length; i++){
+              sirPayload = record3["Sir"];
+              damPayload = record3["Dam"];
 
-                String valueWithKey = whatIsOnTag[i];
-                String key = valueWithKey.substring(0,valueWithKey.indexOf(RegExp(r':')));
-                String valeu = valueWithKey.substring(valueWithKey.indexOf(RegExp(r':')));
+              sexPayload = record4["Sex"];
+              breedPayload = record4["Breed"];
+              colourPayload = record4["Colour"];
+              descriptionPayload = record4["Description"];
 
-                setValueFromTag(key, valeu);
-
-                valueWithKey = "";
-                key = "";
-                valeu = "";
+              if(record5["Tape measure"] == null){
+                tapeMeasurePayload = 0;
+              }else{
+                tapeMeasurePayload = int.parse(record5["Tape measure"]);
               }
 
+              if(record5["Stick measure"] == null){
+                stickMeasurePayload= 0;
+              } else{
+                stickMeasurePayload = int.parse(record5["Stick measure"]);
+              }
 
-//              IDPayload = _tags[index2].records[1].data;
-//              if(IDPayload == null){
-//                IDPayload = null;
-//                numberPayload = null;
-//                namePayload = null;
-//                commonNamePayload = null;
-//              }else {
-//                numberPayload = int.parse(_tags[index2].records[2].data);
-//                namePayload =_tags[index2].records[3].data;
-//                commonNamePayload =_tags[index2].records[4].data;
-//              }
+              if(record5["Breast girth"] == null){
+                breastGirthPayload = 0;
+              } else{
+                breastGirthPayload = int.parse(record5["Breast girth"]);
+              }
 
-//
-//              chipNumberPayload= _tags[index2].records[0].payload;
-//              print("printim chipNumber");
-//              print(chipNumberPayload);
-//              IDPayload = _tags[index2].records[1].payload;
-//              numberPayload = int.parse(_tags[index2].records[2].payload);
-//              namePayload = _tags[index2].records[3].payload;
-//              commonNamePayload = _tags[index2].records[4].payload;
-//              sirPayload = _tags[index2].records[5].payload;
-//              damPayload = _tags[index2].records[6].payload;
-//              dobPayload = _tags[index2].records[7].payload;
-//              print(dobPayload + "dob");
-//              print(yobPayload);
-//              yobPayload = int.parse(_tags[index2].records[8].payload);
-//              sexPayload = _tags[index2].records[9].payload;
-//              breedPayload = _tags[index2].records[10].payload;
-//              colourPayload = _tags[index2].records[11].payload;
-//              descriptionPayload = _tags[index2].records[12].payload;
-//
-//              tapeMeasurePayload = int.parse(_tags[index2].records[13].payload);
-//              stickMeasurePayload = int.parse(_tags[index2].records[14].payload);
-//              breastGirthPayload = int.parse(_tags[index2].records[15].payload);
-//              cannonGirthPayload = double.parse(_tags[index2].records[16].payload);
-//              weightPayload = int.parse(_tags[index2].records[17].payload);
+              if(record5["Cannon girth"] == null){
+                cannonGirthPayload = 0;
+              } else{
+                cannonGirthPayload = double.parse(record5["Cannon girth"]);
+              }
 
+              if(record5["Weight"] == null){
+                weightPayload = 0;
+              } else{
+                weightPayload = int.parse(record5["Weight"]);
+              }
+
+              ownerPayload = record6["Owner"];
             });
           },
           onDone: (){
@@ -203,32 +229,44 @@ class _HorseInfoState extends State<HorseInfo> {
                 height: 22,
               ),
               Container(
-                  padding: const EdgeInsets.all(5.0), child: Text('Info about horse', style: TextStyle(fontSize: 15.0),))
+                  padding: const EdgeInsets.all(5.0),
+                  child: Text(
+                    'Info about horse',
+                    style: TextStyle(
+                        fontSize: 15.0
+                    ),
+                  )
+              )
             ],
           ),
         ),
         actions: <Widget>[
-          Builder(
-            builder: (context){
-              if(!_supportsNFC){
+          OfflineBuilder(
+            connectivityBuilder: (BuildContext context, ConnectivityResult connectivity, Widget child) {
+              connected = connectivity != ConnectivityResult.none;
+              if (!connected) {
                 return FlatButton(
-                  child: Text("NFC unsupported"),
-                  onPressed: null,
-                );
-              }
-              return
-                FlatButton(
                   child:
-                  Text(_streamSubscription == null ? "Start reading": "Stop reading"),
-                  onPressed: (){
-                    if(_streamSubscription == null){
+                  Text(_streamSubscription == null
+                      ? "Start reading"
+                      : "Stop reading"),
+                  onPressed: () {
+                    if (_streamSubscription == null) {
                       _startScannig(context);
-                    } else{
+                    } else {
                       _stopScanning();
                     }
                   },
                 );
+              } else {
+                return Container();
+              }
             },
+              builder: (context){
+                return Container(
+                  height: 0.5,
+                );
+              }
           )
         ],
       ),
@@ -346,7 +384,6 @@ class _HorseInfoState extends State<HorseInfo> {
 //                      } else{
                         return Column(
                           children: <Widget>[
-                            child,
                             Column(
                               children: <Widget>[
                                 ExpansionTile(
@@ -375,8 +412,28 @@ class _HorseInfoState extends State<HorseInfo> {
                                           mainAxisSize: MainAxisSize.max,
                                           children: <Widget>[
                                             Text(horseFromDB.chipNumber),
-                                            Text("3264982334"),
-                                            Text(horseFromDB.IDNumber)
+                                            Container(
+                                              child: TextFormField(
+                                                onChanged: (payload){
+                                                  setValue("RFID number", payload);
+                                                },
+                                                controller: TextEditingController(
+                                                    text: horseFromDB.RFIDNumber
+                                                ),
+                                              ),
+                                              width: 200,
+                                            ),
+                                            Container(
+                                              child: TextFormField(
+                                                onChanged: (payload){
+                                                  setValue("ID number", payload);
+                                                },
+                                                controller: TextEditingController(
+                                                    text: horseFromDB.IDNumber
+                                                ),
+                                              ),
+                                              width: 200,
+                                            ),
                                           ],
                                         )
                                       ],
@@ -386,11 +443,11 @@ class _HorseInfoState extends State<HorseInfo> {
                                 ExpansionTile(
                                   title: Text("Basic data"),
                                   children: <Widget>[
-                                    _field("Number", horseFromDB.number),
-                                    _field("Name", horseFromDB.name),
-                                    _field("Common name", horseFromDB.commonName),
-                                    _field("Day of birth", horseFromDB.dob),
-                                    _field("Year of birth", horseFromDB.yob),
+                                    _field("Number", horseFromDB.number, number_ch),
+                                    _field("Name", horseFromDB.name, name_ch),
+                                    _field("Common name", horseFromDB.commonName, commonMane_ch),
+                                    _field("Day of birth", horseFromDB.dob, dob_ch),
+                                    _field("Year of birth", horseFromDB.yob, yob_ch),
                                     SizedBox(
                                       height: 10.0,
                                     ),
@@ -399,8 +456,8 @@ class _HorseInfoState extends State<HorseInfo> {
                                 ExpansionTile(
                                   title: Text("Pedigree"),
                                   children: <Widget>[
-                                    _field("Sir", horseFromDB.sir),
-                                    _field("Dam", horseFromDB.dam),
+                                    _field("Sir", horseFromDB.sir, sir_ch),
+                                    _field("Dam", horseFromDB.dam, dam_ch),
                                     SizedBox(
                                       height: 10.0,
                                     ),
@@ -409,10 +466,10 @@ class _HorseInfoState extends State<HorseInfo> {
                                 ExpansionTile(
                                   title: Text("Description"),
                                   children: <Widget>[
-                                    _field("Sex", horseFromDB.sex),
-                                    _field("Breed", horseFromDB.breed),
-                                    _field("Colour", horseFromDB.colour),
-                                    _field("Description", horseFromDB.description),
+                                    _field("Sex", horseFromDB.sex, sex_ch),
+                                    _field("Breed", horseFromDB.breed, breed_ch),
+                                    _field("Colour", horseFromDB.colour, colour_ch),
+                                    _field("Description", horseFromDB.description, description_ch),
                                     SizedBox(
                                       height: 10.0,
                                     ),
@@ -421,16 +478,25 @@ class _HorseInfoState extends State<HorseInfo> {
                                 ExpansionTile(
                                   title: Text("Measurements"),
                                   children: <Widget>[
-                                    _field("Tape measure", horseFromDB.tapeMeasure),
-                                    _field("Stick measure", horseFromDB.stickMeasure),
-                                    _field("Breast girth", horseFromDB.breastGirth),
-                                    _field("Cannon girth", horseFromDB.cannonGirth),
-                                    _field("Weight", horseFromDB.weight),
+                                    _field("Tape measure", horseFromDB.tapeMeasure, tapeMeasure_ch),
+                                    _field("Stick measure", horseFromDB.stickMeasure, stichMeasure_ch),
+                                    _field("Breast girth", horseFromDB.breastGirth, breastGirth_ch),
+                                    _field("Cannon girth", horseFromDB.cannonGirth, cannonGirth_ch),
+                                    _field("Weight", horseFromDB.weight, weight_ch),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
+                                  ],
+                                ),
+                                ExpansionTile(
+                                  title: Text("Owner"),
+                                  children: <Widget>[
+                                    _field("Owner", horseFromDB.owner, owner_ch),
                                     SizedBox(
                                       height: 20.0,
                                     ),
                                   ],
-                                )
+                                ),
                               ],
                             ),
                             Row(
@@ -467,45 +533,70 @@ class _HorseInfoState extends State<HorseInfo> {
                             ),
                             Column(
                               children: <Widget>[
-                                Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                ExpansionTile(
+                                  title: Text("IDs"),
                                   children: <Widget>[
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: <Widget>[
-                                        Text("Chip number:"),
-                                        Text("RFID number:"),
-                                        Text("ID number:"),
-                                      ],
-                                    ),
-                                    Padding(
-                                        padding: EdgeInsets.only(right: 10.0)
-                                    ),
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: <Widget>[
-                                        Text(""),
-                                        Text(""),
-                                        Text("")
-                                      ],
-                                    )
-                                  ],
+                                    Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Text("Chip number:"),
+                                          Text("RFID number:"),
+                                          Text("ID number:"),
+                                        ],
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(right: 10.0)
+                                      ),
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Text(""),
+                                          Container(
+                                            child: TextFormField(
+                                              onChanged: (payload){
+                                                setValue("RFID number", payload);
+                                              },
+                                              controller: TextEditingController(
+                                                  text: ""
+                                              ),
+                                            ),
+                                            width: 200,
+                                          ),
+                                          Container(
+                                            child: TextFormField(
+                                              onChanged: (payload){
+                                                setValue("ID number", payload);
+                                              },
+                                              controller: TextEditingController(
+                                                  text: ""
+                                              ),
+                                            ),
+                                            width: 200,
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  ]
                                 ),
                               ],
                             ),
                             ExpansionTile(
                               title: Text("Basic data"),
                               children: <Widget>[
-                                _field("Number", ""),
-                                _field("Name",""),
-                                _field("Common name", ""),
-                                _field("Day of birth", ""),
-                                _field("Year of birth", ""),
+                                _field("Number", "", number_ch),
+                                _field("Name","", name_ch),
+                                _field("Common name", "", commonMane_ch),
+                                _field("Day of birth", "", dob_ch),
+                                _field("Year of birth", "", yob_ch),
                                 SizedBox(
                                   height: 10.0,
                                 ),
@@ -514,8 +605,8 @@ class _HorseInfoState extends State<HorseInfo> {
                             ExpansionTile(
                               title: Text("Pedigree"),
                               children: <Widget>[
-                                _field("Sir", ""),
-                                _field("Dam", ""),
+                                _field("Sir", "", sir_ch),
+                                _field("Dam", "", dam_ch),
                                 SizedBox(
                                   height: 10.0,
                                 ),
@@ -524,10 +615,10 @@ class _HorseInfoState extends State<HorseInfo> {
                             ExpansionTile(
                               title: Text("Description"),
                               children: <Widget>[
-                                _field("Sex", ""),
-                                _field("Breed", ""),
-                                _field("Colour", ""),
-                                _field("Description", ""),
+                                _field("Sex", "", sex_ch),
+                                _field("Breed", "", breed_ch),
+                                _field("Colour", "", colour_ch),
+                                _field("Description", "", description_ch),
                                 SizedBox(
                                   height: 10.0,
                                 ),
@@ -536,16 +627,25 @@ class _HorseInfoState extends State<HorseInfo> {
                             ExpansionTile(
                               title: Text("Measurements"),
                               children: <Widget>[
-                                _field("Tape measure", ""),
-                                _field("Stick measure", ""),
-                                _field("Breast girth", ""),
-                                _field("Cannon girth", ""),
-                                _field("Weight", ""),
+                                _field("Tape measure", "", tapeMeasure_ch),
+                                _field("Stick measure", "", stichMeasure_ch),
+                                _field("Breast girth", "", breastGirth_ch),
+                                _field("Cannon girth", "", cannonGirth_ch),
+                                _field("Weight", "", weight_ch),
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                              ],
+                            ),
+                            ExpansionTile(
+                              title: Text("Owner"),
+                              children: <Widget>[
+                                _field("Owner", "", owner_ch),
                                 SizedBox(
                                   height: 20.0,
                                 ),
                               ],
-                            ),
+                            )
 //                            _saveToTAG(),
                           ],
                         );
@@ -554,43 +654,68 @@ class _HorseInfoState extends State<HorseInfo> {
                           children: <Widget>[
                             Column(
                               children: <Widget>[
-                                Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: <Widget>[
-                                        Text("Chip number:"),
-                                        Text("RFID number:"),
-                                        Text("ID number:"),
-                                      ],
-                                    ),
-                                    Padding(
-                                        padding: EdgeInsets.only(right: 10.0)
-                                    ),
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: <Widget>[
-                                        Text(chipNumberPayload),
-                                        Text("32649823345"),
-                                        Text("87450234")
-                                      ],
-                                    )
-                                  ],
+                                ExpansionTile(
+                                  title: Text("IDs"),
+                                  children:<Widget> [
+                                    Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Text("Chip number:"),
+                                          Text("RFID number:"),
+                                          Text("ID number:"),
+                                        ],
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(right: 10.0)
+                                      ),
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Text(chipNumberPayload),
+                                          Container(
+                                            child: TextFormField(
+                                              onChanged: (payload){
+                                                setValue("RFID number", payload);
+                                              },
+                                              controller: TextEditingController(
+                                                  text: RFIDPayload
+                                              ),
+                                            ),
+                                            width: 200,
+                                          ),
+                                          Container(
+                                            child: TextFormField(
+                                              onChanged: (payload){
+                                                setValue("ID number", payload);
+                                              },
+                                              controller: TextEditingController(
+                                                  text: IDPayload
+                                              ),
+                                            ),
+                                            width: 200,
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  ]
                                 ),
                                 ExpansionTile(
                                   title: Text("Basic data"),
                                   children: <Widget>[
-                                    _field("Number", numberPayload),
-                                    _field("Name", namePayload),
-                                    _field("Common name", commonNamePayload),
-                                    _field("Day of birth", dobPayload),
-                                    _field("Year of birth", yobPayload),
+                                    _field("Number", numberPayload, number_ch),
+                                    _field("Name", namePayload, name_ch),
+                                    _field("Common name", commonNamePayload, commonMane_ch),
+                                    _field("Day of birth", dobPayload, dob_ch),
+                                    _field("Year of birth", yobPayload, yob_ch),
                                     SizedBox(
                                       height: 10.0,
                                     ),
@@ -599,8 +724,8 @@ class _HorseInfoState extends State<HorseInfo> {
                                 ExpansionTile(
                                   title: Text("Pedigree"),
                                   children: <Widget>[
-                                    _field("Sir", sirPayload),
-                                    _field("Dam", damPayload),
+                                    _field("Sir", sirPayload, sir_ch),
+                                    _field("Dam", damPayload, dam_ch),
                                     SizedBox(
                                       height: 10.0,
                                     ),
@@ -609,10 +734,10 @@ class _HorseInfoState extends State<HorseInfo> {
                                 ExpansionTile(
                                   title: Text("Description"),
                                   children: <Widget>[
-                                    _field("Sex", sexPayload),
-                                    _field("Breed", breedPayload),
-                                    _field("Colour", colourPayload),
-                                    _field("Description", descriptionPayload),
+                                    _field("Sex", sexPayload, sex_ch),
+                                    _field("Breed", breedPayload, breed_ch),
+                                    _field("Colour", colourPayload, colour_ch),
+                                    _field("Description", descriptionPayload, description_ch),
                                     SizedBox(
                                       height: 10.0,
                                     ),
@@ -621,11 +746,20 @@ class _HorseInfoState extends State<HorseInfo> {
                                 ExpansionTile(
                                   title: Text("Measurements"),
                                   children: <Widget>[
-                                    _field("Tape measure", tapeMeasurePayload),
-                                    _field("Stick measure", stickMeasurePayload),
-                                    _field("Breast girth", breastGirthPayload),
-                                    _field("Cannon girth", cannonGirthPayload),
-                                    _field("Weight", weightPayload),
+                                    _field("Tape measure", tapeMeasurePayload, tapeMeasure_ch),
+                                    _field("Stick measure", stickMeasurePayload, stichMeasure_ch),
+                                    _field("Breast girth", breastGirthPayload, breastGirth_ch),
+                                    _field("Cannon girth", cannonGirthPayload, cannonGirth_ch),
+                                    _field("Weight", weightPayload, weight_ch),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
+                                  ],
+                                ),
+                                ExpansionTile(
+                                  title: Text("Owner"),
+                                  children: <Widget>[
+                                    _field("Owner", ownerPayload, owner_ch),
                                     SizedBox(
                                       height: 20.0,
                                     ),
@@ -633,7 +767,7 @@ class _HorseInfoState extends State<HorseInfo> {
                                 ),
                               ],
                             ),
-//                            _saveToTAG(),
+                            _saveToTAG(),
                           ],
                         );
                       }
@@ -651,13 +785,16 @@ class _HorseInfoState extends State<HorseInfo> {
     );
   }
 
-  Widget _field(String key, var payload){
-    bool nameVal = false;
-    //TODO - onChange function
+  Widget _field(String key, var payload, bool checked){
     return Row(
       children: <Widget>[
         Checkbox(
-          value: nameVal,
+          value: checked,
+          onChanged: (checked){
+            setState(() {
+              setChecked(key, checked);
+            });
+          },
         ),
         Text(key),
         Spacer(),
@@ -683,6 +820,12 @@ class _HorseInfoState extends State<HorseInfo> {
 
     if(connected){
       switch(keyValue) {
+        case "RFID number": {
+          horseFromDB.RFIDNumber = value;
+          print(horseFromDB.RFIDNumber);
+          RFIDPayload = value;
+        }break;
+
         case "ID number": {
           horseFromDB.IDNumber = value;
           print(horseFromDB.IDNumber);
@@ -790,6 +933,12 @@ class _HorseInfoState extends State<HorseInfo> {
           print(horseFromDB.weight);
           weightPayload = value;
         }break;
+
+        case "Owner": {
+          horseFromDB.owner = value;
+          print(horseFromDB.owner);
+          ownerPayload = value;
+        }break;
       }
     }
 
@@ -801,6 +950,11 @@ class _HorseInfoState extends State<HorseInfo> {
     print(keyValue);
 
       switch(keyValue) {
+        case "RFID number": {
+          RFIDPayload = value;
+          print(RFIDPayload);
+        }break;
+
         case "ID number": {
           IDPayload = value;
           print(IDPayload);
@@ -892,11 +1046,201 @@ class _HorseInfoState extends State<HorseInfo> {
           weightPayload = int.parse(wei);
           print(weightPayload);
         }break;
+
+        case "Owner": {
+          ownerPayload = value;
+          print(ownerPayload);
+        }break;
     }
 
   }
 
-  //plus widget na save on tag iba...
+  void setChecked(String key, bool value){
+    String keyValue = key;
+    print("keyValue");
+    print(keyValue);
+
+    switch(keyValue) {
+      case "Number": {
+        number_ch = value;
+        print(number_ch);
+      }break;
+
+      case "Name": {
+        name_ch= value;
+        print(name_ch);
+      }break;
+
+      case "Common name": {
+        commonMane_ch = value;
+        print(commonMane_ch);
+      }break;
+
+      case "Sir": {
+        sir_ch = value;
+        print(sir_ch);
+      }break;
+
+      case "Dam": {
+        dam_ch = value;
+        print(dam_ch);
+      }break;
+
+      case "Day of birth": {
+        dob_ch = value;
+        print(dob_ch);
+      }break;
+
+      case "Year of birth": {
+        yob_ch = value;
+        print(yob_ch);
+      }break;
+
+      case "Sex": {
+        sex_ch = value;
+        print(sex_ch);
+      }break;
+
+      case "Breed": {
+        breed_ch = value;
+        print(breed_ch);
+      }break;
+
+      case "Colour": {
+        colour_ch = value;
+        print(colour_ch);
+      }break;
+
+      case "Description": {
+        description_ch = value;
+        print(description_ch);
+      }break;
+
+      case "Tape measure": {
+        tapeMeasure_ch = value;
+        print(tapeMeasure_ch);
+      }break;
+
+      case "Stick measure": {
+        stichMeasure_ch = value;
+        print(stichMeasure_ch);
+      }break;
+
+      case "Breast girth": {
+        breastGirth_ch =value;
+        print(breastGirth_ch);
+      }break;
+
+      case "Cannon girth": {
+        cannonGirth_ch = value;
+        print(cannonGirth_ch);
+      }break;
+
+      case "Weight": {
+        weight_ch = value;
+        print(weight_ch);
+      }break;
+
+      case "Owner":{
+        owner_ch = value;
+        print(owner_ch);
+      }
+    }
+  }
+
+  void isChecked(String key, bool value){
+    String keyValue = key;
+    print("keyValue");
+    print(keyValue);
+
+    if(!value){
+      return;
+    }
+
+    switch(keyValue) {
+      case "Number": {
+        basic[keyValue] = numberPayload.toString();
+      }break;
+
+      case "Name": {
+        basic[keyValue] = namePayload;
+      }break;
+
+      case "Common name": {
+        basic[keyValue] = commonNamePayload;
+      }break;
+
+      case "Sir": {
+        pedigree[keyValue] = sirPayload;
+      }break;
+
+      case "Dam": {
+        pedigree[keyValue] = damPayload;
+      }break;
+
+      case "Day of birth": {
+        basic[keyValue] = dobPayload;
+      }break;
+
+      case "Year of birth": {
+        basic[keyValue] = yobPayload.toString();
+      }break;
+
+      case "Sex": {
+        description[keyValue] = sexPayload;
+      }break;
+
+      case "Breed": {
+        description[keyValue] = breedPayload;
+      }break;
+
+      case "Colour": {
+        description[keyValue] = colourPayload;
+      }break;
+
+      case "Description": {
+        description[keyValue] = descriptionPayload;
+      }break;
+
+      case "Tape measure": {
+        measurements[keyValue] = tapeMeasurePayload.toString();
+      }break;
+
+      case "Stick measure": {
+        measurements[keyValue] = stickMeasurePayload.toString();
+      }break;
+
+      case "Breast girth": {
+        measurements[keyValue] = breastGirthPayload.toString();
+      }break;
+
+      case "Cannon girth": {
+        measurements[keyValue] = cannonGirthPayload.toString();
+      }break;
+
+      case "Weight": {
+        measurements[keyValue] = weightPayload.toString();
+      }break;
+
+      case "Owner": {
+        owner[keyValue] = ownerPayload;
+      }break;
+    }
+  }
+
+  Widget _saveToTAG(){
+    return Container(
+      padding: EdgeInsets.only(top: 20.0),
+      child: RaisedButton(
+        color: Color.fromRGBO(0,44,44, 1.0),
+        textColor: Colors.white,
+        onPressed: (){
+          _saveOnTAGFun();
+        },
+        child: Text("SAVE ON TAG"),
+      ),
+    );
+  }
 
   Widget _saveToTAGandDB(){
     return Container(
@@ -939,6 +1283,83 @@ class _HorseInfoState extends State<HorseInfo> {
 //    });
 //  }
 
+  void _saveOnTAGFun() async{
+    var checkedValues = new Map();
+    checkedValues['Number']= number_ch;
+    checkedValues['Name']= name_ch;
+    checkedValues['Common name']= commonMane_ch;
+    checkedValues['Sir']= sir_ch;
+    checkedValues['Dam']= dam_ch;
+    checkedValues['Day of birth']= dob_ch;
+    checkedValues['Year of birth']= yob_ch;
+    checkedValues['Sex']= sex_ch;
+    checkedValues['Breed']= breed_ch;
+    checkedValues['Colour']= colour_ch;
+    checkedValues['Description']= description_ch;
+    checkedValues['Tape measure']= tapeMeasure_ch;
+    checkedValues['Stick measure']= stichMeasure_ch;
+    checkedValues['Breast girth']= breastGirth_ch;
+    checkedValues['Cannon girth']= cannonGirth_ch;
+    checkedValues['Weight']= weight_ch;
+    checkedValues['Owner']= owner_ch;
+
+    checkedValues.forEach((k, v) =>{
+      isChecked(k,v)
+    });
+
+    List<NDEFRecord> records = new List<NDEFRecord>();
+
+    ids["Chip number"] = chipNumberPayload;
+    ids["ID number"] = IDPayload;
+    ids["RFID number"] = RFIDPayload;
+
+    String jsonIDs = jsonEncode(ids);
+    String jsonBasic = jsonEncode(basic);
+    String jsonPedigree = jsonEncode(pedigree);
+    String jsonDesc = jsonEncode(description);
+    String jsonMeasure = jsonEncode(measurements);
+    String jsonOwner = jsonEncode(owner);
+
+    records.add(NDEFRecord.type("text/json", jsonIDs));
+    records.add(NDEFRecord.type("text/json", jsonBasic));
+    records.add(NDEFRecord.type("text/json", jsonPedigree));
+    records.add(NDEFRecord.type("text/json", jsonDesc));
+    records.add(NDEFRecord.type("text/json", jsonMeasure));
+    records.add(NDEFRecord.type("text/json", jsonOwner));
+
+    NDEFMessage message = NDEFMessage.withRecords(records);
+
+    //iOS zevraj ma svoj
+    if (Platform.isAndroid) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Scan the tag you want to write to"),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text("Cancel"),
+              onPressed: () {
+                _hasClosedWriteDialog = true;
+                _streamSubscription?.cancel();
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
+    await NFC.writeNDEF(message).first;
+    if(!_hasClosedWriteDialog){
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CustomerProfile(customer: widget.customer,)
+          )
+      );
+    }
+  }
+
   void _saveOnDBFun(){
     //update kona do db
     Horse newHorse = horseFromDB;
@@ -948,14 +1369,50 @@ class _HorseInfoState extends State<HorseInfo> {
 
   void _saveOnDBandTAGFun() async{
     print("saving do db a na tag");
+
+    var checkedValues = new Map();
+    checkedValues['Number']= number_ch;
+    checkedValues['Name']= name_ch;
+    checkedValues['Common name']= commonMane_ch;
+    checkedValues['Sir']= sir_ch;
+    checkedValues['Dam']= dam_ch;
+    checkedValues['Day of birth']= dob_ch;
+    checkedValues['Year of birth']= yob_ch;
+    checkedValues['Sex']= sex_ch;
+    checkedValues['Breed']= breed_ch;
+    checkedValues['Colour']= colour_ch;
+    checkedValues['Description']= description_ch;
+    checkedValues['Tape measure']= tapeMeasure_ch;
+    checkedValues['Stick measure']= stichMeasure_ch;
+    checkedValues['Breast girth']= breastGirth_ch;
+    checkedValues['Cannon girth']= cannonGirth_ch;
+    checkedValues['Weight']= weight_ch;
+    checkedValues['Owner']= owner_ch;
+
+    checkedValues.forEach((k, v) =>{
+      isChecked(k,v)
+    });
+
     List<NDEFRecord> records = new List<NDEFRecord>();
 
-    // prvych 5 veci sa zapise na Tag
-    records.add(NDEFRecord.type("text/plain", chipNumberPayload));
-    records.add(NDEFRecord.type("text/plain", horseFromDB.IDNumber));
-    records.add(NDEFRecord.type("text/plain", horseFromDB.number.toString()));
-    records.add(NDEFRecord.type("text/plain", horseFromDB.name));
-    records.add(NDEFRecord.type("text/plain", horseFromDB.commonName));
+    ids["Chip number"] = chipNumberPayload;
+    ids["ID number"] = IDPayload;
+    ids["RFID number"] = RFIDPayload;
+
+    String jsonIDs = jsonEncode(ids);
+    String jsonBasic = jsonEncode(basic);
+    String jsonPedigree = jsonEncode(pedigree);
+    String jsonDesc = jsonEncode(description);
+    String jsonMeasure = jsonEncode(measurements);
+    String jsonOwner = jsonEncode(owner);
+
+    records.add(NDEFRecord.type("text/json", jsonIDs));
+    records.add(NDEFRecord.type("text/json", jsonBasic));
+    records.add(NDEFRecord.type("text/json", jsonPedigree));
+    records.add(NDEFRecord.type("text/json", jsonDesc));
+    records.add(NDEFRecord.type("text/json", jsonMeasure));
+    records.add(NDEFRecord.type("text/json", jsonOwner));
+
 
     //update kona do db
     Horse newHorse = horseFromDB;

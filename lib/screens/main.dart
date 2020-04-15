@@ -80,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String chipNumberPayload, namePayload, commonNamePayload, sirPayload, damPayload, sexPayload, breedPayload, colourPayload, dobPayload, descriptionPayload;
   int tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload;
   double cannonGirthPayload;
-  String IDPayload = "87450234";
+  String IDPayload, RFIDPayload, ownerPayload;
 
   String num, yob, tape, stick, breast, wei, cannon;
 
@@ -101,13 +101,14 @@ class _MyHomePageState extends State<MyHomePage> {
   bool number_ch= false;
   bool yob_ch= false;
   bool cannonGirth_ch = false;
-  bool chipNumber_ch= true;
+  bool owner_ch = false;
 
   Map<String, String> ids = new Map();
   Map<String, String> basic = new Map();
   Map<String, String> pedigree= new Map();
   Map<String, String> description = new Map();
   Map<String, String> measurements = new Map();
+  Map<String, String> owner = new Map();
 
   @override
   Widget build(BuildContext context) {
@@ -160,8 +161,28 @@ class _MyHomePageState extends State<MyHomePage> {
                                               mainAxisSize: MainAxisSize.max,
                                                 children: <Widget>[
                                                   Text(chipNumberPayload),
-                                                  Text("32649823345"),
-                                                  Text(IDPayload)
+                                                  Container(
+                                                    child: TextFormField(
+                                                      onChanged: (RFIDpayload){
+                                                        setValue("RFID number", RFIDpayload);
+                                                      },
+                                                      controller: TextEditingController(
+                                                          text: "$RFIDPayload"
+                                                      ),
+                                                    ),
+                                                    width: 200,
+                                                  ),
+                                                  Container(
+                                                    child: TextFormField(
+                                                      onChanged: (payload){
+                                                        setValue("ID number", payload);
+                                                      },
+                                                      controller: TextEditingController(
+                                                          text: "$IDPayload"
+                                                      ),
+                                                    ),
+                                                    width: 200,
+                                                  )
                                                 ],
                                             )
                                           ],
@@ -215,10 +236,19 @@ class _MyHomePageState extends State<MyHomePage> {
                                         _field("Cannon girth", cannonGirthPayload,cannonGirth_ch ),
                                         _field("Weight", weightPayload, weight_ch),
                                         SizedBox(
+                                          height: 10.0,
+                                        ),
+                                      ],
+                                    ),
+                                    ExpansionTile(
+                                      title: Text("Owner"),
+                                      children: <Widget>[
+                                        _field("Owner", ownerPayload, owner_ch),
+                                        SizedBox(
                                           height: 20.0,
                                         ),
                                       ],
-                                    )
+                                    ),
                                   ],
                                 ),
                               ],
@@ -272,6 +302,11 @@ class _MyHomePageState extends State<MyHomePage> {
       case "ID number": {
         IDPayload = value;
         print(IDPayload);
+      }break;
+
+      case "RFID number": {
+        RFIDPayload = value;
+        print(RFIDPayload);
       }break;
 
       case "Number": {
@@ -360,6 +395,11 @@ class _MyHomePageState extends State<MyHomePage> {
         weightPayload = int.parse(wei);
         print(weightPayload);
       }break;
+
+      case "Owner":{
+        ownerPayload = value;
+        print(ownerPayload);
+      }
     }
   }
 
@@ -369,22 +409,6 @@ class _MyHomePageState extends State<MyHomePage> {
     print(keyValue);
 
     switch(keyValue) {
-      case "Chip number": {
-        chipNumber_ch = true;
-        print("is chceck ID?");
-        print(chipNumber_ch);
-      }break;
-      case "ID number": {
-        ID_ch = value;
-        print("is chceck ID?");
-        print(ID_ch);
-      }break;
-      case "ID number": {
-        ID_ch = value;
-        print("is chceck ID?");
-        print(ID_ch);
-      }break;
-
       case "Number": {
         number_ch = value;
         print(number_ch);
@@ -464,6 +488,11 @@ class _MyHomePageState extends State<MyHomePage> {
         weight_ch = value;
         print(weight_ch);
       }break;
+
+      case "Owner":{
+        owner_ch = value;
+        print(owner_ch);
+      }
     }
   }
 
@@ -477,19 +506,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     switch(keyValue) {
-      case "Chip number": {
-        print("switch");
-        print(chipNumberPayload);
-        print(keyValue);
-        ids[keyValue] = chipNumberPayload;
-      }break;
-
-      case "ID number": {
-        print("id number");
-        print(IDPayload);
-        ids[keyValue] = IDPayload;
-      }break;
-
       case "Number": {
         basic[keyValue] = numberPayload.toString();
       }break;
@@ -553,6 +569,10 @@ class _MyHomePageState extends State<MyHomePage> {
       case "Weight": {
         measurements[keyValue] = weightPayload.toString();
       }break;
+
+      case "Owner": {
+        owner[keyValue] = ownerPayload;
+      }break;
     }
   }
 
@@ -575,8 +595,6 @@ class _MyHomePageState extends State<MyHomePage> {
     print("submit form");
 
     var checkedValues = new Map();
-    checkedValues['Chip number']= chipNumber_ch;
-    checkedValues['ID number']= ID_ch;
     checkedValues['Number']= number_ch;
     checkedValues['Name']= name_ch;
     checkedValues['Common name']= commonMane_ch;
@@ -593,6 +611,7 @@ class _MyHomePageState extends State<MyHomePage> {
     checkedValues['Breast girth']= breastGirth_ch;
     checkedValues['Cannon girth']= cannonGirth_ch;
     checkedValues['Weight']= weight_ch;
+    checkedValues['Owner']= owner_ch;
     
     checkedValues.forEach((k, v) =>{
       isChecked(k,v)
@@ -601,26 +620,44 @@ class _MyHomePageState extends State<MyHomePage> {
     // iba 5 recordov
     List<NDEFRecord> records = new List<NDEFRecord>();
 
+
+    ids["Chip number"] = chipNumberPayload;
+    ids["ID number"] = IDPayload;
+    ids["RFID number"] = RFIDPayload;
+
     String jsonIDs = jsonEncode(ids);
     String jsonBasic = jsonEncode(basic);
     String jsonPedigree = jsonEncode(pedigree);
     String jsonDesc = jsonEncode(description);
     String jsonMeasure = jsonEncode(measurements);
+    String jsonOwner = jsonEncode(owner);
 
     records.add(NDEFRecord.type("text/json", jsonIDs));
     records.add(NDEFRecord.type("text/json", jsonBasic));
     records.add(NDEFRecord.type("text/json", jsonPedigree));
     records.add(NDEFRecord.type("text/json", jsonDesc));
     records.add(NDEFRecord.type("text/json", jsonMeasure));
+    records.add(NDEFRecord.type("text/json", jsonOwner));
 
     print("pocet recordov");
     print(records.length);
 
+    records.forEach((record) =>{
+      print(record.payload.length)
+    });
+
+    records.forEach((rec) =>{
+      print(rec.payload)
+    });
+
+
     //zapis noveho kona do db
-    Horse newHorse = Horse(widget.customer.id, chipNumberPayload, IDPayload,namePayload,commonNamePayload,sirPayload,damPayload,sexPayload,breedPayload,colourPayload,dobPayload,descriptionPayload, tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload, cannonGirthPayload);
+    Horse newHorse = Horse(widget.customer.id, chipNumberPayload, IDPayload,namePayload,commonNamePayload,sirPayload,damPayload,sexPayload,breedPayload,colourPayload,dobPayload,descriptionPayload, tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload, cannonGirthPayload, RFIDPayload, ownerPayload);
     _saveHorseFun(newHorse);
 
     NDEFMessage message = NDEFMessage.withRecords(records);
+
+
 
     //iOS zevraj ma svoj
     if (Platform.isAndroid) {
