@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:horsesapp/database.dart';
 import 'package:horsesapp/models/Customer.dart';
 import 'package:horsesapp/screens/customerProfile.dart';
+import 'package:horsesapp/screens/login.dart';
 import 'package:nfc_in_flutter/nfc_in_flutter.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/Horse.dart';
@@ -114,6 +115,7 @@ class _HorseInfoState extends State<HorseInfo> {
               var record6 = jsonDecode(_tags[index2].records[5].payload);
 
               chipNumberPayload = record1["Chip number"];
+              print(chipNumberPayload);
               IDPayload = record1["ID number"];
               RFIDPayload = record1["RFID number"];
 
@@ -263,9 +265,7 @@ class _HorseInfoState extends State<HorseInfo> {
               }
             },
               builder: (context){
-                return Container(
-                  height: 0.5,
-                );
+                return Container();
               }
           )
         ],
@@ -503,11 +503,11 @@ class _HorseInfoState extends State<HorseInfo> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                _saveToDB(),
+                               if(LoginPage.currentUser.name == "Vet") _saveToDB(),
                                 Padding(
                                   padding: EdgeInsets.only(right: 10.0),
                                 ),
-                                _saveToTAGandDB()
+                                if(LoginPage.currentUser.name == "Vet")_saveToTAGandDB()
                               ],
                             )
                           ],
@@ -645,8 +645,8 @@ class _HorseInfoState extends State<HorseInfo> {
                                   height: 20.0,
                                 ),
                               ],
-                            )
-//                            _saveToTAG(),
+                            ),
+                            if(LoginPage.currentUser.name == "Vet") _saveToTAG(),
                           ],
                         );
                       } else{
@@ -767,7 +767,7 @@ class _HorseInfoState extends State<HorseInfo> {
                                 ),
                               ],
                             ),
-                            _saveToTAG(),
+                            if(LoginPage.currentUser.name == "Vet") _saveToTAG(),
                           ],
                         );
                       }

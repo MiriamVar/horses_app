@@ -100,7 +100,7 @@ class _NewCustomerState extends State<NewCustomer>{
                                 print("new value of name $name");
                               },
                               controller: TextEditingController(
-                                  text: ""
+                                  text: "$name"
                               ),
                             ),
                             width: 190,
@@ -127,7 +127,7 @@ class _NewCustomerState extends State<NewCustomer>{
                                 print("new value of email $email");
                               },
                               controller: TextEditingController(
-                                  text: ""
+                                  text: "$email"
                               ),
                             ),
                             width: 190,
@@ -154,7 +154,7 @@ class _NewCustomerState extends State<NewCustomer>{
                                 print("new value of password $password");
                               },
                               controller: TextEditingController(
-                                  text: ""
+                                  text: "$password"
                               ),
                             ),
                             width: 160,
@@ -174,43 +174,6 @@ class _NewCustomerState extends State<NewCustomer>{
                             ),
                           ),
                           SizedBox(
-                            height: 10,
-                          ),
-//                          Row(
-//                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                            children: <Widget>[
-//                              Row(
-//                                children: <Widget>[
-//                                  Material(
-//                                    borderRadius: BorderRadius.all(Radius.circular(100)),
-//                                    child: InkWell(
-//                                      borderRadius: BorderRadius.all(Radius.circular(100)),
-//                                      onTap: (){},
-//                                      child: Padding(
-//                                        padding: const EdgeInsets.all(12),
-//                                        child:  Tab(
-//                                          icon: new Image.asset("assets/icon_horse.png"),
-//                                        ),
-//                                      ),
-//                                    ),
-//                                  ),
-//                                  Text(
-//                                    "Horses",
-//                                    style: TextStyle(
-//                                        color: Colors.black,
-//                                        fontSize: 22
-//                                    ),
-//                                  ),
-//                                ],
-//                              ),
-////                              Row(
-////                                children: <Widget>[
-////                                  _addHorseBtn(),
-////                                ],
-////                              )
-//                            ],
-//                          ),
-                          SizedBox(
                             height: 15,
                           ),
                         _saveCustomer()
@@ -229,26 +192,6 @@ class _NewCustomerState extends State<NewCustomer>{
       ),
     );
   }
-
-//  Widget _addHorseBtn(){
-//    return Container(
-//      padding: EdgeInsets.only(right: 10.0),
-//      child: RaisedButton(
-//        padding: EdgeInsets.all(0),
-//        color: Color.fromRGBO(25, 85,85, 1.0),
-//        textColor: Colors.white,
-//        onPressed: (){
-//          Navigator.push(
-//              context,
-//              MaterialPageRoute(
-//                  builder: (context) => MyHomePage(title: "Horses",)
-//              )
-//          );
-//        },
-//        child: Text("Add horse"),
-//      ),
-//    );
-//  }
 
   Widget _saveCustomer(){
     return Material(

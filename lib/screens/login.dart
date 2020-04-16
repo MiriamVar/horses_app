@@ -6,6 +6,9 @@ import 'package:horsesapp/screens/allCustomersList.dart';
 import 'package:horsesapp/screens/customerProfile.dart';
 
 class LoginPage extends StatefulWidget{
+
+  static Customer currentUser;
+
   @override
   _LoginPageState createState() => _LoginPageState();
 
@@ -36,34 +39,37 @@ class _LoginPageState extends State<LoginPage>{
   Widget build(BuildContext context) {
      return Scaffold(
        key: _formKey,
-       resizeToAvoidBottomPadding: false,
-       body: Container(
-         height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [Color(0xff498281),Color(0xff185555)]
-            )
-          ),
-           child: Padding(
-             padding: const EdgeInsets.all(36.0),
-             child: Column(
-               crossAxisAlignment: CrossAxisAlignment.center,
-               mainAxisAlignment: MainAxisAlignment.center,
-               children: <Widget>[
-                 SizedBox(
-                   height: 155.0,
-                   child: Image.asset(
-                       "assets/logo_horse.png",
-                     fit: BoxFit.contain,
-                   )
-                 ),
-                 _loginForm(),
-               ],
-             ),
-           )),
+       resizeToAvoidBottomPadding: true,
+       body: SingleChildScrollView(
+         child: Container(
+           height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [Color(0xff498281),Color(0xff185555)]
+              )
+            ),
+             child: Padding(
+               padding: const EdgeInsets.all(36.0),
+               child: Column(
+                 mainAxisSize: MainAxisSize.max,
+                 crossAxisAlignment: CrossAxisAlignment.center,
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 children: <Widget>[
+                   SizedBox(
+                     height: 155.0,
+                     child: Image.asset(
+                         "assets/logo_horse.png",
+                       fit: BoxFit.contain,
+                     )
+                   ),
+                   _loginForm(),
+                 ],
+               ),
+             )),
+       ),
      );
   }
 
@@ -71,76 +77,81 @@ class _LoginPageState extends State<LoginPage>{
     return Center(
       child: _isLoading
       ? CircularProgressIndicator()
-      : SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 35.0,
-            ),
-            _nameField(),
-            SizedBox(
-              height: 25.0,
-            ),
-            _passwordField(),
-            SizedBox(
-              height: 25.0,
-            ),
-            _loginBtn(),
-            SizedBox(
-              height: 15.0,
-            ),
-          ],
-        ),
+      : Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          SizedBox(
+            height: 35.0,
+          ),
+          _nameField(),
+          SizedBox(
+            height: 25.0,
+          ),
+          _passwordField(),
+          SizedBox(
+            height: 25.0,
+          ),
+          _loginBtn(),
+          SizedBox(
+            height: 15.0,
+          ),
+        ],
       ),
     );
   }
   
   Widget _nameField(){
-    return TextFormField(
-     controller: _nameController,
-      style: TextStyle(
-        color: Colors.white
-      ),
-      obscureText: false,
-      decoration: InputDecoration(
-        enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.white, width: 1.0),
-          borderRadius: BorderRadius.circular(32.0)
+    return Container(
+      height: 50,
+      child: TextFormField(
+       controller: _nameController,
+        style: TextStyle(
+          color: Colors.white
         ),
-        focusedBorder: OutlineInputBorder(
+        obscureText: false,
+        decoration: InputDecoration(
+          enabledBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.white, width: 1.0),
             borderRadius: BorderRadius.circular(32.0)
-        ),
-        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0,15.0),
-        hintText: 'name',
-        hintStyle: TextStyle(
-          color: Colors.white
+          ),
+          focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.white, width: 1.0),
+              borderRadius: BorderRadius.circular(32.0)
+          ),
+          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0,15.0),
+          hintText: 'name',
+          hintStyle: TextStyle(
+            color: Colors.white
+          ),
         ),
       ),
     );
   }
 
   Widget _passwordField(){
-    return TextFormField(
-      controller: _passwordController,
-      style: TextStyle(
-          color: Colors.white
-      ),
-      obscureText: false,
-      decoration: InputDecoration(
-          enabledBorder: OutlineInputBorder(
+    return Container(
+      height: 50,
+      child: TextFormField(
+        controller: _passwordController,
+        style: TextStyle(
+            color: Colors.white
+        ),
+        obscureText: false,
+        decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.white, width: 1.0),
+                borderRadius: BorderRadius.circular(32.0)
+            ),
+          focusedBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: Colors.white, width: 1.0),
               borderRadius: BorderRadius.circular(32.0)
           ),
-        focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.white, width: 1.0),
-            borderRadius: BorderRadius.circular(32.0)
+            contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0,15.0),
+            hintText: 'password',
+            hintStyle: TextStyle(
+                color: Colors.white
+            ),
         ),
-          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0,15.0),
-          hintText: 'password',
-          hintStyle: TextStyle(
-              color: Colors.white
-          ),
       ),
     );
   }
@@ -172,10 +183,14 @@ class _LoginPageState extends State<LoginPage>{
           });
           if(user != null){
             if(user.name == "Vet"){
+              // user by mal byt Vet
+              LoginPage.currentUser = user;
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => AllCustomersList()
               ));
             }else {
+              // user by mal byt iny customer
+              LoginPage.currentUser = user;
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => CustomerProfile(customer: user,)
               )

@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:horsesapp/database.dart';
 import 'package:horsesapp/models/Horse.dart';
 import 'package:horsesapp/screens/HorseInfo.dart';
+import 'package:horsesapp/screens/login.dart';
 import 'package:horsesapp/screens/main.dart';
 import 'package:nfc_in_flutter/nfc_in_flutter.dart';
 import 'package:sqflite/sqflite.dart';
@@ -32,6 +35,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
   int index2 = 0;
   String chipNumberPayload = "";
   int index3  = 0;
+  bool connected=false;
 
   @override
   Widget build(BuildContext context) {
@@ -215,82 +219,95 @@ class _CustomerProfileState extends State<CustomerProfile>{
                                ),
                                Row(
                                  children: <Widget>[
-                                   _addHorseBtn(),
+                                    if(LoginPage.currentUser.name == "Vet") _addHorseBtn(),
                                  ],
                                )
                              ],
                            ),
-                           Column(
-                             children: <Widget>[
-                               Container(
-                                 width: 350,
-                                 child: ListView.builder(
-                                     scrollDirection: Axis.vertical,
-                                     shrinkWrap: true,
-                                     itemCount: count,
-                                     itemBuilder: (context, index){
-                                       index3= index;
-                                       return Card(
-                                         elevation: 8.0,
-                                         shape: RoundedRectangleBorder(
-                                           borderRadius: BorderRadius.circular(32.0),
-                                         ),
-                                         margin: EdgeInsets.symmetric(horizontal: 10.0,vertical: 6.0),
-                                         child: Slidable(
-                                           actionPane: SlidableDrawerActionPane(),
-                                           actionExtentRatio: 0.25,
-                                           child: Container(
-                                             decoration: BoxDecoration(
-                                                 borderRadius: BorderRadius.circular(32.0),
-                                               color: Color.fromRGBO(73, 130, 129, .2),
-                                             ),
-                                             child: ListTile(
-                                               contentPadding: EdgeInsets.symmetric(
-                                                   horizontal: 20.0,
-                                                   vertical: 3.0
-                                               ),
-                                               title: Text(
-                                                 "${myHorses[index].name}",
-                                                 style: TextStyle(
-                                                     color: Color.fromRGBO(0, 44, 44, 1.0),
-                                                     fontWeight: FontWeight.bold
+                           OfflineBuilder(
+                               connectivityBuilder: (BuildContext context, ConnectivityResult connectivity, Widget child) {
+                                 connected = connectivity != ConnectivityResult.none;
+                                 if(connected){
+                                   return Column(
+                                     children: <Widget>[
+                                       Container(
+                                         width: 350,
+                                         child: ListView.builder(
+                                             scrollDirection: Axis.vertical,
+                                             shrinkWrap: true,
+                                             itemCount: count,
+                                             itemBuilder: (context, index){
+                                               index3= index;
+                                               return Card(
+                                                 elevation: 8.0,
+                                                 shape: RoundedRectangleBorder(
+                                                   borderRadius: BorderRadius.circular(32.0),
                                                  ),
-                                               ),
-                                               trailing: IconButton(
-                                                 icon: Icon(
-                                                   Icons.keyboard_arrow_right,
-                                                   color: Color.fromRGBO(0, 44, 44, 1.0),
-                                                   size: 30.0,
+                                                 margin: EdgeInsets.symmetric(horizontal: 10.0,vertical: 6.0),
+                                                 child: Slidable(
+                                                   actionPane: SlidableDrawerActionPane(),
+                                                   actionExtentRatio: 0.25,
+                                                   child: Container(
+                                                     decoration: BoxDecoration(
+                                                       borderRadius: BorderRadius.circular(32.0),
+                                                       color: Color.fromRGBO(73, 130, 129, .2),
+                                                     ),
+                                                     child: ListTile(
+                                                       contentPadding: EdgeInsets.symmetric(
+                                                           horizontal: 20.0,
+                                                           vertical: 3.0
+                                                       ),
+                                                       title: Text(
+                                                         "${myHorses[index].name}",
+                                                         style: TextStyle(
+                                                             color: Color.fromRGBO(0, 44, 44, 1.0),
+                                                             fontWeight: FontWeight.bold
+                                                         ),
+                                                       ),
+                                                       trailing: IconButton(
+                                                         icon: Icon(
+                                                           Icons.keyboard_arrow_right,
+                                                           color: Color.fromRGBO(0, 44, 44, 1.0),
+                                                           size: 30.0,
+                                                         ),
+                                                         onPressed: (){
+                                                           Navigator.push(
+                                                               context,
+                                                               MaterialPageRoute(
+                                                                   builder: (context) => HorseInfo(customer: widget.customer, horsik: myHorses[index])
+                                                               )
+                                                           );
+                                                         },
+                                                       ),
+                                                     ),
+                                                   ),
+                                                   secondaryActions: <Widget>[
+                                                     IconSlideAction(
+                                                       caption: 'Delete',
+                                                       color: Colors.red,
+                                                       icon: Icons.delete,
+                                                       onTap: () {
+                                                         _deleteHorse(myHorses[index3].id);
+                                                         print("horse was deleted");
+                                                         updateListView(widget.customer.id);
+                                                       },
+                                                     ),
+                                                   ],
                                                  ),
-                                                 onPressed: (){
-                                                   Navigator.push(
-                                                         context,
-                                                         MaterialPageRoute(
-                                                             builder: (context) => HorseInfo(customer: widget.customer, horsik: myHorses[index])
-                                                         )
-                                                     );
-                                                 },
-                                               ),
-                                             ),
-                                           ),
-                                           secondaryActions: <Widget>[
-                                             IconSlideAction(
-                                               caption: 'Delete',
-                                               color: Colors.red,
-                                               icon: Icons.delete,
-                                               onTap: () {
-                                                 _deleteHorse(myHorses[index3].id);
-                                                 print("horse was deleted");
-                                                 updateListView(widget.customer.id);
-                                               },
-                                             ),
-                                           ],
+                                               );
+                                             }
                                          ),
-                                       );
-                                     }
-                                 ),
-                               ),
-                             ],
+                                       ),
+                                     ],
+                                   );
+                                 }
+                                 else{
+                                   return Container();
+                                 }
+                               },
+                               builder: (context){
+                                 return Container();
+                               }
                            ),
                            SizedBox(
                              width: 14,
@@ -321,64 +338,126 @@ class _CustomerProfileState extends State<CustomerProfile>{
           textColor: Colors.white,
           child: Text("Scan your horse"),
           onPressed: (){
-            // todo ... function to horse Info page with exactly horse
-            // todo ... scan function
-            // todo ... by tagID find out the horse
-            // todo ... open Horse info with horse (info from db)
+            _findScannig(context);
           }
       ),
     );
   }
 
   Widget _addHorseBtn(){
-    return Container(
-      padding: EdgeInsets.only(right: 10.0),
-      child: RaisedButton(
-        padding: EdgeInsets.all(0),
-        color: Color.fromRGBO(25, 85,85, 1.0),
-        textColor: Colors.white,
-        onPressed: (){
-          showDialog(
-              context: context,
-            builder: (BuildContext context){
-                return AlertDialog(
-                  content: Container(
-                    height: 140,
-                    child: Column(
-                      children: <Widget>[
-                        Center(
-                          child: Text(
-                            "For adding new horse scan a tag first.",
-                            textAlign: TextAlign.center,
+    return OfflineBuilder(
+        connectivityBuilder: (BuildContext context, ConnectivityResult connectivity, Widget child) {
+          connected = connectivity != ConnectivityResult.none;
+          if (connected) {
+            return Container(
+              padding: EdgeInsets.only(right: 10.0),
+              child: RaisedButton(
+                padding: EdgeInsets.all(0),
+                color: Color.fromRGBO(25, 85, 85, 1.0),
+                textColor: Colors.white,
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Container(
+                            height: 140,
+                            child: Column(
+                              children: <Widget>[
+                                Center(
+                                  child: Text(
+                                    "For adding new horse scan a tag first.",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Container(
+                                    height: 100,
+                                    child: Image.asset("assets/mircochip.jpg")
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          height: 100,
-                            child: Image.asset("assets/mircochip.jpg")
-                        )
-                      ],
-                    ),
+                          actions: <Widget>[
+                            new FlatButton(
+                              child: new Text("Ok"),
+                              onPressed: () {
+                                _startScannig(context);
+                              },
+                            ),
+                            new FlatButton(
+                              child: new Text("Close"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      }
+                  );
+                },
+                child: Text("Add horse"),
+              ),
+            );
+          } else {
+            return Container(
+              padding: EdgeInsets.only(right: 10.0),
+              child: Column(
+                children: <Widget>[
+                  Text("You are in offline mode"),
+                  RaisedButton(
+                    padding: EdgeInsets.all(0),
+                    color: Color.fromRGBO(25, 85, 85, 1.0),
+                    textColor: Colors.white,
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              content: Container(
+                                height: 140,
+                                child: Column(
+                                  children: <Widget>[
+                                    Center(
+                                      child: Text(
+                                        "For adding new horse scan a tag first.",
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    Container(
+                                        height: 100,
+                                        child: Image.asset("assets/mircochip.jpg")
+                                    )
+                                  ],
+                                ),
+                              ),
+                              actions: <Widget>[
+                                new FlatButton(
+                                  child: new Text("Ok"),
+                                  onPressed: () {
+                                    _startScannig(context);
+                                  },
+                                ),
+                                new FlatButton(
+                                  child: new Text("Close"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          }
+                      );
+                    },
+                    child: Text("Add horse"),
                   ),
-                  actions: <Widget>[
-                    new FlatButton(
-                      child: new Text("Ok"),
-                      onPressed: () {
-                        _startScannig(context);
-                      },
-                    ),
-                    new FlatButton(
-                      child: new Text("Close"),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                );
-            }
-          );
+                ],
+              ),
+            );
+          }
         },
-        child: Text("Add horse"),
-      ),
+      builder: (context){
+        return Container();
+      },
     );
   }
 
@@ -442,7 +521,61 @@ class _CustomerProfileState extends State<CustomerProfile>{
     }
   }
 
+  void _findScannig(BuildContext context){
+    try{
+      // ignore: cancel_subscriptions
+      StreamSubscription<NDEFMessage> subscription = NFC.readNDEF().listen(
+              (tag){
+            setState(() {
+              _tags.insert(0,tag);
+              print(tag);
+              print("Record '${_tags[index2].records[0].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[0].tnf}, type '${_tags[index2].records[0].type}', payload '${_tags[index2].records[0].payload}' and data '${_tags[index2].records[0].data}' and language code '${_tags[index2].records[0].languageCode}''");
+
+              //nacitavam iba ID chipu
+              var idTag = jsonDecode(_tags[index2].records[0].payload);
+              chipNumberPayload = idTag["Chip number"];
+
+              if(chipNumberPayload == null){
+                //todo .... if on tag is not ID of tag
+              }else{
+                List<Horse> horses = myHorses.where((chip) => chip.chipNumber == chipNumberPayload).toList();
+                Horse horse = horses[0];
+                print(horse.name);
+
+                if(horse.name != null){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HorseInfo(customer: widget.customer, horsik: horse,)
+                    )
+                );
+                } else{
+                  print("nemam horsa z db");
+                }
+              }
+            });
+          },
+          onDone: (){
+            setState(() {
+              _streamSubscription = null;
+            });
+          },
+          onError: (exp){
+            setState(() {
+              _streamSubscription = null;
+            });
+          });
+      setState(() {
+        _streamSubscription = subscription;
+      });
+    }
+    catch (error){
+      print("error: $error");
+    }
+  }
+
   void _deleteHorse(int idH) async{
     await dbProvider.deleteHorse(idH);
   }
+
 }
