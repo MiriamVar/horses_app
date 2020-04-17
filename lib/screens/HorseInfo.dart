@@ -128,7 +128,7 @@ class _HorseInfoState extends State<HorseInfo> {
               namePayload = record2["Name"];
               commonNamePayload = record2["Common name"];
               dobPayload = record2["Day of birth"];
-              yob = record2["Year of birth"];
+              yobPayload = record2["Year of birth"];
 
               sirPayload = record3["Sir"];
               damPayload = record3["Dam"];
@@ -652,6 +652,18 @@ class _HorseInfoState extends State<HorseInfo> {
                       } else{
                         return Column(
                           children: <Widget>[
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text("You are in OFFLINE mode."),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
                             Column(
                               children: <Widget>[
                                 ExpansionTile(
@@ -818,7 +830,6 @@ class _HorseInfoState extends State<HorseInfo> {
     print("keyValue");
     print(keyValue);
 
-    if(connected){
       switch(keyValue) {
         case "RFID number": {
           horseFromDB.RFIDNumber = value;
@@ -904,152 +915,41 @@ class _HorseInfoState extends State<HorseInfo> {
           tape = value;
           horseFromDB.tapeMeasure = int.parse(tape);
           print(horseFromDB.tapeMeasure);
-          tapeMeasurePayload =value;
+          tapeMeasurePayload =int.parse(tape);
         }break;
 
         case "Stick measure": {
           stick = value;
           horseFromDB.stickMeasure= int.parse(stick);
           print(horseFromDB.stickMeasure);
-          stickMeasurePayload = value;
+          stickMeasurePayload = int.parse(stick);
         }break;
 
         case "Breast girth": {
           breast =value;
           horseFromDB.breastGirth = int.parse(breast);
           print(horseFromDB.breastGirth);
+          breastGirthPayload = int.parse(breast);
         }break;
 
         case "Cannon girth": {
           cannon = value;
           horseFromDB.cannonGirth = double.parse(cannon);
           print(horseFromDB.cannonGirth);
-          cannonGirthPayload = value;
+          cannonGirthPayload = double.parse(cannon);
         }break;
 
         case "Weight": {
           wei = value;
           horseFromDB.weight = int.parse(wei);
           print(horseFromDB.weight);
-          weightPayload = value;
+          weightPayload = int.parse(wei);
         }break;
 
         case "Owner": {
           horseFromDB.owner = value;
           print(horseFromDB.owner);
           ownerPayload = value;
-        }break;
-      }
-    }
-
-  }
-
-  void setValueFromTag(String key, var value){
-    String keyValue = key;
-    print("keyValue");
-    print(keyValue);
-
-      switch(keyValue) {
-        case "RFID number": {
-          RFIDPayload = value;
-          print(RFIDPayload);
-        }break;
-
-        case "ID number": {
-          IDPayload = value;
-          print(IDPayload);
-        }break;
-
-        case "Number": {
-          num = value;
-          numberPayload = int.parse(num);
-          print(numberPayload);
-        }break;
-
-        case "Name": {
-          namePayload = value;
-          print(namePayload);
-        }break;
-
-        case "Common name": {
-          commonNamePayload = value;
-          print(commonNamePayload);
-        }break;
-
-        case "Sir": {
-          sirPayload = value;
-          print(sirPayload);
-        }break;
-
-        case "Dam": {
-          damPayload = value;
-          print(damPayload);
-        }break;
-
-        case "Day of birth": {
-          dobPayload = value;
-          print(dobPayload);
-        }break;
-
-        case "Year of birth": {
-          yob = value;
-          yobPayload= int.parse(yob);
-          print(yobPayload);
-        }break;
-
-        case "Sex": {
-          sexPayload= value;
-          print(sexPayload);
-        }break;
-
-        case "Breed": {
-          breedPayload= value;
-          print(breedPayload);
-        }break;
-
-        case "Colour": {
-          colourPayload = value;
-          print(colourPayload);
-        }break;
-
-        case "Description": {
-          descriptionPayload= value;
-          print(descriptionPayload);
-        }break;
-
-        case "Tape measure": {
-          tape = value;
-          tapeMeasurePayload = int.parse(tape);
-          print(tapeMeasurePayload);
-        }break;
-
-        case "Stick measure": {
-          stick = value;
-          stickMeasurePayload= int.parse(stick);
-          print(stickMeasurePayload);
-        }break;
-
-        case "Breast girth": {
-          breast =value;
-          breastGirthPayload = int.parse(breast);
-          print(breastGirthPayload);
-        }break;
-
-        case "Cannon girth": {
-          cannon = value;
-          cannonGirthPayload = double.parse(cannon);
-          print(cannonGirthPayload);
-        }break;
-
-        case "Weight": {
-          wei = value;
-          weightPayload = int.parse(wei);
-          print(weightPayload);
-        }break;
-
-        case "Owner": {
-          ownerPayload = value;
-          print(ownerPayload);
         }break;
     }
 
@@ -1269,19 +1169,6 @@ class _HorseInfoState extends State<HorseInfo> {
       ),
     );
   }
-
-//  void updateListView(String uid) {
-//    final Future<Database> dbFuture = dbProvider.initDB();
-//    dbFuture.then((database){
-//      Future<List<Horse>> horseListFuture = dbProvider.getMyHorseList(uid);
-//      horseListFuture.then((horses){
-//        setState(() {
-//          this.horses = horses;
-//          this.count = horses.length;
-//        });
-//      });
-//    });
-//  }
 
   void _saveOnTAGFun() async{
     var checkedValues = new Map();

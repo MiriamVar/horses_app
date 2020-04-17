@@ -7,6 +7,7 @@ import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:horsesapp/database.dart';
 import 'package:horsesapp/models/Horse.dart';
+import 'package:horsesapp/screens/FindHorse.dart';
 import 'package:horsesapp/screens/HorseInfo.dart';
 import 'package:horsesapp/screens/login.dart';
 import 'package:horsesapp/screens/main.dart';
@@ -33,9 +34,13 @@ class _CustomerProfileState extends State<CustomerProfile>{
   bool _supportsNFC = false;
   List<NDEFMessage> _tags = [];
   int index2 = 0;
-  String chipNumberPayload = "";
   int index3  = 0;
   bool connected=false;
+
+  String chipNumberPayload, RFIDPayload, IDPayload, namePayload, commonNamePayload, sirPayload, damPayload, sexPayload, breedPayload, colourPayload, dobPayload, descriptionPayload;
+  int tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload;
+  double cannonGirthPayload;
+  String ownerPayload;
 
   @override
   Widget build(BuildContext context) {
@@ -485,9 +490,8 @@ class _CustomerProfileState extends State<CustomerProfile>{
               print("Record '${_tags[index2].records[0].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[0].tnf}, type '${_tags[index2].records[0].type}', payload '${_tags[index2].records[0].payload}' and data '${_tags[index2].records[0].data}' and language code '${_tags[index2].records[0].languageCode}''");
 
               //nacitavam iba ID chipu
-              String idTag = _tags[index2].records[0].data;
-              chipNumberPayload = idTag.substring(idTag.indexOf(RegExp(r'(?<=:)')));
-              print("printim upravene chipNumber");
+              var record1 = jsonDecode(_tags[index2].records[0].payload);
+              chipNumberPayload = record1["Chip number"];
               print(chipNumberPayload);
 
               if(chipNumberPayload == null){
@@ -530,10 +534,76 @@ class _CustomerProfileState extends State<CustomerProfile>{
               _tags.insert(0,tag);
               print(tag);
               print("Record '${_tags[index2].records[0].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[0].tnf}, type '${_tags[index2].records[0].type}', payload '${_tags[index2].records[0].payload}' and data '${_tags[index2].records[0].data}' and language code '${_tags[index2].records[0].languageCode}''");
+              print("Record '${_tags[index2].records[1].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[1].tnf}, type '${_tags[index2].records[1].type}', payload '${_tags[index2].records[1].payload}' and data '${_tags[index2].records[1].data}' and language code '${_tags[index2].records[1].languageCode}''");
+              print("Record '${_tags[index2].records[2].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[2].tnf}, type '${_tags[index2].records[2].type}', payload '${_tags[index2].records[2].payload}' and data '${_tags[index2].records[2].data}' and language code '${_tags[index2].records[2].languageCode}''");
+              print("Record '${_tags[index2].records[3].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[3].tnf}, type '${_tags[index2].records[3].type}', payload '${_tags[index2].records[3].payload}' and data '${_tags[index2].records[3].data}' and language code '${_tags[index2].records[3].languageCode}''");
+              print("Record '${_tags[index2].records[4].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[4].tnf}, type '${_tags[index2].records[4].type}', payload '${_tags[index2].records[4].payload}' and data '${_tags[index2].records[4].data}' and language code '${_tags[index2].records[4].languageCode}''");
+              print("Record '${_tags[index2].records[5].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[5].tnf}, type '${_tags[index2].records[5].type}', payload '${_tags[index2].records[5].payload}' and data '${_tags[index2].records[5].data}' and language code '${_tags[index2].records[5].languageCode}''");
 
-              //nacitavam iba ID chipu
-              var idTag = jsonDecode(_tags[index2].records[0].payload);
-              chipNumberPayload = idTag["Chip number"];
+              var record1 = jsonDecode(_tags[index2].records[0].payload);
+              var record2 = jsonDecode(_tags[index2].records[1].payload);
+              var record3 = jsonDecode(_tags[index2].records[2].payload);
+              var record4 = jsonDecode(_tags[index2].records[3].payload);
+              var record5 = jsonDecode(_tags[index2].records[4].payload);
+              var record6 = jsonDecode(_tags[index2].records[5].payload);
+
+              chipNumberPayload = record1["Chip number"];
+              print(chipNumberPayload);
+              IDPayload = record1["ID number"];
+              RFIDPayload = record1["RFID number"];
+
+              if(record2["Number"] == null){
+                numberPayload = 0;
+              }else{
+                numberPayload = int.parse(record2["Number"]);
+              }
+
+              namePayload = record2["Name"];
+              commonNamePayload = record2["Common name"];
+              dobPayload = record2["Day of birth"];
+              yobPayload = record2["Year of birth"];
+
+              sirPayload = record3["Sir"];
+              damPayload = record3["Dam"];
+
+              sexPayload = record4["Sex"];
+              breedPayload = record4["Breed"];
+              colourPayload = record4["Colour"];
+              descriptionPayload = record4["Description"];
+
+              if(record5["Tape measure"] == null){
+                tapeMeasurePayload = 0;
+              }else{
+                tapeMeasurePayload = int.parse(record5["Tape measure"]);
+              }
+
+              if(record5["Stick measure"] == null){
+                stickMeasurePayload= 0;
+              } else{
+                stickMeasurePayload = int.parse(record5["Stick measure"]);
+              }
+
+              if(record5["Breast girth"] == null){
+                breastGirthPayload = 0;
+              } else{
+                breastGirthPayload = int.parse(record5["Breast girth"]);
+              }
+
+              if(record5["Cannon girth"] == null){
+                cannonGirthPayload = 0;
+              } else{
+                cannonGirthPayload = double.parse(record5["Cannon girth"]);
+              }
+
+              if(record5["Weight"] == null){
+                weightPayload = 0;
+              } else{
+                weightPayload = int.parse(record5["Weight"]);
+              }
+
+              ownerPayload = record6["Owner"];
+
+              Horse horseFromTag = new Horse(widget.customer.id, chipNumberPayload, IDPayload, namePayload, commonNamePayload, sirPayload, damPayload, sexPayload, breedPayload, colourPayload, dobPayload, descriptionPayload, tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload, cannonGirthPayload, RFIDPayload, ownerPayload);
 
               if(chipNumberPayload == null){
                 //todo .... if on tag is not ID of tag
@@ -546,7 +616,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => HorseInfo(customer: widget.customer, horsik: horse,)
+                        builder: (context) => FindHorse(customer: widget.customer, horseTAG: horseFromTag, horseDB: horse,)
                     )
                 );
                 } else{
