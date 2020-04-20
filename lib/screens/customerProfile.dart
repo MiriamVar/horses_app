@@ -525,7 +525,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
     }
   }
 
-  void _findScannig(BuildContext context){
+  void _findScannig(BuildContext contextik){
     try{
       // ignore: cancel_subscriptions
       StreamSubscription<NDEFMessage> subscription = NFC.readNDEF().listen(
@@ -561,7 +561,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
               namePayload = record2["Name"];
               commonNamePayload = record2["Common name"];
               dobPayload = record2["Day of birth"];
-              yobPayload = record2["Year of birth"];
+              yobPayload = int.parse(record2["Year of birth"]);
 
               sirPayload = record3["Sir"];
               damPayload = record3["Dam"];
@@ -609,10 +609,10 @@ class _CustomerProfileState extends State<CustomerProfile>{
                 //todo .... if on tag is not ID of tag
               }else{
                 List<Horse> horses = myHorses.where((chip) => chip.chipNumber == chipNumberPayload).toList();
-                Horse horse = horses[0];
-                print(horse.name);
 
-                if(horse.name != null){
+                if(horses.isNotEmpty){
+                  Horse horse = horses[0];
+                  print(horse.name);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -620,6 +620,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
                     )
                 );
                 } else{
+                  _showDialog("You dont own this horse");
                   print("nemam horsa z db");
                 }
               }
@@ -646,6 +647,17 @@ class _CustomerProfileState extends State<CustomerProfile>{
 
   void _deleteHorse(int idH) async{
     await dbProvider.deleteHorse(idH);
+  }
+
+  void _showDialog(String mess){
+    showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return AlertDialog(
+            content: Text(mess),
+          );
+        }
+    );
   }
 
 }

@@ -49,7 +49,7 @@ class Horse{
     this._id= map['id'];
     this._customerID = map['customerID'];
     this._chipNumber = map['chipNumber'];
-    this._RFIDNumber = map['RFIDNUmber'];
+    this._RFIDNumber = map['RFIDNumber'];
     this._IDNumber = map['IDNumber'];
     this._name = map['name'];
     this._commonName = map['commonName'];

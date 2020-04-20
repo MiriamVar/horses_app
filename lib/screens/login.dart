@@ -198,13 +198,25 @@ class _LoginPageState extends State<LoginPage>{
             }
           }else{
             //toto nejde
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text("Wrong email or password"),
-              )
-            );
+//            Scaffold.of(context).showSnackBar(
+//              SnackBar(
+//                content: Text("Wrong email or password"),
+//              )
+//            );
+          _showDialog();
           }},
       ),
+    );
+  }
+
+  void _showDialog(){
+    showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return AlertDialog(
+            content: Text("Wrong name or password"),
+          );
+        }
     );
   }
 }

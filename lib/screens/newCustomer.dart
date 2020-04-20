@@ -212,19 +212,41 @@ class _NewCustomerState extends State<NewCustomer>{
           ),
         ), onPressed: () {
           Customer newCust = new Customer(name, email, password);
-          _saveCustomerFun(newCust);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => AllCustomersList()
-            )
-        );
+           Future<int> saved =_saveCustomerFun(newCust);
+           saved.then(( int value) =>{
+             if(value > 0){
+//               _showDialog("New customer saved"),
+
+              Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AllCustomersList()
+              )
+          ),
+               Scaffold.of(context).showSnackBar(SnackBar(content: Text("Customer saved"),)),
+             }else{
+//                _showDialog("New Customer not saved")
+               Scaffold.of(context).showSnackBar(SnackBar(content: Text("Customer not saved"),))
+             }
+           });
       },
       ),
     );
   }
-  void _saveCustomerFun(Customer customer) async{
-    await dbProvider.insertCustomer(customer);
+  Future<int>  _saveCustomerFun(Customer customer) async{
+    int result = await dbProvider.insertCustomer(customer);
+    return result;
+  }
+
+  void _showDialog(String mess){
+    showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return AlertDialog(
+            content: Text(mess),
+          );
+        }
+    );
   }
 
 }

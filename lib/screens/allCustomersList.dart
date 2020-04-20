@@ -108,8 +108,11 @@ class _AllCustomersListState extends State<AllCustomersList>{
                       color: Colors.red,
                       icon: Icons.delete,
                       onTap: () {
+                        print("printim idcko customera");
+                        print(this.customersList[index2].id);
                         _deleteCustomer(this.customersList[index2].id);
                         print("mazem customera");
+                        Scaffold.of(context).showSnackBar(SnackBar(content: Text("Customer deleted"),));
                         updateListView();
                       },
                     ),

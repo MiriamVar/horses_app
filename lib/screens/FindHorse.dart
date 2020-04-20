@@ -888,6 +888,7 @@ class _FindHorseState extends State<FindHorse>{
               builder: (context) => CustomerProfile(customer: widget.customer,)
           )
       );
+      _showDialog("New horse was saved");
     }
   }
 
@@ -904,6 +905,16 @@ class _FindHorseState extends State<FindHorse>{
     print("horse was updated");
   }
 
+  void _showDialog(String mess){
+    showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return AlertDialog(
+            content: Text(mess),
+          );
+        }
+    );
+  }
 
 
 }

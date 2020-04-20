@@ -205,17 +205,6 @@ class _HorseInfoState extends State<HorseInfo> {
 
   @override
   Widget build(BuildContext context) {
-//    if(horses == null){
-//      horses= List<Horse>();
-//      if(chipNumberPayload!= null){
-//        updateListView(chipNumberPayload);
-//      }
-//    } else{
-//      //su data z db sa doplnia + treba dorobit values
-//      horseFromDB =
-//      print("mam kona");
-//      print(horseFromDB.name);
-//    }
     horseFromDB = widget.horsik;
     print("mam kona");
     print(horseFromDB.name);
@@ -278,110 +267,6 @@ class _HorseInfoState extends State<HorseInfo> {
                     connected = connectivity!= ConnectivityResult.none;
                     //ak sme pripojeny na internet
                     if(connected == true){
-//                      if (chipNumberPayload == null) {
-//                         return Column(
-//                          children: <Widget>[
-//                            child,
-//                            Column(
-//                              children: <Widget>[
-//                              ExpansionTile(
-//                                title: Text("IDs"),
-//                                children: <Widget>[
-//                                  Row(
-//                                    mainAxisSize: MainAxisSize.max,
-//                                    mainAxisAlignment: MainAxisAlignment.center,
-//                                    children: <Widget>[
-//                                      Column(
-//                                        mainAxisAlignment: MainAxisAlignment.end,
-//                                        crossAxisAlignment: CrossAxisAlignment.end,
-//                                        mainAxisSize: MainAxisSize.max,
-//                                        children: <Widget>[
-//                                          Text("Chip number:"),
-//                                          Text("RFID number:"),
-//                                          Text("ID number:"),
-//                                        ],
-//                                      ),
-//                                      Padding(
-//                                          padding: EdgeInsets.only(right: 10.0)
-//                                      ),
-//                                      Column(
-//                                        mainAxisAlignment: MainAxisAlignment.start,
-//                                        crossAxisAlignment: CrossAxisAlignment.start,
-//                                        mainAxisSize: MainAxisSize.max,
-//                                        children: <Widget>[
-//                                          Text(""),
-//                                          Text(""),
-//                                          Text("")
-//                                        ],
-//                                      )
-//                                    ],
-//                                  ),
-//                                ],
-//                              ),
-//                                ExpansionTile(
-//                                  title: Text("Basic data"),
-//                                  children: <Widget>[
-//                                    _field("Number", ""),
-//                                    _field("Name",""),
-//                                    _field("Common name", ""),
-//                                    _field("Day of birth", ""),
-//                                    _field("Year of birth", ""),
-//                                    SizedBox(
-//                                      height: 10.0,
-//                                    ),
-//                                  ],
-//                                ),
-//                                ExpansionTile(
-//                                  title: Text("Pedigree"),
-//                                  children: <Widget>[
-//                                    _field("Sir", ""),
-//                                    _field("Dam", ""),
-//                                    SizedBox(
-//                                      height: 10.0,
-//                                    ),
-//                                  ],
-//                                ),
-//                                ExpansionTile(
-//                                  title: Text("Description"),
-//                                  children: <Widget>[
-//                                    _field("Sex", ""),
-//                                    _field("Breed", ""),
-//                                    _field("Colour", ""),
-//                                    _field("Description", ""),
-//                                    SizedBox(
-//                                      height: 10.0,
-//                                    ),
-//                                  ],
-//                                ),
-//                                ExpansionTile(
-//                                  title: Text("Measurements"),
-//                                  children: <Widget>[
-//                                    _field("Tape measure", ""),
-//                                    _field("Stick measure", ""),
-//                                    _field("Breast girth", ""),
-//                                    _field("Cannon girth", ""),
-//                                    _field("Weight", ""),
-//                                    SizedBox(
-//                                      height: 20.0,
-//                                    ),
-//                                  ],
-//                                )
-//                              ],
-//                            ),
-//                            Row(
-//                              crossAxisAlignment: CrossAxisAlignment.center,
-//                              mainAxisAlignment: MainAxisAlignment.center,
-//                              children: <Widget>[
-//                                _saveToDB(),
-//                                Padding(
-//                                  padding: EdgeInsets.only(right: 10.0),
-//                                ),
-//                                _saveToTAGandDB(),
-//                              ],
-//                            )
-//                          ],
-//                        );
-//                      } else{
                         return Column(
                           children: <Widget>[
                             Column(
@@ -1056,76 +941,148 @@ class _HorseInfoState extends State<HorseInfo> {
     if(!value){
       return;
     }
+    if(connected){
+      switch(keyValue) {
+        case "Number": {
+          basic[keyValue] = horseFromDB.number.toString();
+        }break;
 
-    switch(keyValue) {
-      case "Number": {
-        basic[keyValue] = numberPayload.toString();
-      }break;
+        case "Name": {
+          basic[keyValue] = horseFromDB.name;
+        }break;
 
-      case "Name": {
-        basic[keyValue] = namePayload;
-      }break;
+        case "Common name": {
+          basic[keyValue] = horseFromDB.commonName;
+        }break;
 
-      case "Common name": {
-        basic[keyValue] = commonNamePayload;
-      }break;
+        case "Sir": {
+          pedigree[keyValue] = horseFromDB.sir;
+        }break;
 
-      case "Sir": {
-        pedigree[keyValue] = sirPayload;
-      }break;
+        case "Dam": {
+          pedigree[keyValue] = horseFromDB.dam;
+        }break;
 
-      case "Dam": {
-        pedigree[keyValue] = damPayload;
-      }break;
+        case "Day of birth": {
+          basic[keyValue] = horseFromDB.dob;
+        }break;
 
-      case "Day of birth": {
-        basic[keyValue] = dobPayload;
-      }break;
+        case "Year of birth": {
+          basic[keyValue] = horseFromDB.yob.toString();
+        }break;
 
-      case "Year of birth": {
-        basic[keyValue] = yobPayload.toString();
-      }break;
+        case "Sex": {
+          description[keyValue] = horseFromDB.sex;
+        }break;
 
-      case "Sex": {
-        description[keyValue] = sexPayload;
-      }break;
+        case "Breed": {
+          description[keyValue] = horseFromDB.breed;
+        }break;
 
-      case "Breed": {
-        description[keyValue] = breedPayload;
-      }break;
+        case "Colour": {
+          description[keyValue] = horseFromDB.colour;
+        }break;
 
-      case "Colour": {
-        description[keyValue] = colourPayload;
-      }break;
+        case "Description": {
+          description[keyValue] = horseFromDB.description;
+        }break;
 
-      case "Description": {
-        description[keyValue] = descriptionPayload;
-      }break;
+        case "Tape measure": {
+          measurements[keyValue] = horseFromDB.tapeMeasure.toString();
+        }break;
 
-      case "Tape measure": {
-        measurements[keyValue] = tapeMeasurePayload.toString();
-      }break;
+        case "Stick measure": {
+          measurements[keyValue] = horseFromDB.stickMeasure.toString();
+        }break;
 
-      case "Stick measure": {
-        measurements[keyValue] = stickMeasurePayload.toString();
-      }break;
+        case "Breast girth": {
+          measurements[keyValue] = horseFromDB.breastGirth.toString();
+        }break;
 
-      case "Breast girth": {
-        measurements[keyValue] = breastGirthPayload.toString();
-      }break;
+        case "Cannon girth": {
+          measurements[keyValue] = horseFromDB.cannonGirth.toString();
+        }break;
 
-      case "Cannon girth": {
-        measurements[keyValue] = cannonGirthPayload.toString();
-      }break;
+        case "Weight": {
+          measurements[keyValue] = horseFromDB.weight.toString();
+        }break;
 
-      case "Weight": {
-        measurements[keyValue] = weightPayload.toString();
-      }break;
+        case "Owner": {
+          owner[keyValue] = horseFromDB.owner;
+        }break;
+      }
+    }else{
+      switch(keyValue) {
+        case "Number": {
+          basic[keyValue] = numberPayload.toString();
+        }break;
 
-      case "Owner": {
-        owner[keyValue] = ownerPayload;
-      }break;
+        case "Name": {
+          basic[keyValue] = namePayload;
+        }break;
+
+        case "Common name": {
+          basic[keyValue] = commonNamePayload;
+        }break;
+
+        case "Sir": {
+          pedigree[keyValue] = sirPayload;
+        }break;
+
+        case "Dam": {
+          pedigree[keyValue] = damPayload;
+        }break;
+
+        case "Day of birth": {
+          basic[keyValue] = dobPayload;
+        }break;
+
+        case "Year of birth": {
+          basic[keyValue] = yobPayload.toString();
+        }break;
+
+        case "Sex": {
+          description[keyValue] = sexPayload;
+        }break;
+
+        case "Breed": {
+          description[keyValue] = breedPayload;
+        }break;
+
+        case "Colour": {
+          description[keyValue] = colourPayload;
+        }break;
+
+        case "Description": {
+          description[keyValue] = descriptionPayload;
+        }break;
+
+        case "Tape measure": {
+          measurements[keyValue] = tapeMeasurePayload.toString();
+        }break;
+
+        case "Stick measure": {
+          measurements[keyValue] = stickMeasurePayload.toString();
+        }break;
+
+        case "Breast girth": {
+          measurements[keyValue] = breastGirthPayload.toString();
+        }break;
+
+        case "Cannon girth": {
+          measurements[keyValue] = cannonGirthPayload.toString();
+        }break;
+
+        case "Weight": {
+          measurements[keyValue] = weightPayload.toString();
+        }break;
+
+        case "Owner": {
+          owner[keyValue] = ownerPayload;
+        }break;
+      }
     }
+
   }
 
   Widget _saveToTAG(){
@@ -1244,6 +1201,7 @@ class _HorseInfoState extends State<HorseInfo> {
               builder: (context) => CustomerProfile(customer: widget.customer,)
           )
       );
+      _showDialog("Horse was updated on tag");
     }
   }
 
@@ -1252,6 +1210,7 @@ class _HorseInfoState extends State<HorseInfo> {
     Horse newHorse = horseFromDB;
     _updateHorseFun(newHorse);
     Navigator.of(context).pop();
+    _showDialog("Horse was updated");
   }
 
   void _saveOnDBandTAGFun() async{
@@ -1282,9 +1241,9 @@ class _HorseInfoState extends State<HorseInfo> {
 
     List<NDEFRecord> records = new List<NDEFRecord>();
 
-    ids["Chip number"] = chipNumberPayload;
-    ids["ID number"] = IDPayload;
-    ids["RFID number"] = RFIDPayload;
+    ids["Chip number"] = horseFromDB.chipNumber;
+    ids["ID number"] = horseFromDB.IDNumber;
+    ids["RFID number"] = horseFromDB.RFIDNumber;
 
     String jsonIDs = jsonEncode(ids);
     String jsonBasic = jsonEncode(basic);
@@ -1335,7 +1294,9 @@ class _HorseInfoState extends State<HorseInfo> {
               builder: (context) => CustomerProfile(customer: widget.customer,)
           )
       );
+      _showDialog("Horse updated on tag");
     }
+
   }
 
   void _updateHorseFun(Horse horse) async{
@@ -1343,4 +1304,14 @@ class _HorseInfoState extends State<HorseInfo> {
     print("horse was updated");
   }
 
+  void _showDialog(String mess){
+    showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return AlertDialog(
+            content: Text(mess),
+          );
+        }
+    );
+  }
 }

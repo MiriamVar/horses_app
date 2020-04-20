@@ -687,12 +687,24 @@ class _MyHomePageState extends State<MyHomePage> {
               builder: (context) => CustomerProfile(customer: widget.customer,)
           )
       );
+      _showDialog("New horse was saved");
     }
   }
 
   void _saveHorseFun(Horse horse) async{
     await dbProvider.insertHorse(horse);
     print("new horse was saved");
+  }
+
+  void _showDialog(String mess){
+    showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return AlertDialog(
+            content: Text(mess),
+          );
+        }
+    );
   }
 
 
