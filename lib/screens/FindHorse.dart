@@ -114,7 +114,10 @@ class _FindHorseState extends State<FindHorse>{
                                     mainAxisSize: MainAxisSize.max,
                                     children: <Widget>[
                                       Text("Chip number:"),
-                                      Text("RFID number:"),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
+                                        child: Text("RFID number:"),
+                                      ),
                                       Text("ID number:"),
                                     ],
                                   ),
@@ -128,23 +131,29 @@ class _FindHorseState extends State<FindHorse>{
                                     children: <Widget>[
                                       Text(horseD.chipNumber),
                                       Container(
-                                        child: TextFormField(
+                                        child: TextField(
                                           onChanged: (payload){
                                             setValue("RFID number", payload);
                                           },
                                           controller: TextEditingController(
                                               text: horseD.RFIDNumber
                                           ),
+                                          decoration: InputDecoration(
+                                              contentPadding: EdgeInsets.only(bottom: -30)
+                                          ),
                                         ),
                                         width: 200,
                                       ),
                                       Container(
-                                        child: TextFormField(
+                                        child: TextField(
                                           onChanged: (payload){
                                             setValue("ID number", payload);
                                           },
                                           controller: TextEditingController(
                                               text: horseD.IDNumber
+                                          ),
+                                          decoration: InputDecoration(
+                                              contentPadding: EdgeInsets.only(bottom: -30)
                                           ),
                                         ),
                                         width: 200,
@@ -153,6 +162,9 @@ class _FindHorseState extends State<FindHorse>{
                                   )
                                 ],
                               ),
+                              SizedBox(
+                                height: 10.0,
+                              )
                             ],
                           ),
                           ExpansionTile(
@@ -260,7 +272,10 @@ class _FindHorseState extends State<FindHorse>{
                                         mainAxisSize: MainAxisSize.max,
                                         children: <Widget>[
                                           Text("Chip number:"),
-                                          Text("RFID number:"),
+                                          Padding(
+                                            padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
+                                            child: Text("RFID number:"),
+                                          ),
                                           Text("ID number:"),
                                         ],
                                       ),
@@ -274,23 +289,29 @@ class _FindHorseState extends State<FindHorse>{
                                         children: <Widget>[
                                           Text(horseT.chipNumber),
                                           Container(
-                                            child: TextFormField(
+                                            child: TextField(
                                               onChanged: (payload){
                                                 setValue("RFID number", payload);
                                               },
                                               controller: TextEditingController(
                                                   text: horseT.RFIDNumber
                                               ),
+                                              decoration: InputDecoration(
+                                                  contentPadding: EdgeInsets.only(bottom: -30)
+                                              ),
                                             ),
                                             width: 200,
                                           ),
                                           Container(
-                                            child: TextFormField(
+                                            child: TextField(
                                               onChanged: (payload){
                                                 setValue("ID number", payload);
                                               },
                                               controller: TextEditingController(
                                                   text: horseT.IDNumber
+                                              ),
+                                              decoration: InputDecoration(
+                                                  contentPadding: EdgeInsets.only(bottom: -30)
                                               ),
                                             ),
                                             width: 200,
@@ -299,6 +320,9 @@ class _FindHorseState extends State<FindHorse>{
                                       )
                                     ],
                                   ),
+                                  SizedBox(
+                                    height: 10.0,
+                                  )
                                 ]
                             ),
                             ExpansionTile(
@@ -866,6 +890,10 @@ class _FindHorseState extends State<FindHorse>{
         context: context,
         builder: (context) => AlertDialog(
           title: const Text("Scan the tag you want to write to"),
+          content: Container(
+              height: 100,
+              child: Image.asset("assets/mircochip.jpg")
+          ),
           actions: <Widget>[
             FlatButton(
               child: const Text("Cancel"),

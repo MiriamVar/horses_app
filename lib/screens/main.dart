@@ -148,7 +148,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                               mainAxisSize: MainAxisSize.max,
                                               children: <Widget>[
                                                 Text("Chip number:"),
-                                                Text("RFID number:"),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
+                                                  child: Text("RFID number:"),
+                                                ),
                                                 Text("ID number:"),
                                               ],
                                             ),
@@ -162,23 +165,29 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 children: <Widget>[
                                                   Text(chipNumberPayload),
                                                   Container(
-                                                    child: TextFormField(
+                                                    child: TextField(
                                                       onChanged: (RFIDpayload){
                                                         setValue("RFID number", RFIDpayload);
                                                       },
                                                       controller: TextEditingController(
                                                           text: "$RFIDPayload"
                                                       ),
+                                                      decoration: InputDecoration(
+                                                          contentPadding: EdgeInsets.only(bottom: -30)
+                                                      ),
                                                     ),
                                                     width: 200,
                                                   ),
                                                   Container(
-                                                    child: TextFormField(
+                                                    child: TextField(
                                                       onChanged: (payload){
                                                         setValue("ID number", payload);
                                                       },
                                                       controller: TextEditingController(
                                                           text: "$IDPayload"
+                                                      ),
+                                                      decoration: InputDecoration(
+                                                          contentPadding: EdgeInsets.only(bottom: -30)
                                                       ),
                                                     ),
                                                     width: 200,
@@ -665,6 +674,10 @@ class _MyHomePageState extends State<MyHomePage> {
         context: context,
         builder: (context) => AlertDialog(
           title: const Text("Scan the tag you want to write to"),
+          content: Container(
+              height: 100,
+              child: Image.asset("assets/mircochip.jpg")
+          ),
           actions: <Widget>[
             FlatButton(
               child: const Text("Cancel"),

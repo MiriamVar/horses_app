@@ -274,53 +274,69 @@ class _HorseInfoState extends State<HorseInfo> {
                                 ExpansionTile(
                                   title: Text("IDs"),
                                   children: <Widget>[
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                    Column(
                                       children: <Widget>[
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                        Row(
                                           mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: <Widget>[
-                                            Text("Chip number:"),
-                                            Text("RFID number:"),
-                                            Text("ID number:"),
+                                            Column(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: <Widget>[
+                                                Text("Chip number:"),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
+                                                  child: Text("RFID number:"),
+                                                ),
+                                                Text("ID number:"),
+                                              ],
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(right: 10.0),
+                                            ),
+                                            Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: <Widget>[
+                                                Text(horseFromDB.chipNumber),
+                                                Container(
+                                                  child: TextField(
+                                                    onChanged: (payload){
+                                                      setValue("RFID number", payload);
+                                                    },
+                                                    controller: TextEditingController(
+                                                        text: horseFromDB.RFIDNumber
+                                                    ),
+                                                    decoration: InputDecoration(
+                                                        contentPadding: EdgeInsets.only(bottom: -30)
+                                                    ),
+                                                  ),
+                                                  width: 200,
+                                                ),
+                                                Container(
+                                                  child: TextField(
+                                                    onChanged: (payload){
+                                                      setValue("ID number", payload);
+                                                    },
+                                                    controller: TextEditingController(
+                                                        text: horseFromDB.IDNumber
+                                                    ),
+                                                    decoration: InputDecoration(
+                                                        contentPadding: EdgeInsets.only(bottom: -30)
+                                                    ),
+                                                  ),
+                                                  width: 200,
+                                                ),
+                                              ],
+                                            )
                                           ],
                                         ),
-                                        Padding(
-                                            padding: EdgeInsets.only(right: 10.0)
-                                        ),
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: <Widget>[
-                                            Text(horseFromDB.chipNumber),
-                                            Container(
-                                              child: TextFormField(
-                                                onChanged: (payload){
-                                                  setValue("RFID number", payload);
-                                                },
-                                                controller: TextEditingController(
-                                                    text: horseFromDB.RFIDNumber
-                                                ),
-                                              ),
-                                              width: 200,
-                                            ),
-                                            Container(
-                                              child: TextFormField(
-                                                onChanged: (payload){
-                                                  setValue("ID number", payload);
-                                                },
-                                                controller: TextEditingController(
-                                                    text: horseFromDB.IDNumber
-                                                ),
-                                              ),
-                                              width: 200,
-                                            ),
-                                          ],
-                                        )
+                                      SizedBox(
+                                        height: 10.0,
+                                      )
                                       ],
                                     ),
                                   ],
@@ -431,7 +447,10 @@ class _HorseInfoState extends State<HorseInfo> {
                                         mainAxisSize: MainAxisSize.max,
                                         children: <Widget>[
                                           Text("Chip number:"),
-                                          Text("RFID number:"),
+                                          Padding(
+                                            padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
+                                            child: Text("RFID number:"),
+                                          ),
                                           Text("ID number:"),
                                         ],
                                       ),
@@ -445,23 +464,29 @@ class _HorseInfoState extends State<HorseInfo> {
                                         children: <Widget>[
                                           Text(""),
                                           Container(
-                                            child: TextFormField(
+                                            child: TextField(
                                               onChanged: (payload){
                                                 setValue("RFID number", payload);
                                               },
                                               controller: TextEditingController(
                                                   text: ""
                                               ),
+                                              decoration: InputDecoration(
+                                                  contentPadding: EdgeInsets.only(bottom: -30)
+                                              ),
                                             ),
                                             width: 200,
                                           ),
                                           Container(
-                                            child: TextFormField(
+                                            child: TextField(
                                               onChanged: (payload){
                                                 setValue("ID number", payload);
                                               },
                                               controller: TextEditingController(
                                                   text: ""
+                                              ),
+                                              decoration: InputDecoration(
+                                                  contentPadding: EdgeInsets.only(bottom: -30)
                                               ),
                                             ),
                                             width: 200,
@@ -470,6 +495,9 @@ class _HorseInfoState extends State<HorseInfo> {
                                       )
                                     ],
                                   ),
+                                    SizedBox(
+                                      height: 10.0,
+                                    )
                                   ]
                                 ),
                               ],
@@ -564,7 +592,10 @@ class _HorseInfoState extends State<HorseInfo> {
                                         mainAxisSize: MainAxisSize.max,
                                         children: <Widget>[
                                           Text("Chip number:"),
-                                          Text("RFID number:"),
+                                          Padding(
+                                            padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
+                                            child: Text("RFID number:"),
+                                          ),
                                           Text("ID number:"),
                                         ],
                                       ),
@@ -578,23 +609,29 @@ class _HorseInfoState extends State<HorseInfo> {
                                         children: <Widget>[
                                           Text(chipNumberPayload),
                                           Container(
-                                            child: TextFormField(
+                                            child: TextField(
                                               onChanged: (payload){
                                                 setValue("RFID number", payload);
                                               },
                                               controller: TextEditingController(
                                                   text: RFIDPayload
                                               ),
+                                              decoration: InputDecoration(
+                                                  contentPadding: EdgeInsets.only(bottom: -30)
+                                              ),
                                             ),
                                             width: 200,
                                           ),
                                           Container(
-                                            child: TextFormField(
+                                            child: TextField(
                                               onChanged: (payload){
                                                 setValue("ID number", payload);
                                               },
                                               controller: TextEditingController(
                                                   text: IDPayload
+                                              ),
+                                              decoration: InputDecoration(
+                                                  contentPadding: EdgeInsets.only(bottom: -30)
                                               ),
                                             ),
                                             width: 200,
@@ -603,6 +640,9 @@ class _HorseInfoState extends State<HorseInfo> {
                                       )
                                     ],
                                   ),
+                                    SizedBox(
+                                      height: 10.0,
+                                    )
                                   ]
                                 ),
                                 ExpansionTile(
@@ -1179,6 +1219,10 @@ class _HorseInfoState extends State<HorseInfo> {
         context: context,
         builder: (context) => AlertDialog(
           title: const Text("Scan the tag you want to write to"),
+          content: Container(
+              height: 100,
+              child: Image.asset("assets/mircochip.jpg")
+          ),
           actions: <Widget>[
             FlatButton(
               child: const Text("Cancel"),
@@ -1272,6 +1316,10 @@ class _HorseInfoState extends State<HorseInfo> {
         context: context,
         builder: (context) => AlertDialog(
           title: const Text("Scan the tag you want to write to"),
+          content: Container(
+              height: 100,
+              child: Image.asset("assets/mircochip.jpg")
+          ),
           actions: <Widget>[
             FlatButton(
               child: const Text("Cancel"),
