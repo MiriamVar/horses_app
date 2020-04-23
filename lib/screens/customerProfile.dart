@@ -14,6 +14,7 @@ import 'package:horsesapp/screens/main.dart';
 import 'package:nfc_in_flutter/nfc_in_flutter.dart';
 import 'package:sqflite/sqflite.dart';
 
+
 import '../models/Customer.dart';
 
 class CustomerProfile extends StatefulWidget{
@@ -68,17 +69,44 @@ class _CustomerProfileState extends State<CustomerProfile>{
            child: Container(
              height: 80,
              child: Row(
-               mainAxisAlignment: MainAxisAlignment.center,
                children: <Widget>[
-                 Padding(
-                   padding: EdgeInsets.only(top: 40),
-                   child: Text(
-                     "Profile",
-                     style: TextStyle(
-                       color: Colors.white,
-                       fontSize: 20,
-                     ),
+                 Spacer(),
+                 Center(
+                   child: Column(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: <Widget>[
+                       Padding(
+                         padding: EdgeInsets.only(top: 40, right: 85),
+                         child: Text(
+                           "Profile",
+                           style: TextStyle(
+                             color: Colors.white,
+                             fontSize: 20,
+                           ),
+                         ),
+                       ),
+                     ],
                    ),
+                 ),
+                 Column(
+                   mainAxisAlignment: MainAxisAlignment.center,
+                   children: <Widget>[
+                     InkWell(
+                       child: Padding(
+                         padding: const EdgeInsets.only(top: 40, right: 40),
+                         child: Icon(
+                           Icons.power_settings_new,
+                           color: Colors.white,
+                           size: 20.0,
+                         ),
+                       ),
+                       onTap:(){
+                         setState(() {
+                           _navigateToLogin();
+                         });
+                       } ,
+                     ),
+                   ],
                  )
                ],
              ),
@@ -561,7 +589,12 @@ class _CustomerProfileState extends State<CustomerProfile>{
               namePayload = record2["Name"];
               commonNamePayload = record2["Common name"];
               dobPayload = record2["Day of birth"];
-              yobPayload = int.parse(record2["Year of birth"]);
+              if(record2["Year of birth"] == null){
+                yobPayload = 0;
+              }else{
+                yobPayload = int.parse(record2["Year of birth"]);
+              }
+
 
               sirPayload = record3["Sir"];
               damPayload = record3["Dam"];
@@ -657,6 +690,16 @@ class _CustomerProfileState extends State<CustomerProfile>{
             content: Text(mess),
           );
         }
+    );
+  }
+
+  void _navigateToLogin(){
+    print("tlacim");
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => LoginPage()
+        )
     );
   }
 

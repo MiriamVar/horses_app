@@ -12,6 +12,7 @@ import 'package:nfc_in_flutter/nfc_in_flutter.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/Horse.dart';
 import 'package:flutter_offline/flutter_offline.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 
 class HorseInfo extends StatefulWidget {
@@ -69,9 +70,12 @@ class _HorseInfoState extends State<HorseInfo> {
   Map<String, String> measurements = new Map();
   Map<String, String> owner = new Map();
 
+  double progressValue;
+
 
   @override
   void initState() {
+    progressValue = 0.0;
     sort = false;
     selectedHorse = [];
     super.initState();
@@ -232,15 +236,23 @@ class _HorseInfoState extends State<HorseInfo> {
           ),
         ),
         actions: <Widget>[
+          CircularPercentIndicator(
+            radius: 40.0,
+            lineWidth: 4.0,
+            percent: progressValue,
+            center: Text(progressValue.toString()+"%", style: TextStyle(color: Colors.white),),
+            progressColor: Colors.white,
+          ),
           OfflineBuilder(
             connectivityBuilder: (BuildContext context, ConnectivityResult connectivity, Widget child) {
               connected = connectivity != ConnectivityResult.none;
               if (!connected) {
                 return FlatButton(
+                  padding: EdgeInsets.all(0.0),
                   child:
                   Text(_streamSubscription == null
-                      ? "Start reading"
-                      : "Stop reading"),
+                      ? "Start scan"
+                      : "Stop scan"),
                   onPressed: () {
                     if (_streamSubscription == null) {
                       _startScannig(context);
@@ -563,6 +575,7 @@ class _HorseInfoState extends State<HorseInfo> {
                           ],
                         );
                       } else{
+
                         return Column(
                           children: <Widget>[
                             SizedBox(
@@ -731,6 +744,25 @@ class _HorseInfoState extends State<HorseInfo> {
             setState(() {
               setChecked(key, checked);
             });
+            if(checked){
+              String hodnota = payload.toString();
+              int bytes = hodnota.length * 4;
+              double percentage =((bytes * 100) / 512) / 100;
+              print(percentage);
+              double rounded = double.parse(percentage.toStringAsFixed(2));
+              print(rounded);
+              progressValue += rounded;
+              print(progressValue);
+            } else{
+              String hodnota = payload.toString();
+              int bytes = hodnota.length * 4;
+              double percentage =((bytes * 100) / 512) / 100;
+              print(percentage);
+              double rounded = double.parse(percentage.toStringAsFixed(2));
+              print(rounded);
+              progressValue -= rounded;
+              print(progressValue);
+            }
           },
         ),
         Text(key),
