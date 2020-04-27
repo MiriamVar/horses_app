@@ -112,7 +112,7 @@ class _AllCustomersListState extends State<AllCustomersList>{
                         print(this.customersList[index2].id);
                         _deleteCustomer(this.customersList[index2].id);
                         print("mazem customera");
-                        Scaffold.of(context).showSnackBar(SnackBar(content: Text("Customer deleted"),));
+                        _showDialog("Customer was deleted");
                         updateListView();
                       },
                     ),
@@ -164,6 +164,20 @@ class _AllCustomersListState extends State<AllCustomersList>{
 
   void _deleteCustomer(int idC) async{
     await dbProvider.deleteCustomer(idC);
+  }
+
+  void _showDialog(String mess){
+    showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return AlertDialog(
+            content: Text(
+              mess,
+              textAlign: TextAlign.center,
+            ),
+          );
+        }
+    );
   }
 }
 

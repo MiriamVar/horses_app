@@ -618,7 +618,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
               IDPayload = record1["ID number"];
               RFIDPayload = record1["RFID number"];
 
-              if(record2["Number"] == null){
+              if(record2["Number"] == "null"){
                 numberPayload = 0;
               }else{
                 numberPayload = int.parse(record2["Number"]);
@@ -627,6 +627,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
               namePayload = record2["Name"];
               commonNamePayload = record2["Common name"];
               dobPayload = record2["Day of birth"];
+
               if(record2["Year of birth"] == "null"){
                 yobPayload = 0;
               }else{
@@ -642,31 +643,31 @@ class _CustomerProfileState extends State<CustomerProfile>{
               colourPayload = record4["Colour"];
               descriptionPayload = record4["Description"];
 
-              if(record5["Tape measure"] == null){
+              if(record5["Tape measure"] == "null"){
                 tapeMeasurePayload = 0;
               }else{
                 tapeMeasurePayload = int.parse(record5["Tape measure"]);
               }
 
-              if(record5["Stick measure"] == null){
+              if(record5["Stick measure"] == "null"){
                 stickMeasurePayload= 0;
               } else{
                 stickMeasurePayload = int.parse(record5["Stick measure"]);
               }
 
-              if(record5["Breast girth"] == null){
+              if(record5["Breast girth"] == "null"){
                 breastGirthPayload = 0;
               } else{
                 breastGirthPayload = int.parse(record5["Breast girth"]);
               }
 
-              if(record5["Cannon girth"] == null){
+              if(record5["Cannon girth"] == "null"){
                 cannonGirthPayload = 0;
               } else{
                 cannonGirthPayload = double.parse(record5["Cannon girth"]);
               }
 
-              if(record5["Weight"] == null){
+              if(record5["Weight"] == "null"){
                 weightPayload = 0;
               } else{
                 weightPayload = int.parse(record5["Weight"]);
@@ -737,16 +738,6 @@ class _CustomerProfileState extends State<CustomerProfile>{
             ),
           );
         }
-    );
-  }
-
-  void _navigateToLogin(){
-    print("tlacim");
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => LoginPage()
-        )
     );
   }
 

@@ -122,7 +122,7 @@ class _HorseInfoState extends State<HorseInfo> {
               generateFirstValues(IDPayload);
               generateFirstValues(RFIDPayload);
 
-              if(record2["Number"] == null){
+              if(record2["Number"] == "null"){
                 numberPayload = 0;
               }else{
                 numberPayload = int.parse(record2["Number"]);
@@ -131,7 +131,12 @@ class _HorseInfoState extends State<HorseInfo> {
               namePayload = record2["Name"];
               commonNamePayload = record2["Common name"];
               dobPayload = record2["Day of birth"];
-              yobPayload = record2["Year of birth"];
+
+              if(record2["Year of birth"] == "null"){
+                yobPayload = 0;
+              }else{
+                yobPayload = int.parse(record2["Year of birth"]);
+              }
 
               sirPayload = record3["Sir"];
               damPayload = record3["Dam"];
@@ -141,31 +146,31 @@ class _HorseInfoState extends State<HorseInfo> {
               colourPayload = record4["Colour"];
               descriptionPayload = record4["Description"];
 
-              if(record5["Tape measure"] == null){
+              if(record5["Tape measure"] == "null"){
                 tapeMeasurePayload = 0;
               }else{
                 tapeMeasurePayload = int.parse(record5["Tape measure"]);
               }
 
-              if(record5["Stick measure"] == null){
+              if(record5["Stick measure"] == "null"){
                 stickMeasurePayload= 0;
               } else{
                 stickMeasurePayload = int.parse(record5["Stick measure"]);
               }
 
-              if(record5["Breast girth"] == null){
+              if(record5["Breast girth"] == "null"){
                 breastGirthPayload = 0;
               } else{
                 breastGirthPayload = int.parse(record5["Breast girth"]);
               }
 
-              if(record5["Cannon girth"] == null){
+              if(record5["Cannon girth"] == "null"){
                 cannonGirthPayload = 0;
               } else{
                 cannonGirthPayload = double.parse(record5["Cannon girth"]);
               }
 
-              if(record5["Weight"] == null){
+              if(record5["Weight"] == "null"){
                 weightPayload = 0;
               } else{
                 weightPayload = int.parse(record5["Weight"]);
@@ -488,12 +493,12 @@ class _HorseInfoState extends State<HorseInfo> {
                                       crossAxisAlignment: CrossAxisAlignment.end,
                                       mainAxisSize: MainAxisSize.max,
                                       children: <Widget>[
-                                        Text("Chip number:"),
+                                        Text("Chip number"),
                                         Padding(
                                           padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
-                                          child: Text("RFID number:"),
+                                          child: Text("RFID number"),
                                         ),
-                                        Text("ID number:"),
+                                        Text("ID number"),
                                       ],
                                     ),
                                     Padding(
@@ -648,12 +653,12 @@ class _HorseInfoState extends State<HorseInfo> {
                                       crossAxisAlignment: CrossAxisAlignment.end,
                                       mainAxisSize: MainAxisSize.max,
                                       children: <Widget>[
-                                        Text("Chip number:"),
+                                        Text("Chip number"),
                                         Padding(
                                           padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
-                                          child: Text("RFID number:"),
+                                          child: Text("RFID number"),
                                         ),
-                                        Text("ID number:"),
+                                        Text("ID number"),
                                       ],
                                     ),
                                     Padding(

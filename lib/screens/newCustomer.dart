@@ -13,7 +13,9 @@ class NewCustomer extends StatefulWidget{
 }
 
 class _NewCustomerState extends State<NewCustomer>{
-  String name, email, password;
+  String name ="";
+  String email = "";
+  String password ="";
   DBProvider dbProvider= DBProvider();
 
   @override
@@ -81,84 +83,95 @@ class _NewCustomerState extends State<NewCustomer>{
                         height: 15,
                       ),
                       Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(top: 20.0),
+                                child: Text(
+                                  'Customers name:',
+                                  style: TextStyle(
+                                      color: Color.fromRGBO(25, 85, 85, 1.0),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
+                                child: Text(
+                                  'Customers email:',
+                                  style: TextStyle(
+                                      color: Color.fromRGBO(25, 85, 85, 1.0),
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                'Customers password:',
+                                style: TextStyle(
+                                    color: Color.fromRGBO(25, 85, 85, 1.0),
+                                ),
+                              ),
+                            ],
+                          ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 5.0),
-                            child: Text(
-                              'Customers name:',
-                              style: TextStyle(
-                                  color: Color.fromRGBO(25, 85, 85, 1.0),
-                                  fontSize: 15
-                              ),
-                            ),
+                            padding: EdgeInsets.only(right: 10.0),
                           ),
-                          Container(
-                            padding: EdgeInsets.only(right:5.0),
-                            child: TextFormField(
-                              onChanged: (nameVal){
-                                name = nameVal;
-                                print("new value of name $name");
-                              },
-                              controller: TextEditingController(
-                                  text: "$name"
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              Container(
+                                child: TextFormField(
+                                  onChanged: (nameVal){
+                                    name = nameVal;
+                                    print("new value of name $name");
+                                  },
+                                  controller: TextEditingController(
+                                      text: "$name"
+                                  ),
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.only(bottom: -30)
+                                  ),
+                                ),
+                                width: 140,
                               ),
-                            ),
-                            width: 190,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(left: 5.0),
-                            child: Text(
-                              'Customers email:',
-                              style: TextStyle(
-                                  color: Color.fromRGBO(25, 85, 85, 1.0),
-                                  fontSize: 15
+                              Container(
+                                child: TextFormField(
+                                  onChanged: (emailVal){
+                                    email = emailVal;
+                                    print("new value of email $email");
+                                  },
+                                  controller: TextEditingController(
+                                      text: "$email"
+                                  ),
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.only(bottom: -30)
+                                  ),
+                                ),
+                                width: 140,
                               ),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(right:5.0),
-                            child: TextFormField(
-                              onChanged: (emailVal){
-                                email = emailVal;
-                                print("new value of email $email");
-                              },
-                              controller: TextEditingController(
-                                  text: "$email"
+                              Container(
+                                child: TextFormField(
+                                  onChanged: (passVal){
+                                    password = passVal;
+                                    print("new value of password $password");
+                                  },
+                                  controller: TextEditingController(
+                                      text: "$password"
+                                  ),
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.only(bottom: -30)
+                                  ),
+                                ),
+                                width: 140,
                               ),
-                            ),
-                            width: 190,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(left: 5.0),
-                            child: Text(
-                              'Customers password:',
-                              style: TextStyle(
-                                  color: Color.fromRGBO(25, 85, 85, 1.0),
-                                  fontSize: 15
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(right:5.0),
-                            child: TextFormField(
-                              onChanged: (passVal){
-                                password = passVal;
-                                print("new value of password $password");
-                              },
-                              controller: TextEditingController(
-                                  text: "$password"
-                              ),
-                            ),
-                            width: 160,
-                          ),
+                            ],
+                          )
                         ],
                       ),
                       Column(
@@ -198,7 +211,6 @@ class _NewCustomerState extends State<NewCustomer>{
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
       color: Color(0xff002c2c),
-//      color: Color(0xffab6844),
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width/ 3,
         padding: EdgeInsets.fromLTRB(10.0,5.0,10.0,5.0),
@@ -215,18 +227,10 @@ class _NewCustomerState extends State<NewCustomer>{
            Future<int> saved =_saveCustomerFun(newCust);
            saved.then(( int value) =>{
              if(value > 0){
-//               _showDialog("New customer saved"),
-
-              Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AllCustomersList()
-              )
-          ),
-               Scaffold.of(context).showSnackBar(SnackBar(content: Text("Customer saved"),)),
+               Navigator.pushNamedAndRemoveUntil(context, "/allCustomers", (_) => false),
+               _showDialog("New Customer was successfully saved.")
              }else{
-//                _showDialog("New Customer not saved")
-               Scaffold.of(context).showSnackBar(SnackBar(content: Text("Customer not saved"),))
+                _showDialog("New Customer was not saved.")
              }
            });
       },
@@ -243,7 +247,10 @@ class _NewCustomerState extends State<NewCustomer>{
         context: context,
         builder: (BuildContext context){
           return AlertDialog(
-            content: Text(mess),
+            content: Text(
+                mess,
+              textAlign: TextAlign.center,
+            ),
           );
         }
     );

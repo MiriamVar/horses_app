@@ -692,7 +692,7 @@ class _FindHorseState extends State<FindHorse>{
 
     switch(keyValue) {
       case "Number": {
-        basic[keyValue] = horseT.toString();
+        basic[keyValue] = horseT.number.toString();
       }break;
 
       case "Name": {
