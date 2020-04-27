@@ -12,6 +12,7 @@ import 'package:horsesapp/screens/customerProfile.dart';
 import 'package:horsesapp/screens/newCustomer.dart';
 import 'package:nfc_in_flutter/nfc_in_flutter.dart';
 import 'package:horsesapp/screens/login.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 import '../models/Horse.dart';
 
@@ -30,7 +31,9 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => LoginPage(),
+        '/': (context) => new LoginPage(),
+        '/allCustomers': (context) => new AllCustomersList(),
+        '/logout': (context) => new LoginPage(),
         // When navigating to the "/second" route, build the SecondScreen widget.
       },
 //      home: MyHomePage(title: 'Horses'),
@@ -110,12 +113,24 @@ class _MyHomePageState extends State<MyHomePage> {
   Map<String, String> measurements = new Map();
   Map<String, String> owner = new Map();
 
+  double progressValue = 0.0;
+  double progressValue2 = 0.0;
+
   @override
   Widget build(BuildContext context) {
     chipNumberPayload = widget.tagID;
     return Scaffold(
       appBar: AppBar(
         title: Text("Horse"),
+        actions: <Widget>[
+          CircularPercentIndicator(
+            radius: 40.0,
+            lineWidth: 4.0,
+            percent: progressValue,
+            center: Text(progressValue.toString()+"%", style: TextStyle(color: Colors.white),),
+            progressColor: Colors.white,
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -138,63 +153,66 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ExpansionTile(
                                       title: Text("IDs"),
                                       children: <Widget>[
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Column(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              crossAxisAlignment: CrossAxisAlignment.end,
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: <Widget>[
-                                                Text("Chip number:"),
-                                                Padding(
-                                                  padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
-                                                  child: Text("RFID number:"),
-                                                ),
-                                                Text("ID number:"),
-                                              ],
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.only(right: 10.0)
-                                            ),
-                                            Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.max,
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 45.0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Column(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                crossAxisAlignment: CrossAxisAlignment.end,
+                                                mainAxisSize: MainAxisSize.max,
                                                 children: <Widget>[
-                                                  Text(chipNumberPayload),
-                                                  Container(
-                                                    child: TextField(
-                                                      onChanged: (RFIDpayload){
-                                                        setValue("RFID number", RFIDpayload);
-                                                      },
-                                                      controller: TextEditingController(
-                                                          text: "$RFIDPayload"
-                                                      ),
-                                                      decoration: InputDecoration(
-                                                          contentPadding: EdgeInsets.only(bottom: -30)
-                                                      ),
-                                                    ),
-                                                    width: 200,
+                                                  Text("Chip number:"),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
+                                                    child: Text("RFID number:"),
                                                   ),
-                                                  Container(
-                                                    child: TextField(
-                                                      onChanged: (payload){
-                                                        setValue("ID number", payload);
-                                                      },
-                                                      controller: TextEditingController(
-                                                          text: "$IDPayload"
-                                                      ),
-                                                      decoration: InputDecoration(
-                                                          contentPadding: EdgeInsets.only(bottom: -30)
-                                                      ),
-                                                    ),
-                                                    width: 200,
-                                                  )
+                                                  Text("ID number:"),
                                                 ],
-                                            )
-                                          ],
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.only(right: 33.0)
+                                              ),
+                                              Column(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                mainAxisSize: MainAxisSize.max,
+                                                  children: <Widget>[
+                                                    Text(chipNumberPayload),
+                                                    Container(
+                                                      child: TextField(
+                                                        onChanged: (RFIDpayload){
+                                                          setValue("RFID number", RFIDpayload);
+                                                        },
+                                                        controller: TextEditingController(
+                                                            text: "$RFIDPayload"
+                                                        ),
+                                                        decoration: InputDecoration(
+                                                            contentPadding: EdgeInsets.only(bottom: -30)
+                                                        ),
+                                                      ),
+                                                      width: 200,
+                                                    ),
+                                                    Container(
+                                                      child: TextField(
+                                                        onChanged: (payload){
+                                                          setValue("ID number", payload);
+                                                        },
+                                                        controller: TextEditingController(
+                                                            text: "$IDPayload"
+                                                        ),
+                                                        decoration: InputDecoration(
+                                                            contentPadding: EdgeInsets.only(bottom: -30)
+                                                        ),
+                                                      ),
+                                                      width: 200,
+                                                    )
+                                                  ],
+                                              )
+                                            ],
+                                          ),
                                         ),
                                         SizedBox(
                                           height: 10.0,
@@ -294,6 +312,9 @@ class _MyHomePageState extends State<MyHomePage> {
             },
             controller: TextEditingController(
                 text: "$payload2",
+            ),
+            decoration: InputDecoration(
+                contentPadding: EdgeInsets.only(bottom: -30)
             ),
           ),
           width: 200,
@@ -594,7 +615,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: (){
           _submitForm();
         },
-        child: Text("SAVE ON TAG AND TO DATABASE"),
+        child: Text("SAVE ON IMPLANT AND TO DATABASE"),
       ),
     );
   }
@@ -673,7 +694,7 @@ class _MyHomePageState extends State<MyHomePage> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Scan the tag you want to write to"),
+          title: const Text("Scan the implnat you want to write to."),
           content: Container(
               height: 100,
               child: Image.asset("assets/mircochip.jpg")
@@ -714,7 +735,10 @@ class _MyHomePageState extends State<MyHomePage> {
         context: context,
         builder: (BuildContext context){
           return AlertDialog(
-            content: Text(mess),
+            content: Text(
+                mess,
+              textAlign: TextAlign.center,
+            ),
           );
         }
     );

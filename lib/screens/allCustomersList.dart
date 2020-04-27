@@ -156,12 +156,10 @@ class _AllCustomersListState extends State<AllCustomersList>{
 
   void navigateToProfile(Customer customerko) async{
     print(customerko.id);
-    bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+    await Navigator.push(context, MaterialPageRoute(builder: (context) {
       return CustomerProfile(customer: customerko);
     }));
-//    if(result == true){
-//      updateListView();
-//    }
+
   }
 
   void _deleteCustomer(int idC) async{

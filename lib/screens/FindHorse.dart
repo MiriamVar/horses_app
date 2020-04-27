@@ -8,6 +8,7 @@ import 'package:horsesapp/database.dart';
 import 'package:horsesapp/models/Customer.dart';
 import 'package:horsesapp/models/Horse.dart';
 import 'package:nfc_in_flutter/nfc_in_flutter.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 import 'customerProfile.dart';
 import 'login.dart';
@@ -35,24 +36,24 @@ class _FindHorseState extends State<FindHorse>{
   int count;
   String num, yob, tape, stick, breast, cannon, wei;
 
-  bool ID_ch = false;
-  bool name_ch = false;
-  bool commonMane_ch = false;
-  bool sir_ch= false;
-  bool dam_ch= false;
-  bool sex_ch= false;
-  bool breed_ch= false;
-  bool colour_ch = false;
-  bool dob_ch = false;
-  bool description_ch = false;
-  bool tapeMeasure_ch =false;
-  bool stichMeasure_ch= false;
-  bool breastGirth_ch =false;
-  bool weight_ch = false;
-  bool number_ch= false;
-  bool yob_ch= false;
-  bool cannonGirth_ch = false;
-  bool owner_ch = false;
+  bool ID_ch = true;
+  bool name_ch = true;
+  bool commonMane_ch = true;
+  bool sir_ch= true;
+  bool dam_ch= true;
+  bool sex_ch= true;
+  bool breed_ch= true;
+  bool colour_ch = true;
+  bool dob_ch = true;
+  bool description_ch = true;
+  bool tapeMeasure_ch =true;
+  bool stichMeasure_ch= true;
+  bool breastGirth_ch =true;
+  bool weight_ch = true;
+  bool number_ch= true;
+  bool yob_ch= true;
+  bool cannonGirth_ch = true;
+  bool owner_ch = true;
 
   Map<String, String> ids = new Map();
   Map<String, String> basic = new Map();
@@ -60,6 +61,10 @@ class _FindHorseState extends State<FindHorse>{
   Map<String, String> description = new Map();
   Map<String, String> measurements = new Map();
   Map<String, String> owner = new Map();
+
+
+  double progressValue = 0.0;
+  double progressValue2 = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +93,15 @@ class _FindHorseState extends State<FindHorse>{
             ],
           ),
         ),
+        actions: <Widget>[
+          CircularPercentIndicator(
+            radius: 40.0,
+            lineWidth: 4.0,
+            percent: progressValue,
+            center: Text(progressValue.toString()+"%", style: TextStyle(color: Colors.white),),
+            progressColor: Colors.white,
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -99,68 +113,83 @@ class _FindHorseState extends State<FindHorse>{
                 if(connected == true){
                   return Column(
                     children: <Widget>[
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text("Information is from the database."),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
                       Column(
                         children: <Widget>[
                           ExpansionTile(
                             title: Text("IDs"),
                             children: <Widget>[
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: <Widget>[
-                                      Text("Chip number:"),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
-                                        child: Text("RFID number:"),
-                                      ),
-                                      Text("ID number:"),
-                                    ],
-                                  ),
-                                  Padding(
-                                      padding: EdgeInsets.only(right: 10.0)
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: <Widget>[
-                                      Text(horseD.chipNumber),
-                                      Container(
-                                        child: TextField(
-                                          onChanged: (payload){
-                                            setValue("RFID number", payload);
-                                          },
-                                          controller: TextEditingController(
-                                              text: horseD.RFIDNumber
-                                          ),
-                                          decoration: InputDecoration(
-                                              contentPadding: EdgeInsets.only(bottom: -30)
-                                          ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 45.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        Text("Chip number:"),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
+                                          child: Text("RFID number:"),
                                         ),
-                                        width: 200,
-                                      ),
-                                      Container(
-                                        child: TextField(
-                                          onChanged: (payload){
-                                            setValue("ID number", payload);
-                                          },
-                                          controller: TextEditingController(
-                                              text: horseD.IDNumber
+                                        Text("ID number:"),
+                                      ],
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(right: 31.0)
+                                    ),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        Text(horseD.chipNumber),
+                                        Container(
+                                          child: TextField(
+                                            onChanged: (payload){
+                                              setValue("RFID number", payload);
+                                            },
+                                            controller: TextEditingController(
+                                                text: horseD.RFIDNumber
+                                            ),
+                                            decoration: InputDecoration(
+                                                contentPadding: EdgeInsets.only(bottom: -30)
+                                            ),
                                           ),
-                                          decoration: InputDecoration(
-                                              contentPadding: EdgeInsets.only(bottom: -30)
-                                          ),
+                                          width: 200,
                                         ),
-                                        width: 200,
-                                      ),
-                                    ],
-                                  )
-                                ],
+                                        Container(
+                                          child: TextField(
+                                            onChanged: (payload){
+                                              setValue("ID number", payload);
+                                            },
+                                            controller: TextEditingController(
+                                                text: horseD.IDNumber
+                                            ),
+                                            decoration: InputDecoration(
+                                                contentPadding: EdgeInsets.only(bottom: -30)
+                                            ),
+                                          ),
+                                          width: 200,
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
                               SizedBox(
                                 height: 10.0,
@@ -239,7 +268,6 @@ class _FindHorseState extends State<FindHorse>{
                       )
                     ],
                   );
-//                      }
                 }
                 //ked nie som connectnuty
                 else{
@@ -251,7 +279,23 @@ class _FindHorseState extends State<FindHorse>{
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text("You are in OFFLINE mode."),
+                            Text(
+                              "You are in OFFLINE mode.",
+                              style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromRGBO(73, 130, 129, 1.0)
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text("Information is from the implant."),
                           ],
                         ),
                         SizedBox(
@@ -262,63 +306,66 @@ class _FindHorseState extends State<FindHorse>{
                             ExpansionTile(
                                 title: Text("IDs"),
                                 children:<Widget> [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        crossAxisAlignment: CrossAxisAlignment.end,
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: <Widget>[
-                                          Text("Chip number:"),
-                                          Padding(
-                                            padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
-                                            child: Text("RFID number:"),
-                                          ),
-                                          Text("ID number:"),
-                                        ],
-                                      ),
-                                      Padding(
-                                          padding: EdgeInsets.only(right: 10.0)
-                                      ),
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: <Widget>[
-                                          Text(horseT.chipNumber),
-                                          Container(
-                                            child: TextField(
-                                              onChanged: (payload){
-                                                setValue("RFID number", payload);
-                                              },
-                                              controller: TextEditingController(
-                                                  text: horseT.RFIDNumber
-                                              ),
-                                              decoration: InputDecoration(
-                                                  contentPadding: EdgeInsets.only(bottom: -30)
-                                              ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 45.0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: <Widget>[
+                                            Text("Chip number:"),
+                                            Padding(
+                                              padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
+                                              child: Text("RFID number:"),
                                             ),
-                                            width: 200,
-                                          ),
-                                          Container(
-                                            child: TextField(
-                                              onChanged: (payload){
-                                                setValue("ID number", payload);
-                                              },
-                                              controller: TextEditingController(
-                                                  text: horseT.IDNumber
+                                            Text("ID number:"),
+                                          ],
+                                        ),
+                                        Padding(
+                                            padding: EdgeInsets.only(right: 31.0)
+                                        ),
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: <Widget>[
+                                            Text(horseT.chipNumber),
+                                            Container(
+                                              child: TextField(
+                                                onChanged: (payload){
+                                                  setValue("RFID number", payload);
+                                                },
+                                                controller: TextEditingController(
+                                                    text: horseT.RFIDNumber
+                                                ),
+                                                decoration: InputDecoration(
+                                                    contentPadding: EdgeInsets.only(bottom: -30)
+                                                ),
                                               ),
-                                              decoration: InputDecoration(
-                                                  contentPadding: EdgeInsets.only(bottom: -30)
-                                              ),
+                                              width: 200,
                                             ),
-                                            width: 200,
-                                          ),
-                                        ],
-                                      )
-                                    ],
+                                            Container(
+                                              child: TextField(
+                                                onChanged: (payload){
+                                                  setValue("ID number", payload);
+                                                },
+                                                controller: TextEditingController(
+                                                    text: horseT.IDNumber
+                                                ),
+                                                decoration: InputDecoration(
+                                                    contentPadding: EdgeInsets.only(bottom: -30)
+                                                ),
+                                              ),
+                                              width: 200,
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 10.0,
@@ -413,12 +460,15 @@ class _FindHorseState extends State<FindHorse>{
         Text(key),
         Spacer(),
         Container(
-          child: TextFormField(
+          child: TextField(
             onChanged: (payload){
               setValue(key, payload);
             },
             controller: TextEditingController(
                 text: "$payload"
+            ),
+            decoration: InputDecoration(
+                contentPadding: EdgeInsets.only(bottom: -30)
             ),
           ),
           width: 200,
@@ -720,7 +770,7 @@ class _FindHorseState extends State<FindHorse>{
         onPressed: (){
           _saveOnTAGFun();
         },
-        child: Text("SAVE ON TAG"),
+        child: Text("SAVE ON IMPLANT"),
       ),
     );
   }
@@ -734,7 +784,7 @@ class _FindHorseState extends State<FindHorse>{
         onPressed: (){
           _saveOnDBandTAGFun();
         },
-        child: Text("SAVE ON TAG"),
+        child: Text("SAVE ON IMPLANT"),
       ),
     );
   }
@@ -805,7 +855,14 @@ class _FindHorseState extends State<FindHorse>{
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Scan the tag you want to write to"),
+          title: const Text(
+              "Scan the implant you want to write to",
+            textAlign: TextAlign.center,
+          ),
+          content: Container(
+              height: 100,
+              child: Image.asset("assets/mircochip.jpg")
+          ),
           actions: <Widget>[
             FlatButton(
               child: const Text("Cancel"),
@@ -828,6 +885,7 @@ class _FindHorseState extends State<FindHorse>{
               builder: (context) => CustomerProfile(customer: widget.customer,)
           )
       );
+      _showDialog("Horse was updated on implant");
     }
   }
 
@@ -889,7 +947,10 @@ class _FindHorseState extends State<FindHorse>{
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Scan the tag you want to write to"),
+          title: const Text(
+              "Scan the implant you want to write to.",
+            textAlign: TextAlign.center,
+          ),
           content: Container(
               height: 100,
               child: Image.asset("assets/mircochip.jpg")
@@ -916,7 +977,7 @@ class _FindHorseState extends State<FindHorse>{
               builder: (context) => CustomerProfile(customer: widget.customer,)
           )
       );
-      _showDialog("New horse was saved");
+      _showDialog("Horse was updated");
     }
   }
 
@@ -938,7 +999,10 @@ class _FindHorseState extends State<FindHorse>{
         context: context,
         builder: (BuildContext context){
           return AlertDialog(
-            content: Text(mess),
+            content: Text(
+                mess,
+               textAlign: TextAlign.center,
+            ),
           );
         }
     );

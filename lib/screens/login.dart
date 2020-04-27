@@ -185,9 +185,7 @@ class _LoginPageState extends State<LoginPage>{
             if(user.name == "Vet"){
               // user by mal byt Vet
               LoginPage.currentUser = user;
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => AllCustomersList()
-              ));
+              Navigator.pushReplacementNamed(context, "/allCustomers");
             }else {
               // user by mal byt iny customer
               LoginPage.currentUser = user;
@@ -197,12 +195,6 @@ class _LoginPageState extends State<LoginPage>{
               );
             }
           }else{
-            //toto nejde
-//            Scaffold.of(context).showSnackBar(
-//              SnackBar(
-//                content: Text("Wrong email or password"),
-//              )
-//            );
           _showDialog();
           }},
       ),
@@ -214,7 +206,10 @@ class _LoginPageState extends State<LoginPage>{
         context: context,
         builder: (BuildContext context){
           return AlertDialog(
-            content: Text("Wrong name or password"),
+            content: Text(
+                "Wrong name or password",
+              textAlign: TextAlign.center,
+            ),
           );
         }
     );

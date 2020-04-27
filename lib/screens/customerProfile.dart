@@ -9,6 +9,7 @@ import 'package:horsesapp/database.dart';
 import 'package:horsesapp/models/Horse.dart';
 import 'package:horsesapp/screens/FindHorse.dart';
 import 'package:horsesapp/screens/HorseInfo.dart';
+import 'package:horsesapp/screens/allCustomersList.dart';
 import 'package:horsesapp/screens/login.dart';
 import 'package:horsesapp/screens/main.dart';
 import 'package:nfc_in_flutter/nfc_in_flutter.dart';
@@ -68,48 +69,21 @@ class _CustomerProfileState extends State<CustomerProfile>{
            left: 0,
            child: Container(
              height: 80,
-             child: Row(
-               children: <Widget>[
-                 Spacer(),
-                 Center(
-                   child: Column(
-                     mainAxisAlignment: MainAxisAlignment.center,
-                     children: <Widget>[
-                       Padding(
-                         padding: EdgeInsets.only(top: 40, right: 85),
-                         child: Text(
-                           "Profile",
-                           style: TextStyle(
-                             color: Colors.white,
-                             fontSize: 20,
-                           ),
-                         ),
-                       ),
-                     ],
-                   ),
-                 ),
-                 Column(
-                   mainAxisAlignment: MainAxisAlignment.center,
-                   children: <Widget>[
-                     InkWell(
-                       child: Padding(
-                         padding: const EdgeInsets.only(top: 40, right: 40),
-                         child: Icon(
-                           Icons.power_settings_new,
-                           color: Colors.white,
-                           size: 20.0,
-                         ),
-                       ),
-                       onTap:(){
-                         setState(() {
-                           _navigateToLogin();
-                         });
-                       } ,
-                     ),
-                   ],
-                 )
-               ],
-             ),
+//             child: Row(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               children: <Widget>[
+//                 Padding(
+//                   padding: EdgeInsets.only(top: 40),
+//                   child: Text(
+//                     "Profile",
+//                     style: TextStyle(
+//                       color: Colors.white,
+//                       fontSize: 20,
+//                     ),
+//                   ),
+//                 ),
+//               ],
+//             ),
            ),
          ),
          Container(
@@ -141,12 +115,58 @@ class _CustomerProfileState extends State<CustomerProfile>{
                        SizedBox(
                          height: 20,
                        ),
-                       Text(
-                         '${widget.customer.name}',
-                         style: TextStyle(
-                           color: Color.fromRGBO(25, 85, 85, 1.0),
-                           fontSize: 20
-                         ),
+                       Row(
+                         mainAxisAlignment: MainAxisAlignment.center,
+                         crossAxisAlignment: CrossAxisAlignment.center,
+                         children: <Widget>[
+                           if(LoginPage.currentUser.name == "Vet")IconButton(
+                             icon: Icon(Icons.arrow_back),
+                             color: Color.fromRGBO(25, 85, 85, 1.0),
+                             iconSize: 20.0,
+                             onPressed: () {
+                               Navigator.pushNamedAndRemoveUntil(context, "/allCustomers", (_) => false);
+                             },
+                           ),
+                           if(LoginPage.currentUser.name == "Vet")Padding(
+                             padding: const EdgeInsets.only(left: 80.0),
+                             child: Text(
+                               '${widget.customer.name}',
+                               style: TextStyle(
+                                   color: Color.fromRGBO(25, 85, 85, 1.0),
+                                   fontSize: 20
+                               ),
+                             ),
+                           ),
+                           if(LoginPage.currentUser.name == "Vet")IconButton(
+                             padding: EdgeInsets.only(left: 85.0, right: 20.0),
+                             icon: Icon(Icons.power_settings_new),
+                             color: Color.fromRGBO(25, 85, 85, 1.0),
+                             iconSize: 20.0,
+                             onPressed: () {
+                               LoginPage.currentUser == null;
+                               Navigator.pushReplacementNamed(context, "/logout");
+                             },
+                           ),
+                           if(LoginPage.currentUser.name != "Vet")Padding(
+                             padding: const EdgeInsets.only(left: 120.0),
+                             child: Text(
+                               '${widget.customer.name}',
+                               style: TextStyle(
+                                   color: Color.fromRGBO(25, 85, 85, 1.0),
+                                   fontSize: 20
+                               ),
+                             ),
+                           ),
+                           if(LoginPage.currentUser.name != "Vet")IconButton(
+                             padding: EdgeInsets.only(left: 85.0, right: 20.0),
+                             icon: Icon(Icons.power_settings_new),
+                             color: Color.fromRGBO(25, 85, 85, 1.0),
+                             iconSize: 20.0,
+                             onPressed: () {
+                               Navigator.pushReplacementNamed(context, "/logout");
+                             },
+                           ),
+                         ],
                        ),
                        Container(
                          margin: EdgeInsets.only(top: 30),
@@ -520,18 +540,36 @@ class _CustomerProfileState extends State<CustomerProfile>{
               //nacitavam iba ID chipu
               var record1 = jsonDecode(_tags[index2].records[0].payload);
               chipNumberPayload = record1["Chip number"];
+              IDPayload = record1["ID number"];
+              RFIDPayload = record1["RFID number"];
               print(chipNumberPayload);
 
               if(chipNumberPayload == null){
-                  //todo .... if on tag is not ID of tag
-              }else{
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CustomerProfile(customer: widget.customer,)
+                    )
+                );
+                _showDialog("Wrong chip");
+              }
+              if(chipNumberPayload != null && IDPayload == null && RFIDPayload == null){
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => MyHomePage(customer: widget.customer, tagID:  chipNumberPayload,)
                     )
                 );
+              } else{
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CustomerProfile(customer: widget.customer,)
+                    )
+                );
+                _showDialog("You can't use this implant. On this implant is information saved.");
               }
+
             });
           },
           onDone: (){
@@ -589,7 +627,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
               namePayload = record2["Name"];
               commonNamePayload = record2["Common name"];
               dobPayload = record2["Day of birth"];
-              if(record2["Year of birth"] == null){
+              if(record2["Year of birth"] == "null"){
                 yobPayload = 0;
               }else{
                 yobPayload = int.parse(record2["Year of birth"]);
@@ -639,7 +677,13 @@ class _CustomerProfileState extends State<CustomerProfile>{
               Horse horseFromTag = new Horse(widget.customer.id, chipNumberPayload, IDPayload, namePayload, commonNamePayload, sirPayload, damPayload, sexPayload, breedPayload, colourPayload, dobPayload, descriptionPayload, tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload, cannonGirthPayload, RFIDPayload, ownerPayload);
 
               if(chipNumberPayload == null){
-                //todo .... if on tag is not ID of tag
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CustomerProfile(customer: widget.customer,)
+                    )
+                );
+                _showDialog("Wrong chip");
               }else{
                 List<Horse> horses = myHorses.where((chip) => chip.chipNumber == chipNumberPayload).toList();
 
@@ -653,7 +697,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
                     )
                 );
                 } else{
-                  _showDialog("You dont own this horse");
+                  _showDialog("You don't own this horse");
                   print("nemam horsa z db");
                 }
               }
@@ -687,7 +731,10 @@ class _CustomerProfileState extends State<CustomerProfile>{
         context: context,
         builder: (BuildContext context){
           return AlertDialog(
-            content: Text(mess),
+            content: Text(
+                mess,
+              textAlign: TextAlign.center,
+            ),
           );
         }
     );

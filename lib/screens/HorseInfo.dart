@@ -44,24 +44,24 @@ class _HorseInfoState extends State<HorseInfo> {
   double cannonGirthPayload;
   String ownerPayload;
 
-  bool ID_ch = false;
-  bool name_ch = false;
-  bool commonMane_ch = false;
-  bool sir_ch= false;
-  bool dam_ch= false;
-  bool sex_ch= false;
-  bool breed_ch= false;
-  bool colour_ch = false;
-  bool dob_ch = false;
-  bool description_ch = false;
-  bool tapeMeasure_ch =false;
-  bool stichMeasure_ch= false;
-  bool breastGirth_ch =false;
-  bool weight_ch = false;
-  bool number_ch= false;
-  bool yob_ch= false;
-  bool cannonGirth_ch = false;
-  bool owner_ch = false;
+  bool ID_ch = true;
+  bool name_ch = true;
+  bool commonMane_ch = true;
+  bool sir_ch= true;
+  bool dam_ch= true;
+  bool sex_ch= true;
+  bool breed_ch= true;
+  bool colour_ch = true;
+  bool dob_ch = true;
+  bool description_ch = true;
+  bool tapeMeasure_ch =true;
+  bool stichMeasure_ch= true;
+  bool breastGirth_ch =true;
+  bool weight_ch = true;
+  bool number_ch= true;
+  bool yob_ch= true;
+  bool cannonGirth_ch = true;
+  bool owner_ch = true;
 
   Map<String, String> ids = new Map();
   Map<String, String> basic = new Map();
@@ -71,11 +71,13 @@ class _HorseInfoState extends State<HorseInfo> {
   Map<String, String> owner = new Map();
 
   double progressValue;
+  double progressValue2;
 
 
   @override
   void initState() {
     progressValue = 0.0;
+    progressValue2 = 0.0;
     sort = false;
     selectedHorse = [];
     super.initState();
@@ -104,13 +106,6 @@ class _HorseInfoState extends State<HorseInfo> {
             setState(() {
               _tags.insert(0,tag);
               print(tag);
-              print("Record '${_tags[index2].records[0].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[0].tnf}, type '${_tags[index2].records[0].type}', payload '${_tags[index2].records[0].payload}' and data '${_tags[index2].records[0].data}' and language code '${_tags[index2].records[0].languageCode}''");
-              print("Record '${_tags[index2].records[1].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[1].tnf}, type '${_tags[index2].records[1].type}', payload '${_tags[index2].records[1].payload}' and data '${_tags[index2].records[1].data}' and language code '${_tags[index2].records[1].languageCode}''");
-              print("Record '${_tags[index2].records[2].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[2].tnf}, type '${_tags[index2].records[2].type}', payload '${_tags[index2].records[2].payload}' and data '${_tags[index2].records[2].data}' and language code '${_tags[index2].records[2].languageCode}''");
-              print("Record '${_tags[index2].records[3].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[3].tnf}, type '${_tags[index2].records[3].type}', payload '${_tags[index2].records[3].payload}' and data '${_tags[index2].records[3].data}' and language code '${_tags[index2].records[3].languageCode}''");
-              print("Record '${_tags[index2].records[4].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[4].tnf}, type '${_tags[index2].records[4].type}', payload '${_tags[index2].records[4].payload}' and data '${_tags[index2].records[4].data}' and language code '${_tags[index2].records[4].languageCode}''");
-              print("Record '${_tags[index2].records[5].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[5].tnf}, type '${_tags[index2].records[5].type}', payload '${_tags[index2].records[5].payload}' and data '${_tags[index2].records[5].data}' and language code '${_tags[index2].records[5].languageCode}''");
-
               var record1 = jsonDecode(_tags[index2].records[0].payload);
               var record2 = jsonDecode(_tags[index2].records[1].payload);
               var record3 = jsonDecode(_tags[index2].records[2].payload);
@@ -119,9 +114,13 @@ class _HorseInfoState extends State<HorseInfo> {
               var record6 = jsonDecode(_tags[index2].records[5].payload);
 
               chipNumberPayload = record1["Chip number"];
-              print(chipNumberPayload);
+//              print(chipNumberPayload);
               IDPayload = record1["ID number"];
               RFIDPayload = record1["RFID number"];
+
+              generateFirstValues(chipNumberPayload);
+              generateFirstValues(IDPayload);
+              generateFirstValues(RFIDPayload);
 
               if(record2["Number"] == null){
                 numberPayload = 0;
@@ -281,76 +280,87 @@ class _HorseInfoState extends State<HorseInfo> {
                     if(connected == true){
                         return Column(
                           children: <Widget>[
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text("Information is from the database."),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
                             Column(
                               children: <Widget>[
                                 ExpansionTile(
                                   title: Text("IDs"),
                                   children: <Widget>[
-                                    Column(
-                                      children: <Widget>[
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Column(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              crossAxisAlignment: CrossAxisAlignment.end,
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: <Widget>[
-                                                Text("Chip number:"),
-                                                Padding(
-                                                  padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
-                                                  child: Text("RFID number:"),
-                                                ),
-                                                Text("ID number:"),
-                                              ],
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.only(right: 10.0),
-                                            ),
-                                            Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: <Widget>[
-                                                Text(horseFromDB.chipNumber),
-                                                Container(
-                                                  child: TextField(
-                                                    onChanged: (payload){
-                                                      setValue("RFID number", payload);
-                                                    },
-                                                    controller: TextEditingController(
-                                                        text: horseFromDB.RFIDNumber
-                                                    ),
-                                                    decoration: InputDecoration(
-                                                        contentPadding: EdgeInsets.only(bottom: -30)
-                                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 45.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Column(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: <Widget>[
+                                              Text("Chip number"),
+                                              Padding(
+                                                padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
+                                                child: Text("RFID number"),
+                                              ),
+                                              Text("ID number"),
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(right: 33.0),
+                                          ),
+                                          Column(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: <Widget>[
+                                              Text(horseFromDB.chipNumber),
+                                              Container(
+                                                child: TextField(
+                                                  onChanged: (payload){
+                                                    setValue("RFID number", payload);
+                                                  },
+                                                  controller: TextEditingController(
+                                                      text: horseFromDB.RFIDNumber
                                                   ),
-                                                  width: 200,
-                                                ),
-                                                Container(
-                                                  child: TextField(
-                                                    onChanged: (payload){
-                                                      setValue("ID number", payload);
-                                                    },
-                                                    controller: TextEditingController(
-                                                        text: horseFromDB.IDNumber
-                                                    ),
-                                                    decoration: InputDecoration(
-                                                        contentPadding: EdgeInsets.only(bottom: -30)
-                                                    ),
+                                                  decoration: InputDecoration(
+                                                      contentPadding: EdgeInsets.only(bottom: -30)
                                                   ),
-                                                  width: 200,
                                                 ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      SizedBox(
-                                        height: 10.0,
-                                      )
-                                      ],
+                                                width: 200,
+                                              ),
+                                              Container(
+                                                child: TextField(
+                                                  onChanged: (payload){
+                                                    setValue("ID number", payload);
+                                                  },
+                                                  controller: TextEditingController(
+                                                      text: horseFromDB.IDNumber
+                                                  ),
+                                                  decoration: InputDecoration(
+                                                      contentPadding: EdgeInsets.only(bottom: -30)
+                                                  ),
+                                                ),
+                                                width: 200,
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
                                     ),
+                                      SizedBox(
+                                    height: 10.0,
+                                      ),
                                   ],
                                 ),
                                 ExpansionTile(
@@ -425,7 +435,6 @@ class _HorseInfoState extends State<HorseInfo> {
                             )
                           ],
                         );
-//                      }
                     }
                     //ked nie som connectnuty
                     else{
@@ -438,81 +447,101 @@ class _HorseInfoState extends State<HorseInfo> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Text("You are in OFFLINE mode."),
+                                Text(
+                                    "You are in OFFLINE mode.",
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromRGBO(73, 130, 129, 1.0)
+                                  ),
+                                ),
                               ],
                             ),
                             SizedBox(
                               height: 10.0,
                             ),
-                            Column(
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                ExpansionTile(
-                                  title: Text("IDs"),
+                                Column(
                                   children: <Widget>[
-                                    Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        crossAxisAlignment: CrossAxisAlignment.end,
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: <Widget>[
-                                          Text("Chip number:"),
-                                          Padding(
-                                            padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
-                                            child: Text("RFID number:"),
-                                          ),
-                                          Text("ID number:"),
-                                        ],
-                                      ),
-                                      Padding(
-                                          padding: EdgeInsets.only(right: 10.0)
-                                      ),
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: <Widget>[
-                                          Text(""),
-                                          Container(
-                                            child: TextField(
-                                              onChanged: (payload){
-                                                setValue("RFID number", payload);
-                                              },
-                                              controller: TextEditingController(
-                                                  text: ""
-                                              ),
-                                              decoration: InputDecoration(
-                                                  contentPadding: EdgeInsets.only(bottom: -30)
-                                              ),
-                                            ),
-                                            width: 200,
-                                          ),
-                                          Container(
-                                            child: TextField(
-                                              onChanged: (payload){
-                                                setValue("ID number", payload);
-                                              },
-                                              controller: TextEditingController(
-                                                  text: ""
-                                              ),
-                                              decoration: InputDecoration(
-                                                  contentPadding: EdgeInsets.only(bottom: -30)
-                                              ),
-                                            ),
-                                            width: 200,
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                    SizedBox(
-                                      height: 10.0,
-                                    )
-                                  ]
-                                ),
+                                    Text("Any information because of missing info about implant."),
+                                    Text("Please scan your implant."),
+                                  ],
+                                )
                               ],
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            ExpansionTile(
+                              title: Text("IDs"),
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 45.0),
+                                  child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        Text("Chip number:"),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
+                                          child: Text("RFID number:"),
+                                        ),
+                                        Text("ID number:"),
+                                      ],
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(right: 31.0)
+                                    ),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        Text(""),
+                                        Container(
+                                          child: TextField(
+                                            onChanged: (payload){
+                                              setValue("RFID number", payload);
+                                            },
+                                            controller: TextEditingController(
+                                                text: ""
+                                            ),
+                                            decoration: InputDecoration(
+                                                contentPadding: EdgeInsets.only(bottom: -30)
+                                            ),
+                                          ),
+                                          width: 200,
+                                        ),
+                                        Container(
+                                          child: TextField(
+                                            onChanged: (payload){
+                                              setValue("ID number", payload);
+                                            },
+                                            controller: TextEditingController(
+                                                text: ""
+                                            ),
+                                            decoration: InputDecoration(
+                                                contentPadding: EdgeInsets.only(bottom: -30)
+                                            ),
+                                          ),
+                                          width: 200,
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                              ),
+                                ),
+                                SizedBox(
+                                  height: 10.0,
+                                )
+                              ]
                             ),
                             ExpansionTile(
                               title: Text("Basic data"),
@@ -575,7 +604,6 @@ class _HorseInfoState extends State<HorseInfo> {
                           ],
                         );
                       } else{
-
                         return Column(
                           children: <Widget>[
                             SizedBox(
@@ -584,136 +612,151 @@ class _HorseInfoState extends State<HorseInfo> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Text("You are in OFFLINE mode."),
+                                Text(
+                                    "You are in OFFLINE mode.",
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromRGBO(73, 130, 129, 1.0)
+                                  ),
+                                ),
                               ],
                             ),
                             SizedBox(
                               height: 10.0,
                             ),
-                            Column(
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                ExpansionTile(
-                                  title: Text("IDs"),
-                                  children:<Widget> [
-                                    Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        crossAxisAlignment: CrossAxisAlignment.end,
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: <Widget>[
-                                          Text("Chip number:"),
-                                          Padding(
-                                            padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
-                                            child: Text("RFID number:"),
-                                          ),
-                                          Text("ID number:"),
-                                        ],
-                                      ),
-                                      Padding(
-                                          padding: EdgeInsets.only(right: 10.0)
-                                      ),
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: <Widget>[
-                                          Text(chipNumberPayload),
-                                          Container(
-                                            child: TextField(
-                                              onChanged: (payload){
-                                                setValue("RFID number", payload);
-                                              },
-                                              controller: TextEditingController(
-                                                  text: RFIDPayload
-                                              ),
-                                              decoration: InputDecoration(
-                                                  contentPadding: EdgeInsets.only(bottom: -30)
-                                              ),
+                                Text("Information is from the implant."),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            ExpansionTile(
+                              title: Text("IDs"),
+                              children:<Widget> [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 45.0),
+                                  child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        Text("Chip number:"),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top:33.0, bottom: 33.0),
+                                          child: Text("RFID number:"),
+                                        ),
+                                        Text("ID number:"),
+                                      ],
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(right: 31.0)
+                                    ),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        Text(chipNumberPayload),
+                                        Container(
+                                          child: TextField(
+                                            onChanged: (payload){
+                                              setValue("RFID number", payload);
+                                            },
+                                            controller: TextEditingController(
+                                                text: RFIDPayload
                                             ),
-                                            width: 200,
-                                          ),
-                                          Container(
-                                            child: TextField(
-                                              onChanged: (payload){
-                                                setValue("ID number", payload);
-                                              },
-                                              controller: TextEditingController(
-                                                  text: IDPayload
-                                              ),
-                                              decoration: InputDecoration(
-                                                  contentPadding: EdgeInsets.only(bottom: -30)
-                                              ),
+                                            decoration: InputDecoration(
+                                                contentPadding: EdgeInsets.only(bottom: -30)
                                             ),
-                                            width: 200,
                                           ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                    SizedBox(
-                                      height: 10.0,
+                                          width: 200,
+                                        ),
+                                        Container(
+                                          child: TextField(
+                                            onChanged: (payload){
+                                              setValue("ID number", payload);
+                                            },
+                                            controller: TextEditingController(
+                                                text: IDPayload
+                                            ),
+                                            decoration: InputDecoration(
+                                                contentPadding: EdgeInsets.only(bottom: -30)
+                                            ),
+                                          ),
+                                          width: 200,
+                                        ),
+                                      ],
                                     )
-                                  ]
-                                ),
-                                ExpansionTile(
-                                  title: Text("Basic data"),
-                                  children: <Widget>[
-                                    _field("Number", numberPayload, number_ch),
-                                    _field("Name", namePayload, name_ch),
-                                    _field("Common name", commonNamePayload, commonMane_ch),
-                                    _field("Day of birth", dobPayload, dob_ch),
-                                    _field("Year of birth", yobPayload, yob_ch),
-                                    SizedBox(
-                                      height: 10.0,
-                                    ),
                                   ],
+                              ),
                                 ),
-                                ExpansionTile(
-                                  title: Text("Pedigree"),
-                                  children: <Widget>[
-                                    _field("Sir", sirPayload, sir_ch),
-                                    _field("Dam", damPayload, dam_ch),
-                                    SizedBox(
-                                      height: 10.0,
-                                    ),
-                                  ],
+                                SizedBox(
+                                  height: 10.0,
+                                )
+                              ]
+                            ),
+                            ExpansionTile(
+                              title: Text("Basic data"),
+                              children: <Widget>[
+                                _field("Number", numberPayload, number_ch),
+                                _field("Name", namePayload, name_ch),
+                                _field("Common name", commonNamePayload, commonMane_ch),
+                                _field("Day of birth", dobPayload, dob_ch),
+                                _field("Year of birth", yobPayload, yob_ch),
+                                SizedBox(
+                                  height: 10.0,
                                 ),
-                                ExpansionTile(
-                                  title: Text("Description"),
-                                  children: <Widget>[
-                                    _field("Sex", sexPayload, sex_ch),
-                                    _field("Breed", breedPayload, breed_ch),
-                                    _field("Colour", colourPayload, colour_ch),
-                                    _field("Description", descriptionPayload, description_ch),
-                                    SizedBox(
-                                      height: 10.0,
-                                    ),
-                                  ],
+                              ],
+                            ),
+                            ExpansionTile(
+                              title: Text("Pedigree"),
+                              children: <Widget>[
+                                _field("Sir", sirPayload, sir_ch),
+                                _field("Dam", damPayload, dam_ch),
+                                SizedBox(
+                                  height: 10.0,
                                 ),
-                                ExpansionTile(
-                                  title: Text("Measurements"),
-                                  children: <Widget>[
-                                    _field("Tape measure", tapeMeasurePayload, tapeMeasure_ch),
-                                    _field("Stick measure", stickMeasurePayload, stichMeasure_ch),
-                                    _field("Breast girth", breastGirthPayload, breastGirth_ch),
-                                    _field("Cannon girth", cannonGirthPayload, cannonGirth_ch),
-                                    _field("Weight", weightPayload, weight_ch),
-                                    SizedBox(
-                                      height: 10.0,
-                                    ),
-                                  ],
+                              ],
+                            ),
+                            ExpansionTile(
+                              title: Text("Description"),
+                              children: <Widget>[
+                                _field("Sex", sexPayload, sex_ch),
+                                _field("Breed", breedPayload, breed_ch),
+                                _field("Colour", colourPayload, colour_ch),
+                                _field("Description", descriptionPayload, description_ch),
+                                SizedBox(
+                                  height: 10.0,
                                 ),
-                                ExpansionTile(
-                                  title: Text("Owner"),
-                                  children: <Widget>[
-                                    _field("Owner", ownerPayload, owner_ch),
-                                    SizedBox(
-                                      height: 20.0,
-                                    ),
-                                  ],
+                              ],
+                            ),
+                            ExpansionTile(
+                              title: Text("Measurements"),
+                              children: <Widget>[
+                                _field("Tape measure", tapeMeasurePayload, tapeMeasure_ch),
+                                _field("Stick measure", stickMeasurePayload, stichMeasure_ch),
+                                _field("Breast girth", breastGirthPayload, breastGirth_ch),
+                                _field("Cannon girth", cannonGirthPayload, cannonGirth_ch),
+                                _field("Weight", weightPayload, weight_ch),
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                              ],
+                            ),
+                            ExpansionTile(
+                              title: Text("Owner"),
+                              children: <Widget>[
+                                _field("Owner", ownerPayload, owner_ch),
+                                SizedBox(
+                                  height: 20.0,
                                 ),
                               ],
                             ),
@@ -737,6 +780,9 @@ class _HorseInfoState extends State<HorseInfo> {
 
   Widget _field(String key, var payload, bool checked){
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         Checkbox(
           value: checked,
@@ -747,11 +793,13 @@ class _HorseInfoState extends State<HorseInfo> {
             if(checked){
               String hodnota = payload.toString();
               int bytes = hodnota.length * 4;
+              // /100 tam bolo
               double percentage =((bytes * 100) / 512) / 100;
               print(percentage);
-              double rounded = double.parse(percentage.toStringAsFixed(2));
+              double rounded = double.parse((percentage).toStringAsFixed(2));
               print(rounded);
-              progressValue += rounded;
+              progressValue2 += rounded;
+              progressValue = double.parse((progressValue2).toStringAsFixed(2));
               print(progressValue);
             } else{
               String hodnota = payload.toString();
@@ -760,7 +808,8 @@ class _HorseInfoState extends State<HorseInfo> {
               print(percentage);
               double rounded = double.parse(percentage.toStringAsFixed(2));
               print(rounded);
-              progressValue -= rounded;
+              progressValue2 -= rounded;
+              progressValue = double.parse((progressValue2).toStringAsFixed(2));
               print(progressValue);
             }
           },
@@ -768,18 +817,39 @@ class _HorseInfoState extends State<HorseInfo> {
         Text(key),
         Spacer(),
         Container(
-          child: TextFormField(
-            onChanged: (payload){
-              setValue(key, payload);
-            },
-            controller: TextEditingController(
-                text: "$payload"
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              TextField(
+                onChanged: (payload){
+                  setValue(key, payload);
+                },
+                controller: TextEditingController(
+                    text: "$payload"
+                ),
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.only(bottom: -20)
+                ),
+              ),
+            ],
           ),
           width: 200,
         ),
       ],
     );
+  }
+
+  void generateFirstValues(var payload){
+    String hodnota = payload.toString();
+    int bytes = hodnota.length * 4;
+    double percentage =((bytes * 100) / 512) / 100;
+    print(percentage);
+    double rounded = double.parse(percentage.toStringAsFixed(2));
+    print(rounded);
+    progressValue2 += rounded;
+    progressValue = double.parse((progressValue2).toStringAsFixed(2));
+    print(progressValue);
   }
 
   void setValue(String key, var value){
@@ -1166,7 +1236,7 @@ class _HorseInfoState extends State<HorseInfo> {
         onPressed: (){
           _saveOnTAGFun();
         },
-        child: Text("SAVE ON TAG"),
+        child: Text("SAVE ON IMPLANT"),
       ),
     );
   }
@@ -1180,7 +1250,7 @@ class _HorseInfoState extends State<HorseInfo> {
         onPressed: (){
          _saveOnDBandTAGFun();
         },
-        child: Text("SAVE ON TAG"),
+        child: Text("SAVE ON IMPLANT"),
       ),
     );
   }
@@ -1200,6 +1270,8 @@ class _HorseInfoState extends State<HorseInfo> {
   }
 
   void _saveOnTAGFun() async{
+    progressValue = 0.0;
+
     var checkedValues = new Map();
     checkedValues['Number']= number_ch;
     checkedValues['Name']= name_ch;
@@ -1237,11 +1309,29 @@ class _HorseInfoState extends State<HorseInfo> {
     String jsonOwner = jsonEncode(owner);
 
     records.add(NDEFRecord.type("text/json", jsonIDs));
+    print("jsonID");
+    List<int> bytes = utf8.encode(jsonIDs);
+    print(bytes.length);
     records.add(NDEFRecord.type("text/json", jsonBasic));
+    print("jsonBasic");
+    List<int> bytes2 = utf8.encode(jsonBasic);
+    print(bytes2.length);
     records.add(NDEFRecord.type("text/json", jsonPedigree));
+    print("jsonPedigrees");
+    List<int> bytes3 = utf8.encode(jsonPedigree);
+    print(bytes3.length);
     records.add(NDEFRecord.type("text/json", jsonDesc));
+    print("jsonDesc");
+    List<int> bytes4 = utf8.encode(jsonDesc);
+    print(bytes4.length);
     records.add(NDEFRecord.type("text/json", jsonMeasure));
+    print("jsonMeasure");
+    List<int> bytes5 = utf8.encode(jsonMeasure);
+    print(bytes5.length);
     records.add(NDEFRecord.type("text/json", jsonOwner));
+    print("jsonOwner");
+    List<int> bytes6 = utf8.encode(jsonOwner);
+    print(bytes6.length);
 
     NDEFMessage message = NDEFMessage.withRecords(records);
 
@@ -1250,7 +1340,10 @@ class _HorseInfoState extends State<HorseInfo> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Scan the tag you want to write to"),
+          title: const Text(
+              "Scan the implant you want to write to.",
+            textAlign: TextAlign.center,
+          ),
           content: Container(
               height: 100,
               child: Image.asset("assets/mircochip.jpg")
@@ -1277,7 +1370,7 @@ class _HorseInfoState extends State<HorseInfo> {
               builder: (context) => CustomerProfile(customer: widget.customer,)
           )
       );
-      _showDialog("Horse was updated on tag");
+      _showDialog("Horse was updated on implant");
     }
   }
 
@@ -1291,6 +1384,7 @@ class _HorseInfoState extends State<HorseInfo> {
 
   void _saveOnDBandTAGFun() async{
     print("saving do db a na tag");
+    progressValue = 0.0;
 
     var checkedValues = new Map();
     checkedValues['Number']= number_ch;
@@ -1328,13 +1422,25 @@ class _HorseInfoState extends State<HorseInfo> {
     String jsonMeasure = jsonEncode(measurements);
     String jsonOwner = jsonEncode(owner);
 
-    records.add(NDEFRecord.type("text/json", jsonIDs));
-    records.add(NDEFRecord.type("text/json", jsonBasic));
-    records.add(NDEFRecord.type("text/json", jsonPedigree));
-    records.add(NDEFRecord.type("text/json", jsonDesc));
-    records.add(NDEFRecord.type("text/json", jsonMeasure));
-    records.add(NDEFRecord.type("text/json", jsonOwner));
 
+    records.add(NDEFRecord.type("text/json", jsonIDs));
+    print("jsonID");
+    print(records.length);
+    records.add(NDEFRecord.type("text/json", jsonBasic));
+    print("jsonBasic");
+    print(records.length);
+    records.add(NDEFRecord.type("text/json", jsonPedigree));
+    print("jsonPedigrees");
+    print(records.length);
+    records.add(NDEFRecord.type("text/json", jsonDesc));
+    print("jsonDesc");
+    print(records.length);
+    records.add(NDEFRecord.type("text/json", jsonMeasure));
+    print("jsonMeasure");
+    print(records.length);
+    records.add(NDEFRecord.type("text/json", jsonOwner));
+    print("jsonOwner");
+    print(records.length);
 
     //update kona do db
     Horse newHorse = horseFromDB;
@@ -1347,7 +1453,10 @@ class _HorseInfoState extends State<HorseInfo> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Scan the tag you want to write to"),
+          title: const Text(
+              "Scan the implant you want to write to.",
+            textAlign: TextAlign.center,
+          ),
           content: Container(
               height: 100,
               child: Image.asset("assets/mircochip.jpg")
@@ -1374,7 +1483,7 @@ class _HorseInfoState extends State<HorseInfo> {
               builder: (context) => CustomerProfile(customer: widget.customer,)
           )
       );
-      _showDialog("Horse updated on tag");
+      _showDialog("Horse updated on implant");
     }
 
   }
@@ -1389,7 +1498,10 @@ class _HorseInfoState extends State<HorseInfo> {
         context: context,
         builder: (BuildContext context){
           return AlertDialog(
-            content: Text(mess),
+            content: Text(
+                mess,
+            textAlign: TextAlign.center,
+            ),
           );
         }
     );
