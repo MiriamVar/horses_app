@@ -73,12 +73,16 @@ class _HorseInfoState extends State<HorseInfo> {
 
   double progressValue;
   double progressValue2;
+  int something;
+  int comma;
 
 
   @override
   void initState() {
     progressValue = 0.0;
     progressValue2 = 0.0;
+    something = 14;
+    comma = -1;
     sort = false;
     selectedHorse = [];
     super.initState();
@@ -126,10 +130,10 @@ class _HorseInfoState extends State<HorseInfo> {
 //              print(chipNumberPayload);
               IDPayload = record1["ID number"];
               RFIDPayload = record1["RFID number"];
-
-              generateFirstValues("Chip number",chipNumberPayload);
-              generateFirstValues("ID number",IDPayload);
-              generateFirstValues("RFID number",RFIDPayload);
+//
+//              generateFirstValues("Chip number",chipNumberPayload);
+//              generateFirstValues("ID number",IDPayload);
+//              generateFirstValues("RFID number",RFIDPayload);
 
               if(record2["Number"] == null){
                 numberPayload = 0;
@@ -805,30 +809,43 @@ class _HorseInfoState extends State<HorseInfo> {
               setChecked(key, checked);
             });
             if(checked){
+              comma += 2;
+
               String hodnota = payload.toString();
               int bytesV = hodnota.length;
               int bytesK = key.length;
               // zvysok ma byt 14
-              int zvysok = 14;
-              int bytesSum = bytesV + bytesK + zvysok;
-              double percentage =((bytesSum * 100) / 512) / 100;
+//              int zvysok = 14;
+
+              int bytesSum = bytesV + bytesK;
+              something += bytesSum + comma;
+
+              double percentage =((something * 100) / 512) / 100;
               print(percentage);
               double rounded = double.parse((percentage).toStringAsFixed(2));
               print(rounded);
-              progressValue2 += rounded;
+              progressValue2 = rounded;
               progressValue = double.parse((progressValue2).toStringAsFixed(2));
               print(progressValue);
             } else{
+              comma -= 2;
               String hodnota = payload.toString();
               int bytesV = hodnota.length;
               int bytesK = key.length;
-              int zvysok = 14;
-              int bytesSum = bytesV + bytesK + zvysok;
-              double percentage =((bytesSum * 100) / 512) / 100;
+
+              int bytesSum = bytesV + bytesK;
+              something -= bytesSum - comma;
+
+              double percentage =((something * 100) / 512) / 100;
               print(percentage);
               double rounded = double.parse(percentage.toStringAsFixed(2));
               print(rounded);
-              progressValue2 -= rounded;
+
+              if(something == 14){
+                progressValue2 = 0;
+              }else{
+                progressValue2 = rounded;
+              }
               progressValue = double.parse((progressValue2).toStringAsFixed(2));
               print(progressValue);
             }
