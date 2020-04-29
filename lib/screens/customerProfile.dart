@@ -33,16 +33,31 @@ class _CustomerProfileState extends State<CustomerProfile>{
   List<Horse> myHorses;
   int count = 0;
   StreamSubscription<NDEFMessage> _streamSubscription;
-  bool _supportsNFC = false;
   List<NDEFMessage> _tags = [];
   int index2 = 0;
   int index3  = 0;
   bool connected=false;
 
-  String chipNumberPayload, RFIDPayload, IDPayload, namePayload, commonNamePayload, sirPayload, damPayload, sexPayload, breedPayload, colourPayload, dobPayload, descriptionPayload;
-  int tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload;
-  double cannonGirthPayload;
-  String ownerPayload;
+  String chipNumberPayload ="";
+  String RFIDPayload = "";
+  String IDPayload = "";
+  String namePayload = "";
+  String commonNamePayload = "";
+  String sirPayload = "";
+  String damPayload = "";
+  String sexPayload = "";
+  String breedPayload = "";
+  String colourPayload = "";
+  String dobPayload = "";
+  String descriptionPayload="";
+  int tapeMeasurePayload = 0;
+  int stickMeasurePayload =0;
+  int breastGirthPayload = 0;
+  int weightPayload = 0;
+  int numberPayload = 0;
+  int yobPayload =0;
+  double cannonGirthPayload= 0.0;
+  String ownerPayload = "";
 
   @override
   Widget build(BuildContext context) {
@@ -534,7 +549,12 @@ class _CustomerProfileState extends State<CustomerProfile>{
               (tag){
             setState(() {
               _tags.insert(0,tag);
+
+              print("_tags lenght");
+              print(_tags.length);
+              print("printim tag");
               print(tag);
+
               print("Record '${_tags[index2].records[0].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[0].tnf}, type '${_tags[index2].records[0].type}', payload '${_tags[index2].records[0].payload}' and data '${_tags[index2].records[0].data}' and language code '${_tags[index2].records[0].languageCode}''");
 
               //nacitavam iba ID chipu
@@ -598,7 +618,11 @@ class _CustomerProfileState extends State<CustomerProfile>{
               (tag){
             setState(() {
               _tags.insert(0,tag);
+              print("_tags lenght");
+              print(_tags.length);
+              print("printim tag");
               print(tag);
+
               print("Record '${_tags[index2].records[0].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[0].tnf}, type '${_tags[index2].records[0].type}', payload '${_tags[index2].records[0].payload}' and data '${_tags[index2].records[0].data}' and language code '${_tags[index2].records[0].languageCode}''");
               print("Record '${_tags[index2].records[1].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[1].tnf}, type '${_tags[index2].records[1].type}', payload '${_tags[index2].records[1].payload}' and data '${_tags[index2].records[1].data}' and language code '${_tags[index2].records[1].languageCode}''");
               print("Record '${_tags[index2].records[2].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[2].tnf}, type '${_tags[index2].records[2].type}', payload '${_tags[index2].records[2].payload}' and data '${_tags[index2].records[2].data}' and language code '${_tags[index2].records[2].languageCode}''");
@@ -628,7 +652,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
               commonNamePayload = record2["Common name"];
               dobPayload = record2["Day of birth"];
 
-              if(record2["Year of birth"] == "null"){
+              if(record2["Year of birth"] == null){
                 yobPayload = 0;
               }else{
                 yobPayload = int.parse(record2["Year of birth"]);
@@ -643,31 +667,31 @@ class _CustomerProfileState extends State<CustomerProfile>{
               colourPayload = record4["Colour"];
               descriptionPayload = record4["Description"];
 
-              if(record5["Tape measure"] == "null"){
+              if(record5["Tape measure"] == null){
                 tapeMeasurePayload = 0;
               }else{
                 tapeMeasurePayload = int.parse(record5["Tape measure"]);
               }
 
-              if(record5["Stick measure"] == "null"){
+              if(record5["Stick measure"] == null){
                 stickMeasurePayload= 0;
               } else{
                 stickMeasurePayload = int.parse(record5["Stick measure"]);
               }
 
-              if(record5["Breast girth"] == "null"){
+              if(record5["Breast girth"] == null){
                 breastGirthPayload = 0;
               } else{
                 breastGirthPayload = int.parse(record5["Breast girth"]);
               }
 
-              if(record5["Cannon girth"] == "null"){
+              if(record5["Cannon girth"] == null){
                 cannonGirthPayload = 0;
               } else{
                 cannonGirthPayload = double.parse(record5["Cannon girth"]);
               }
 
-              if(record5["Weight"] == "null"){
+              if(record5["Weight"] == null){
                 weightPayload = 0;
               } else{
                 weightPayload = int.parse(record5["Weight"]);
@@ -698,7 +722,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
                     )
                 );
                 } else{
-                  _showDialog("You don't own this horse");
+                  _showDialog("You don't own this horse.");
                   print("nemam horsa z db");
                 }
               }
@@ -722,6 +746,20 @@ class _CustomerProfileState extends State<CustomerProfile>{
       print("error: $error");
     }
   }
+
+  void _stopScanning() {
+    _streamSubscription?.cancel();
+    setState(() {
+      _streamSubscription = null;
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _stopScanning();
+  }
+
 
   void _deleteHorse(int idH) async{
     await dbProvider.deleteHorse(idH);

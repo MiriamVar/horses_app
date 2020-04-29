@@ -36,24 +36,24 @@ class _FindHorseState extends State<FindHorse>{
   int count;
   String num, yob, tape, stick, breast, cannon, wei;
 
-  bool ID_ch = true;
-  bool name_ch = true;
-  bool commonMane_ch = true;
-  bool sir_ch= true;
-  bool dam_ch= true;
-  bool sex_ch= true;
-  bool breed_ch= true;
-  bool colour_ch = true;
-  bool dob_ch = true;
-  bool description_ch = true;
-  bool tapeMeasure_ch =true;
-  bool stichMeasure_ch= true;
-  bool breastGirth_ch =true;
-  bool weight_ch = true;
-  bool number_ch= true;
-  bool yob_ch= true;
-  bool cannonGirth_ch = true;
-  bool owner_ch = true;
+  bool ID_ch = false;
+  bool name_ch = false;
+  bool commonMane_ch = false;
+  bool sir_ch= false;
+  bool dam_ch= false;
+  bool sex_ch= false;
+  bool breed_ch= false;
+  bool colour_ch = false;
+  bool dob_ch = false;
+  bool description_ch = false;
+  bool tapeMeasure_ch =false;
+  bool stichMeasure_ch= false;
+  bool breastGirth_ch =false;
+  bool weight_ch = false;
+  bool number_ch= false;
+  bool yob_ch= false;
+  bool cannonGirth_ch = false;
+  bool owner_ch = false;
 
   Map<String, String> ids = new Map();
   Map<String, String> basic = new Map();
@@ -70,6 +70,7 @@ class _FindHorseState extends State<FindHorse>{
   Widget build(BuildContext context) {
     horseT = widget.horseTAG;
     horseD = widget.horseDB;
+    checkValueFromTag(horseT);
     return Scaffold(
       appBar: AppBar(
         title: SingleChildScrollView(
@@ -758,6 +759,77 @@ class _FindHorseState extends State<FindHorse>{
       case "Owner": {
         owner[keyValue] = horseT.owner;
       }break;
+    }
+  }
+
+  void checkValueFromTag(Horse horse){
+
+    if(horse.number != 0){
+      number_ch = true;
+    }
+
+    if(horse.name != null){
+      name_ch = true;
+    }
+
+    if(horse.commonName != null){
+      commonMane_ch = true;
+    }
+
+    if(horse.dob != null){
+      dob_ch = true;
+    }
+
+    if(horse.yob != 0){
+      yob_ch = true;
+    }
+
+    if(horse.sir != null){
+      sir_ch = true;
+    }
+
+    if(horse.dam != null){
+      dam_ch = true;
+    }
+
+    if(horse.sex != null){
+      sex_ch = true;
+    }
+
+    if(horse.breed != null){
+      breed_ch = true;
+    }
+
+    if(horse.colour != null){
+      colour_ch = true;
+    }
+
+    if(horse.description != null){
+      description_ch = true;
+    }
+
+    if(horse.tapeMeasure != 0){
+      tapeMeasure_ch = true;
+    }
+
+    if(horse.stickMeasure != 0){
+      stichMeasure_ch = true;
+    }
+
+    if(horse.breastGirth != 0){
+      breastGirth_ch = true;
+    }
+
+    if(horse.cannonGirth != 0){
+      cannonGirth_ch = true;
+    }
+
+    if(horse.weight != 0){
+      weight_ch = true;
+    }
+
+    if(horse.owner != null){
+      owner_ch = true;
     }
   }
 

@@ -38,30 +38,31 @@ class _HorseInfoState extends State<HorseInfo> {
   int index2 = 0;
   bool connected=false;
   bool _hasClosedWriteDialog = false;
+  int zvysok = 0;
 
   String chipNumberPayload, RFIDPayload, IDPayload, namePayload, commonNamePayload, sirPayload, damPayload, sexPayload, breedPayload, colourPayload, dobPayload, descriptionPayload;
   int tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload;
   double cannonGirthPayload;
   String ownerPayload;
 
-  bool ID_ch = true;
-  bool name_ch = true;
-  bool commonMane_ch = true;
-  bool sir_ch= true;
-  bool dam_ch= true;
-  bool sex_ch= true;
-  bool breed_ch= true;
-  bool colour_ch = true;
-  bool dob_ch = true;
-  bool description_ch = true;
-  bool tapeMeasure_ch =true;
-  bool stichMeasure_ch= true;
-  bool breastGirth_ch =true;
-  bool weight_ch = true;
-  bool number_ch= true;
-  bool yob_ch= true;
-  bool cannonGirth_ch = true;
-  bool owner_ch = true;
+  bool ID_ch = false;
+  bool name_ch = false;
+  bool commonMane_ch = false;
+  bool sir_ch= false;
+  bool dam_ch= false;
+  bool sex_ch= false;
+  bool breed_ch= false;
+  bool colour_ch = false;
+  bool dob_ch = false;
+  bool description_ch = false;
+  bool tapeMeasure_ch =false;
+  bool stichMeasure_ch= false;
+  bool breastGirth_ch =false;
+  bool weight_ch = false;
+  bool number_ch= false;
+  bool yob_ch= false;
+  bool cannonGirth_ch = false;
+  bool owner_ch = false;
 
   Map<String, String> ids = new Map();
   Map<String, String> basic = new Map();
@@ -105,7 +106,15 @@ class _HorseInfoState extends State<HorseInfo> {
               (tag){
             setState(() {
               _tags.insert(0,tag);
-              print(tag);
+
+              print("printim tag");
+              print(tag.records[0].payload.length);
+              print(tag.records[1].payload.length);
+              print(tag.records[2].payload.length);
+              print(tag.records[3].payload.length);
+              print(tag.records[4].payload.length);
+              print(tag.records[5].payload.length);
+
               var record1 = jsonDecode(_tags[index2].records[0].payload);
               var record2 = jsonDecode(_tags[index2].records[1].payload);
               var record3 = jsonDecode(_tags[index2].records[2].payload);
@@ -118,11 +127,11 @@ class _HorseInfoState extends State<HorseInfo> {
               IDPayload = record1["ID number"];
               RFIDPayload = record1["RFID number"];
 
-              generateFirstValues(chipNumberPayload);
-              generateFirstValues(IDPayload);
-              generateFirstValues(RFIDPayload);
+              generateFirstValues("Chip number",chipNumberPayload);
+              generateFirstValues("ID number",IDPayload);
+              generateFirstValues("RFID number",RFIDPayload);
 
-              if(record2["Number"] == "null"){
+              if(record2["Number"] == null){
                 numberPayload = 0;
               }else{
                 numberPayload = int.parse(record2["Number"]);
@@ -132,7 +141,7 @@ class _HorseInfoState extends State<HorseInfo> {
               commonNamePayload = record2["Common name"];
               dobPayload = record2["Day of birth"];
 
-              if(record2["Year of birth"] == "null"){
+              if(record2["Year of birth"] == null){
                 yobPayload = 0;
               }else{
                 yobPayload = int.parse(record2["Year of birth"]);
@@ -170,7 +179,7 @@ class _HorseInfoState extends State<HorseInfo> {
                 cannonGirthPayload = double.parse(record5["Cannon girth"]);
               }
 
-              if(record5["Weight"] == "null"){
+              if(record5["Weight"] == null){
                 weightPayload = 0;
               } else{
                 weightPayload = int.parse(record5["Weight"]);
@@ -797,9 +806,12 @@ class _HorseInfoState extends State<HorseInfo> {
             });
             if(checked){
               String hodnota = payload.toString();
-              int bytes = hodnota.length * 4;
-              // /100 tam bolo
-              double percentage =((bytes * 100) / 512) / 100;
+              int bytesV = hodnota.length;
+              int bytesK = key.length;
+              // zvysok ma byt 14
+              int zvysok = 14;
+              int bytesSum = bytesV + bytesK + zvysok;
+              double percentage =((bytesSum * 100) / 512) / 100;
               print(percentage);
               double rounded = double.parse((percentage).toStringAsFixed(2));
               print(rounded);
@@ -808,8 +820,11 @@ class _HorseInfoState extends State<HorseInfo> {
               print(progressValue);
             } else{
               String hodnota = payload.toString();
-              int bytes = hodnota.length * 4;
-              double percentage =((bytes * 100) / 512) / 100;
+              int bytesV = hodnota.length;
+              int bytesK = key.length;
+              int zvysok = 14;
+              int bytesSum = bytesV + bytesK + zvysok;
+              double percentage =((bytesSum * 100) / 512) / 100;
               print(percentage);
               double rounded = double.parse(percentage.toStringAsFixed(2));
               print(rounded);
@@ -845,10 +860,17 @@ class _HorseInfoState extends State<HorseInfo> {
     );
   }
 
-  void generateFirstValues(var payload){
+  void generateFirstValues(String key, var payload){
     String hodnota = payload.toString();
-    int bytes = hodnota.length * 4;
-    double percentage =((bytes * 100) / 512) / 100;
+    int bytesV = hodnota.length;
+    int bytesK = key.length;
+    if(key == "RFID number"){
+      zvysok = 11;
+    }else{
+      zvysok = 10;
+    }
+    int bytesSum = bytesV + bytesK + zvysok;
+    double percentage =((bytesSum * 100) / 512) / 100;
     print(percentage);
     double rounded = double.parse(percentage.toStringAsFixed(2));
     print(rounded);
@@ -1375,7 +1397,7 @@ class _HorseInfoState extends State<HorseInfo> {
               builder: (context) => CustomerProfile(customer: widget.customer,)
           )
       );
-      _showDialog("Horse was updated on implant");
+      _showDialog("Horse was updated on implant.");
     }
   }
 
@@ -1384,7 +1406,7 @@ class _HorseInfoState extends State<HorseInfo> {
     Horse newHorse = horseFromDB;
     _updateHorseFun(newHorse);
     Navigator.of(context).pop();
-    _showDialog("Horse was updated");
+    _showDialog("Horse was updated in database.");
   }
 
   void _saveOnDBandTAGFun() async{
@@ -1488,7 +1510,7 @@ class _HorseInfoState extends State<HorseInfo> {
               builder: (context) => CustomerProfile(customer: widget.customer,)
           )
       );
-      _showDialog("Horse updated on implant");
+      _showDialog("Horse was updated on implant.");
     }
 
   }
