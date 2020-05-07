@@ -28,17 +28,15 @@ class HorseInfo extends StatefulWidget {
 class _HorseInfoState extends State<HorseInfo> {
   Horse horseFromDB;
   List<Horse> selectedHorse;
-  bool sort;
   String num, yob, tape, stick, breast, cannon, wei;
   DBProvider dbProvider = DBProvider();
   int count;
   StreamSubscription<NDEFMessage> _streamSubscription;
-  bool _supportsNFC = false;
   List<NDEFMessage> _tags = [];
   int index2 = 0;
   bool connected=false;
   bool _hasClosedWriteDialog = false;
-  int zvysok = 0;
+
 
   String chipNumberPayload, RFIDPayload, IDPayload, namePayload, commonNamePayload, sirPayload, damPayload, sexPayload, breedPayload, colourPayload, dobPayload, descriptionPayload;
   int tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload;
@@ -73,35 +71,15 @@ class _HorseInfoState extends State<HorseInfo> {
 
   double progressValue ;
   double progressValue2 ;
-  int comma ;
-  int something;
-
+  int togetherBytes;
 
   @override
   void initState() {
     progressValue = 0.0;
     progressValue2 = 0.0;
-    comma = -1;
-    something = 14;
-    sort = false;
-    selectedHorse = [];
     super.initState();
-    NFC.isNDEFSupported.then((supported) {
-      setState(() {
-        _supportsNFC = true;
-      });
-    });
   }
 
-  onSelected(bool selected, Horse horse) async{
-    setState(() {
-      if(selected){
-        selectedHorse.add(horse);
-      } else{
-        selectedHorse.remove(horse);
-      }
-    });
-  }
 
   void _startScannig(BuildContext context){
     try{
@@ -131,9 +109,6 @@ class _HorseInfoState extends State<HorseInfo> {
               IDPayload = record1["ID number"];
               RFIDPayload = record1["RFID number"];
 
-              generateFirstValues("Chip number",chipNumberPayload);
-              generateFirstValues("ID number",IDPayload);
-              generateFirstValues("RFID number",RFIDPayload);
 
               if(record2["Number"] == null){
                 numberPayload = 0;
@@ -253,13 +228,6 @@ class _HorseInfoState extends State<HorseInfo> {
           ),
         ),
         actions: <Widget>[
-          CircularPercentIndicator(
-            radius: 40.0,
-            lineWidth: 4.0,
-            percent: progressValue,
-            center: Text(progressValue.toString()+"%", style: TextStyle(color: Colors.white),),
-            progressColor: Colors.white,
-          ),
           OfflineBuilder(
             connectivityBuilder: (BuildContext context, ConnectivityResult connectivity, Widget child) {
               connected = connectivity != ConnectivityResult.none;
@@ -808,11 +776,6 @@ class _HorseInfoState extends State<HorseInfo> {
             setState(() {
               setChecked(key, checked);
             });
-            if(checked){
-                generetingPercentagePlus(key, payload);
-            } else{
-              generetingPercentageMinus(key, payload);
-            }
           },
         ),
         Text(key),
@@ -841,98 +804,6 @@ class _HorseInfoState extends State<HorseInfo> {
     );
   }
 
-  void generetingPercentagePlus(String key, var payload){
-    comma += 2;
-
-    print("payload");
-    print(payload);
-    String hodnota = payload.toString();
-    print(hodnota);
-    int bytesV = hodnota.length +2;
-    print("BAJTY - HODNOTA");
-    print(bytesV);
-    int bytesK = key.length +2;
-    print("BAJTY - KLUC");
-    print(bytesK);
-
-
-    int bytesSum = bytesV + bytesK;
-    print("BAJTY - SPOLU");
-    print(bytesSum);
-
-    something += bytesSum + comma;
-
-    print("VSetko SPOLU");
-    print(something);
-
-    double percentage =((something * 100) / 512) / 100;
-    print("prve percenta");
-    print(percentage);
-
-    double rounded = double.parse((percentage).toStringAsFixed(3));
-    print("Zaokruhlenie na 4 miesta");
-    print(rounded);
-
-    progressValue2 = rounded;
-    progressValue = double.parse((progressValue2).toStringAsFixed(2));
-    print(progressValue);
-
-  }
-
-  void generetingPercentageMinus(String key, var payload){
-    comma -= 2;
-    String hodnota = payload.toString();
-    int bytesV = hodnota.length;
-    int bytesK = key.length;
-
-    int bytesSum = bytesV + bytesK;
-    something = something - bytesSum - comma;
-    print("zaporne something");
-    print(something);
-
-    if(something < 0){
-      something = -(something);
-    }
-
-    double percentage =((something * 100) / 512) / 100;
-    print(percentage);
-    double rounded = double.parse(percentage.toStringAsFixed(4));
-    print(rounded);
-
-
-
-    if(something == 14){
-      progressValue2 = 0;
-    }else{
-      progressValue2 = rounded;
-    }
-
-    progressValue = double.parse((progressValue2).toStringAsFixed(2));
-    print(progressValue);
-
-    something = 14;
-    comma = -1;
-  }
-
-  void generateFirstValues(String key, var payload){
-    String hodnota = payload.toString();
-    int bytesV = hodnota.length;
-    int bytesK = key.length;
-    if(key == "RFID number"){
-      zvysok = 11;
-    }else{
-      zvysok = 10;
-    }
-    int bytesSum = bytesV + bytesK + zvysok;
-    double percentage =((bytesSum * 100) / 512) / 100;
-    print(percentage);
-    double rounded = double.parse(percentage.toStringAsFixed(2));
-    print(rounded);
-    progressValue2 += rounded;
-    progressValue = double.parse((progressValue2).toStringAsFixed(2));
-    print("progress value first");
-    print(progressValue);
-  }
 
   void setValue(String key, var value){
     String keyValue = key;
@@ -1352,7 +1223,6 @@ class _HorseInfoState extends State<HorseInfo> {
   }
 
   void _saveOnTAGFun() async{
-    progressValue = 0.0;
 
     var checkedValues = new Map();
     checkedValues['Number']= number_ch;
@@ -1392,28 +1262,54 @@ class _HorseInfoState extends State<HorseInfo> {
 
     records.add(NDEFRecord.type("text/json", jsonIDs));
     print("jsonID");
-    List<int> bytes = utf8.encode(jsonIDs);
-    print(bytes.length);
+    print(jsonIDs);
+    int bytes = jsonIDs.length + 12;
+    print(bytes);
+
     records.add(NDEFRecord.type("text/json", jsonBasic));
     print("jsonBasic");
-    List<int> bytes2 = utf8.encode(jsonBasic);
-    print(bytes2.length);
+    print(jsonBasic);
+    int bytes2 = jsonBasic.length + 12;
+    print(bytes2);
+
     records.add(NDEFRecord.type("text/json", jsonPedigree));
     print("jsonPedigrees");
-    List<int> bytes3 = utf8.encode(jsonPedigree);
-    print(bytes3.length);
+    print(jsonPedigree);
+    int bytes3 = jsonPedigree.length + 12;
+    print(bytes3);
+
     records.add(NDEFRecord.type("text/json", jsonDesc));
     print("jsonDesc");
-    List<int> bytes4 = utf8.encode(jsonDesc);
-    print(bytes4.length);
+    print(jsonDesc);
+    int bytes4 = jsonDesc.length + 12;
+    print(bytes4);
+
     records.add(NDEFRecord.type("text/json", jsonMeasure));
     print("jsonMeasure");
-    List<int> bytes5 = utf8.encode(jsonMeasure);
-    print(bytes5.length);
+    print(jsonMeasure);
+    int bytes5 = jsonMeasure.length + 12;
+    print(bytes5);
+
     records.add(NDEFRecord.type("text/json", jsonOwner));
     print("jsonOwner");
-    List<int> bytes6 = utf8.encode(jsonOwner);
-    print(bytes6.length);
+    print(jsonOwner);
+    int bytes6 = jsonOwner.length + 12;
+    print(bytes6);
+
+    togetherBytes = bytes + bytes2 + bytes3 + bytes4 + bytes5 + bytes6;
+
+    double percentage =(togetherBytes * 100) / 512;
+    print("prve percenta");
+    print(percentage);
+
+    double rounded = double.parse((percentage).toStringAsFixed(3));
+    print("Zaokruhlenie na 4 miesta");
+    print(rounded);
+
+    progressValue2 = rounded;
+    progressValue = double.parse((progressValue2).toStringAsFixed(2));
+    print(progressValue);
+
 
     NDEFMessage message = NDEFMessage.withRecords(records);
 
@@ -1427,8 +1323,35 @@ class _HorseInfoState extends State<HorseInfo> {
             textAlign: TextAlign.center,
           ),
           content: Container(
-              height: 100,
-              child: Image.asset("assets/mircochip.jpg")
+            height: 150,
+            child: Column(
+              children: <Widget>[
+                Container(
+                    height: 100,
+                    child: Image.asset("assets/mircochip.jpg")
+                ),
+                progressValue < 100
+                    ? Container(
+                      height: 50,
+                      child: Column(
+                        children: <Widget>[
+                          Text("Filling the implant on:"),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: LinearPercentIndicator(
+                              lineHeight: 20.0,
+                              percent: progressValue,
+                              center: Text(progressValue.toString()+"%", style: TextStyle(color: Colors.white),),
+                              progressColor: Colors.black,
+                              linearStrokeCap: LinearStrokeCap.roundAll,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                    : Text("You choose more data as you can."),
+              ],
+            ),
           ),
           actions: <Widget>[
             FlatButton(
@@ -1466,7 +1389,6 @@ class _HorseInfoState extends State<HorseInfo> {
 
   void _saveOnDBandTAGFun() async{
     print("saving do db a na tag");
-    progressValue = 0.0;
 
     var checkedValues = new Map();
     checkedValues['Number']= number_ch;
@@ -1507,22 +1429,53 @@ class _HorseInfoState extends State<HorseInfo> {
 
     records.add(NDEFRecord.type("text/json", jsonIDs));
     print("jsonID");
-    print(records.length);
+    print(jsonIDs);
+    int bytes = jsonIDs.length + 12;
+    print(bytes);
+
     records.add(NDEFRecord.type("text/json", jsonBasic));
     print("jsonBasic");
-    print(records.length);
+    print(jsonBasic);
+    int bytes2 = jsonBasic.length + 12;
+    print(bytes2);
+
     records.add(NDEFRecord.type("text/json", jsonPedigree));
     print("jsonPedigrees");
-    print(records.length);
+    print(jsonPedigree);
+    int bytes3 = jsonPedigree.length + 12;
+    print(bytes3);
+
     records.add(NDEFRecord.type("text/json", jsonDesc));
     print("jsonDesc");
-    print(records.length);
+    print(jsonDesc);
+    int bytes4 = jsonDesc.length + 12;
+    print(bytes4);
+
     records.add(NDEFRecord.type("text/json", jsonMeasure));
     print("jsonMeasure");
-    print(records.length);
+    print(jsonMeasure);
+    int bytes5 = jsonMeasure.length + 12;
+    print(bytes5);
+
     records.add(NDEFRecord.type("text/json", jsonOwner));
     print("jsonOwner");
-    print(records.length);
+    print(jsonOwner);
+    int bytes6 = jsonOwner.length + 12;
+    print(bytes6);
+
+    togetherBytes = bytes + bytes2 + bytes3 + bytes4 + bytes5 + bytes6;
+
+    double percentage =(togetherBytes * 100) / 512;
+    print("prve percenta");
+    print(percentage);
+
+    double rounded = double.parse((percentage).toStringAsFixed(3));
+    print("Zaokruhlenie na 4 miesta");
+    print(rounded);
+
+    progressValue2 = rounded;
+    progressValue = double.parse((progressValue2).toStringAsFixed(2));
+    print(progressValue);
 
     //update kona do db
     Horse newHorse = horseFromDB;
@@ -1540,8 +1493,35 @@ class _HorseInfoState extends State<HorseInfo> {
             textAlign: TextAlign.center,
           ),
           content: Container(
-              height: 100,
-              child: Image.asset("assets/mircochip.jpg")
+            height: 150,
+            child: Column(
+              children: <Widget>[
+                Container(
+                    height: 100,
+                    child: Image.asset("assets/mircochip.jpg")
+                ),
+                progressValue < 100
+                    ? Container(
+                  height: 50,
+                  child: Column(
+                    children: <Widget>[
+                      Text("Filling the implant on:"),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: LinearPercentIndicator(
+                          lineHeight: 20.0,
+                          percent: progressValue,
+                          center: Text(progressValue.toString()+"%", style: TextStyle(color: Colors.white),),
+                          progressColor: Colors.black,
+                          linearStrokeCap: LinearStrokeCap.roundAll,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+                    : Text("You choose more data as you can."),
+              ],
+            ),
           ),
           actions: <Widget>[
             FlatButton(

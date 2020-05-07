@@ -36,19 +36,12 @@ class MyApp extends StatelessWidget {
         '/logout': (context) => new LoginPage(),
         // When navigating to the "/second" route, build the SecondScreen widget.
       },
-//      home: MyHomePage(title: 'Horses'),
-//    home: LoginPage(),
-//      home: CustomerProfile(),
-//      home: AllCustomers()
-//    home: NewCustomer(),
-//    home: HorseInfo(number: 1,),
     );
   }
 }
 
 Map<int, Color> color = {
   50:Color.fromRGBO(25,85,85, .1),
-//  50:Color.fromRGBO(224, 150, 112, .1),
   100:Color.fromRGBO(25,85,85, .2),
   200:Color.fromRGBO(25,85,85, .3),
   300:Color.fromRGBO(25,85,85, .4),
@@ -74,8 +67,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   StreamSubscription<NDEFMessage> _streamSubscription;
-//  bool _supportsNFC = false;
-//  List<NDEFMessage> _tags = [];
   int index2 = 0;
   bool _hasClosedWriteDialog = false;
   DBProvider dbProvider = DBProvider();
@@ -115,6 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   double progressValue = 0.0;
   double progressValue2 = 0.0;
+  int togetherBytes = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -122,15 +114,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Horse"),
-        actions: <Widget>[
-          CircularPercentIndicator(
-            radius: 40.0,
-            lineWidth: 4.0,
-            percent: progressValue,
-            center: Text(progressValue.toString()+"%", style: TextStyle(color: Colors.white),),
-            progressColor: Colors.white,
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -663,22 +646,54 @@ class _MyHomePageState extends State<MyHomePage> {
     String jsonOwner = jsonEncode(owner);
 
     records.add(NDEFRecord.type("text/json", jsonIDs));
+    print("jsonID");
+    print(jsonIDs);
+    int bytes = jsonIDs.length + 12;
+    print(bytes);
+
     records.add(NDEFRecord.type("text/json", jsonBasic));
+    print("jsonBasic");
+    print(jsonBasic);
+    int bytes2 = jsonBasic.length + 12;
+    print(bytes2);
+
     records.add(NDEFRecord.type("text/json", jsonPedigree));
+    print("jsonPedigrees");
+    print(jsonPedigree);
+    int bytes3 = jsonPedigree.length + 12;
+    print(bytes3);
+
     records.add(NDEFRecord.type("text/json", jsonDesc));
+    print("jsonDesc");
+    print(jsonDesc);
+    int bytes4 = jsonDesc.length + 12;
+    print(bytes4);
+
     records.add(NDEFRecord.type("text/json", jsonMeasure));
+    print("jsonMeasure");
+    print(jsonMeasure);
+    int bytes5 = jsonMeasure.length + 12;
+    print(bytes5);
+
     records.add(NDEFRecord.type("text/json", jsonOwner));
+    print("jsonOwner");
+    print(jsonOwner);
+    int bytes6 = jsonOwner.length + 12;
+    print(bytes6);
 
-    print("pocet recordov");
-    print(records.length);
+    togetherBytes = bytes + bytes2 + bytes3 + bytes4 + bytes5 + bytes6;
 
-    records.forEach((record) =>{
-      print(record.payload.length)
-    });
+    double percentage =(togetherBytes * 100) / 512;
+    print("prve percenta");
+    print(percentage);
 
-    records.forEach((rec) =>{
-      print(rec.payload)
-    });
+    double rounded = double.parse((percentage).toStringAsFixed(3));
+    print("Zaokruhlenie na 4 miesta");
+    print(rounded);
+
+    progressValue2 = rounded;
+    progressValue = double.parse((progressValue2).toStringAsFixed(2));
+    print(progressValue);
 
 
     //zapis noveho kona do db
@@ -696,8 +711,35 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (context) => AlertDialog(
           title: const Text("Scan the implnat you want to write to."),
           content: Container(
-              height: 100,
-              child: Image.asset("assets/mircochip.jpg")
+            height: 150,
+            child: Column(
+              children: <Widget>[
+                Container(
+                    height: 100,
+                    child: Image.asset("assets/mircochip.jpg")
+                ),
+                progressValue < 100
+                    ? Container(
+                  height: 50,
+                  child: Column(
+                    children: <Widget>[
+                      Text("Filling the implant on:"),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: LinearPercentIndicator(
+                          lineHeight: 20.0,
+                          percent: progressValue,
+                          center: Text(progressValue.toString()+"%", style: TextStyle(color: Colors.white),),
+                          progressColor: Colors.black,
+                          linearStrokeCap: LinearStrokeCap.roundAll,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+                    : Text("You choose more data as you can."),
+              ],
+            ),
           ),
           actions: <Widget>[
             FlatButton(
