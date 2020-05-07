@@ -942,7 +942,7 @@ class _FindHorseState extends State<FindHorse>{
 
     togetherBytes = bytes + bytes2 + bytes3 + bytes4 + bytes5 + bytes6;
 
-    double percentage =(togetherBytes * 100) / 512;
+    double percentage =((togetherBytes * 100) / 512) / 100;
     print("prve percenta");
     print(percentage);
 
@@ -958,6 +958,7 @@ class _FindHorseState extends State<FindHorse>{
 
     //iOS zevraj ma svoj
     if (Platform.isAndroid) {
+      _hasClosedWriteDialog =false;
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -966,16 +967,16 @@ class _FindHorseState extends State<FindHorse>{
             textAlign: TextAlign.center,
           ),
           content: Container(
-            height: 150,
+            height: 160,
             child: Column(
               children: <Widget>[
                 Container(
-                    height: 100,
+                    height: 110,
                     child: Image.asset("assets/mircochip.jpg")
                 ),
                 progressValue < 100
                     ? Container(
-                  height: 50,
+                  height: 60,
                   child: Column(
                     children: <Widget>[
                       Text("Filling the implant on:"),
@@ -984,7 +985,7 @@ class _FindHorseState extends State<FindHorse>{
                         child: LinearPercentIndicator(
                           lineHeight: 20.0,
                           percent: progressValue,
-                          center: Text(progressValue.toString()+"%", style: TextStyle(color: Colors.white),),
+                          center: Text((progressValue * 100).toString()+"%", style: TextStyle(color: Colors.white),),
                           progressColor: Colors.black,
                           linearStrokeCap: LinearStrokeCap.roundAll,
                         ),
@@ -1099,7 +1100,7 @@ class _FindHorseState extends State<FindHorse>{
 
     togetherBytes = bytes + bytes2 + bytes3 + bytes4 + bytes5 + bytes6;
 
-    double percentage =(togetherBytes * 100) / 512;
+    double percentage = ((togetherBytes * 100) / 512) / 100;
     print("prve percenta");
     print(percentage);
 
@@ -1120,6 +1121,7 @@ class _FindHorseState extends State<FindHorse>{
 
     //iOS zevraj ma svoj
     if (Platform.isAndroid) {
+      _hasClosedWriteDialog =false;
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -1128,16 +1130,16 @@ class _FindHorseState extends State<FindHorse>{
             textAlign: TextAlign.center,
           ),
           content: Container(
-            height: 150,
+            height: 160,
             child: Column(
               children: <Widget>[
                 Container(
-                    height: 100,
+                    height: 110,
                     child: Image.asset("assets/mircochip.jpg")
                 ),
                 progressValue < 100
                     ? Container(
-                  height: 50,
+                  height: 60,
                   child: Column(
                     children: <Widget>[
                       Text("Filling the implant on:"),
@@ -1146,7 +1148,7 @@ class _FindHorseState extends State<FindHorse>{
                         child: LinearPercentIndicator(
                           lineHeight: 20.0,
                           percent: progressValue,
-                          center: Text(progressValue.toString()+"%", style: TextStyle(color: Colors.white),),
+                          center: Text((progressValue * 100).toString()+"%", style: TextStyle(color: Colors.white),),
                           progressColor: Colors.black,
                           linearStrokeCap: LinearStrokeCap.roundAll,
                         ),
