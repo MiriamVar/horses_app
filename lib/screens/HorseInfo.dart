@@ -134,25 +134,25 @@ class _HorseInfoState extends State<HorseInfo> {
               colourPayload = record4["Colour"];
               descriptionPayload = record4["Description"];
 
-              if(record5["Tape measure"] == "null"){
+              if(record5["Tape measure"] == null){
                 tapeMeasurePayload = 0;
               }else{
                 tapeMeasurePayload = int.parse(record5["Tape measure"]);
               }
 
-              if(record5["Stick measure"] == "null"){
+              if(record5["Stick measure"] == null){
                 stickMeasurePayload= 0;
               } else{
                 stickMeasurePayload = int.parse(record5["Stick measure"]);
               }
 
-              if(record5["Breast girth"] == "null"){
+              if(record5["Breast girth"] == null){
                 breastGirthPayload = 0;
               } else{
                 breastGirthPayload = int.parse(record5["Breast girth"]);
               }
 
-              if(record5["Cannon girth"] == "null"){
+              if(record5["Cannon girth"] == null){
                 cannonGirthPayload = 0;
               } else{
                 cannonGirthPayload = double.parse(record5["Cannon girth"]);

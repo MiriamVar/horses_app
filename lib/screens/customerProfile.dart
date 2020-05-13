@@ -563,6 +563,8 @@ class _CustomerProfileState extends State<CustomerProfile>{
               if(record.contains('{')){
                 print("funguje podmienka");
                 var record1 = jsonDecode(_tags[index2].records[0].data);
+                print(record1);
+                _showDialog(record);
                 chipNumberPayload = record1["Chip number"];
                 IDPayload = record1["ID number"];
                 RFIDPayload = record1["RFID number"];
@@ -570,6 +572,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
                 print(IDPayload);
                 print(RFIDPayload);
               } else{
+                _showDialog(record);
                 print("podmienka nefunguje");
                 chipNumberPayload = null;
                 print(chipNumberPayload);
@@ -654,7 +657,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
               IDPayload = record1["ID number"];
               RFIDPayload = record1["RFID number"];
 
-              if(record2["Number"] == "null"){
+              if(record2["Number"] == null){
                 numberPayload = 0;
               }else{
                 numberPayload = int.parse(record2["Number"]);
