@@ -37,6 +37,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
   int index2 = 0;
   int index3  = 0;
   bool connected=false;
+  bool changeColor = false;
 
   String chipNumberPayload ="";
   String RFIDPayload = "";
@@ -402,10 +403,13 @@ class _CustomerProfileState extends State<CustomerProfile>{
       padding: EdgeInsets.only(right:  10.0),
       child: RaisedButton(
           padding: EdgeInsets.only(right: 10.0, left: 10.0),
-          color: Color.fromRGBO(25, 85,85, 1.0),
+          color: changeColor ?  Color.fromRGBO(73, 130, 129, 1.0): Color.fromRGBO(25, 85,85, 1.0),
           textColor: Colors.white,
           child: Text("Scan your horse"),
           onPressed: (){
+            setState(() {
+              changeColor = !changeColor;
+            });
             _findScannig(context);
           }
       ),
@@ -564,7 +568,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
                 print("funguje podmienka");
                 var record1 = jsonDecode(_tags[index2].records[0].data);
                 print(record1);
-                _showDialog(record);
+//                _showDialog(record);
                 chipNumberPayload = record1["Chip number"];
                 IDPayload = record1["ID number"];
                 RFIDPayload = record1["RFID number"];
@@ -572,7 +576,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
                 print(IDPayload);
                 print(RFIDPayload);
               } else{
-                _showDialog(record);
+//                _showDialog(record);
                 print("podmienka nefunguje");
                 chipNumberPayload = null;
                 print(chipNumberPayload);
