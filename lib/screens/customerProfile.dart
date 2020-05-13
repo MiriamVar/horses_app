@@ -558,11 +558,24 @@ class _CustomerProfileState extends State<CustomerProfile>{
               print("Record '${_tags[index2].records[0].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[0].tnf}, type '${_tags[index2].records[0].type}', payload '${_tags[index2].records[0].payload}' and data '${_tags[index2].records[0].data}' and language code '${_tags[index2].records[0].languageCode}''");
 
               //nacitavam iba ID chipu
-              var record1 = jsonDecode(_tags[index2].records[0].payload);
-              chipNumberPayload = record1["Chip number"];
-              IDPayload = record1["ID number"];
-              RFIDPayload = record1["RFID number"];
-              print(chipNumberPayload);
+              var record = _tags[index2].records[0].payload;
+
+              if(record.contains('{')){
+                print("funguje podmienka");
+                var record1 = jsonDecode(_tags[index2].records[0].data);
+                chipNumberPayload = record1["Chip number"];
+                IDPayload = record1["ID number"];
+                RFIDPayload = record1["RFID number"];
+                print(chipNumberPayload);
+                print(IDPayload);
+                print(RFIDPayload);
+              } else{
+                print("podmienka nefunguje");
+                chipNumberPayload = null;
+                print(chipNumberPayload);
+              }
+
+
 
               if(chipNumberPayload == null){
                 Navigator.push(
@@ -571,9 +584,8 @@ class _CustomerProfileState extends State<CustomerProfile>{
                         builder: (context) => CustomerProfile(customer: widget.customer,)
                     )
                 );
-                _showDialog("Wrong chip");
-              }
-              if(chipNumberPayload != null && IDPayload == null && RFIDPayload == null){
+                _showDialog("Wrong set of chip. Chip number is not a defined.");
+              } else if(chipNumberPayload != null && IDPayload == null && RFIDPayload == null){
                 Navigator.push(
                     context,
                     MaterialPageRoute(

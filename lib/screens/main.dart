@@ -176,7 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                             contentPadding: EdgeInsets.only(bottom: -30)
                                                         ),
                                                       ),
-                                                      width: 200,
+                                                      width: 195,
                                                     ),
                                                     Container(
                                                       child: TextField(
@@ -190,7 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                             contentPadding: EdgeInsets.only(bottom: -30)
                                                         ),
                                                       ),
-                                                      width: 200,
+                                                      width: 195,
                                                     )
                                                   ],
                                               )
