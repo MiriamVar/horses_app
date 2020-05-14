@@ -730,20 +730,18 @@ class _CustomerProfileState extends State<CustomerProfile>{
               Horse horseFromTag = new Horse(widget.customer.id, chipNumberPayload, IDPayload, namePayload, commonNamePayload, sirPayload, damPayload, sexPayload, breedPayload, colourPayload, dobPayload, descriptionPayload, tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload, cannonGirthPayload, RFIDPayload, ownerPayload);
 
               if(chipNumberPayload == null){
-                changeColor = false;
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => CustomerProfile(customer: widget.customer,)
                     )
                 );
-
+                changeColor = false;
                 _showDialog("Wrong chip");
               }else{
                 List<Horse> horses = myHorses.where((chip) => chip.chipNumber == chipNumberPayload).toList();
 
                 if(horses.isNotEmpty){
-                  changeColor = false;
                   Horse horse = horses[0];
                   print(horse.name);
                   Navigator.push(
@@ -752,7 +750,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
                         builder: (context) => FindHorse(customer: widget.customer, horseTAG: horseFromTag, horseDB: horse,)
                     )
                 );
-
+                  changeColor = false;
                 } else{
                   _showDialog("You don't own this horse.");
                   changeColor = false;
