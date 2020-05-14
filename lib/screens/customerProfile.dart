@@ -60,6 +60,13 @@ class _CustomerProfileState extends State<CustomerProfile>{
   double cannonGirthPayload= 0.0;
   String ownerPayload = "";
 
+
+  @override
+  void initState() {
+    super.initState();
+    changeColor= false;
+  }
+
   @override
   Widget build(BuildContext context) {
     if(myHorses == null){
@@ -642,6 +649,8 @@ class _CustomerProfileState extends State<CustomerProfile>{
               print("printim tag");
               print(tag);
 
+
+
               print("Record '${_tags[index2].records[0].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[0].tnf}, type '${_tags[index2].records[0].type}', payload '${_tags[index2].records[0].payload}' and data '${_tags[index2].records[0].data}' and language code '${_tags[index2].records[0].languageCode}''");
               print("Record '${_tags[index2].records[1].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[1].tnf}, type '${_tags[index2].records[1].type}', payload '${_tags[index2].records[1].payload}' and data '${_tags[index2].records[1].data}' and language code '${_tags[index2].records[1].languageCode}''");
               print("Record '${_tags[index2].records[2].id ?? "[NO ID]"}' with  TNF '${_tags[index2].records[2].tnf}, type '${_tags[index2].records[2].type}', payload '${_tags[index2].records[2].payload}' and data '${_tags[index2].records[2].data}' and language code '${_tags[index2].records[2].languageCode}''");
@@ -721,17 +730,20 @@ class _CustomerProfileState extends State<CustomerProfile>{
               Horse horseFromTag = new Horse(widget.customer.id, chipNumberPayload, IDPayload, namePayload, commonNamePayload, sirPayload, damPayload, sexPayload, breedPayload, colourPayload, dobPayload, descriptionPayload, tapeMeasurePayload, stickMeasurePayload, breastGirthPayload, weightPayload, numberPayload, yobPayload, cannonGirthPayload, RFIDPayload, ownerPayload);
 
               if(chipNumberPayload == null){
+                changeColor = false;
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => CustomerProfile(customer: widget.customer,)
                     )
                 );
+
                 _showDialog("Wrong chip");
               }else{
                 List<Horse> horses = myHorses.where((chip) => chip.chipNumber == chipNumberPayload).toList();
 
                 if(horses.isNotEmpty){
+                  changeColor = false;
                   Horse horse = horses[0];
                   print(horse.name);
                   Navigator.push(
@@ -740,8 +752,10 @@ class _CustomerProfileState extends State<CustomerProfile>{
                         builder: (context) => FindHorse(customer: widget.customer, horseTAG: horseFromTag, horseDB: horse,)
                     )
                 );
+
                 } else{
                   _showDialog("You don't own this horse.");
+                  changeColor = false;
                   print("nemam horsa z db");
                 }
               }
