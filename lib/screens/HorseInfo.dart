@@ -206,6 +206,17 @@ class _HorseInfoState extends State<HorseInfo> {
     print(horseFromDB.name);
     return Scaffold(
       appBar: AppBar(
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CustomerProfile(customer: widget.customer,)
+                )
+            );
+          },
+        ),
         title: SingleChildScrollView(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

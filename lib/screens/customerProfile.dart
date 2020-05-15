@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +10,11 @@ import 'package:horsesapp/database.dart';
 import 'package:horsesapp/models/Horse.dart';
 import 'package:horsesapp/screens/FindHorse.dart';
 import 'package:horsesapp/screens/HorseInfo.dart';
-import 'package:horsesapp/screens/allCustomersList.dart';
 import 'package:horsesapp/screens/login.dart';
 import 'package:horsesapp/screens/main.dart';
 import 'package:nfc_in_flutter/nfc_in_flutter.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 
 
 import '../models/Customer.dart';
@@ -59,6 +60,9 @@ class _CustomerProfileState extends State<CustomerProfile>{
   int yobPayload =0;
   double cannonGirthPayload= 0.0;
   String ownerPayload = "";
+
+  String barcode = '';
+  Uint8List bytes = Uint8List(200);
 
 
   @override
@@ -435,7 +439,9 @@ class _CustomerProfileState extends State<CustomerProfile>{
                 color: Color.fromRGBO(25, 85, 85, 1.0),
                 textColor: Colors.white,
                 onPressed: () {
-                  showDialog(
+                  print("stacil som tlacitko ");
+                  print(barcode);
+                  _scanQRCode().then((value) => showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
@@ -466,13 +472,14 @@ class _CustomerProfileState extends State<CustomerProfile>{
                             new FlatButton(
                               child: new Text("Close"),
                               onPressed: () {
+                                barcode = null;
                                 Navigator.of(context).pop();
                               },
                             ),
                           ],
                         );
                       }
-                  );
+                  ));
                 },
                 child: Text("Add horse"),
               ),
@@ -488,7 +495,9 @@ class _CustomerProfileState extends State<CustomerProfile>{
                     color: Color.fromRGBO(25, 85, 85, 1.0),
                     textColor: Colors.white,
                     onPressed: () {
-                      showDialog(
+                      print("stacil som tlacitko ");
+                      print(barcode);
+                      _scanQRCode().then((value) => showDialog(
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
@@ -525,7 +534,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
                               ],
                             );
                           }
-                      );
+                      ));
                     },
                     child: Text("Add horse"),
                   ),
@@ -590,7 +599,6 @@ class _CustomerProfileState extends State<CustomerProfile>{
               }
 
 
-
               if(chipNumberPayload == null){
                 Navigator.push(
                     context,
@@ -598,14 +606,28 @@ class _CustomerProfileState extends State<CustomerProfile>{
                         builder: (context) => CustomerProfile(customer: widget.customer,)
                     )
                 );
+                barcode = null;
                 _showDialog("Wrong set of chip. Chip number is not a defined.");
               } else if(chipNumberPayload != null && IDPayload == null && RFIDPayload == null){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MyHomePage(customer: widget.customer, tagID:  chipNumberPayload,)
-                    )
-                );
+
+                if(barcode == chipNumberPayload){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyHomePage(customer: widget.customer, tagID:  chipNumberPayload,)
+                      )
+                  );
+                } else{
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CustomerProfile(customer: widget.customer,)
+                      )
+                  );
+                  barcode = null;
+                  _showDialog("Number of implant and QR code is not the same.");
+                }
+
               } else{
                 Navigator.push(
                     context,
@@ -613,6 +635,7 @@ class _CustomerProfileState extends State<CustomerProfile>{
                         builder: (context) => CustomerProfile(customer: widget.customer,)
                     )
                 );
+                barcode = null;
                 _showDialog("You can't use this implant. On this implant is information saved.");
               }
 
@@ -789,6 +812,11 @@ class _CustomerProfileState extends State<CustomerProfile>{
   void dispose() {
     super.dispose();
     _stopScanning();
+  }
+
+  Future _scanQRCode() async {
+    String barcode = await scanner.scan();
+    setState(() => this.barcode = barcode);
   }
 
 
